@@ -11,7 +11,9 @@ export const Controls = () => {
     size, setSize, 
     color, setColor, 
     pattern, setPattern,
-    audioFormat, setAudioFormat 
+    audioFormat, setAudioFormat,
+    isDesync, setIsDesync,
+    randomness, setRandomness
   } = useStore();
   const [openSettings, setOpenSettings] = useState(false);
 
@@ -99,6 +101,28 @@ export const Controls = () => {
               value={size} onChange={(e) => setSize(parseInt(e.target.value))}
               className="accent-white/80 w-full"
             />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <div className="flex justify-between">
+              <span className="text-white/70 text-xs uppercase tracking-widest font-semibold">Рандомизация</span>
+              <span className="text-white/90 text-xs bg-white/10 px-2 py-0.5 rounded-full">{randomness}%</span>
+            </div>
+            <input 
+              type="range" min="0" max="100" step="1" 
+              value={randomness} onChange={(e) => setRandomness(parseInt(e.target.value))}
+              className="accent-white/80 w-full"
+            />
+          </div>
+
+          <div className="flex items-center justify-between border-t border-white/5 pt-4">
+            <span className="text-white/70 text-xs uppercase tracking-widest font-semibold">Аудио-Асинхронность</span>
+            <button 
+              onClick={() => setIsDesync(!isDesync)}
+              className={`w-12 h-6 rounded-full transition-colors relative flex items-center ${isDesync ? 'bg-cyan-600' : 'bg-white/10'}`}
+            >
+              <div className={`w-4 h-4 rounded-full bg-white transition-transform ${isDesync ? 'translate-x-7' : 'translate-x-1'}`} />
+            </button>
           </div>
 
           <div className="flex flex-col gap-3">

@@ -31,6 +31,9 @@ export interface EmdrState {
   audioEnabled: boolean;
   audioVolume: number;
   audioFormat: AudioFormat;
+  isDesync: boolean; // Desynchronize audio and visual
+  randomness: number; // 0 to 100%
+  
   setSpeed: (speed: number) => void;
   setColor: (color: string) => void;
   setSize: (size: number) => void;
@@ -40,6 +43,8 @@ export interface EmdrState {
   setAudioEnabled: (enabled: boolean) => void;
   setAudioVolume: (volume: number) => void;
   setAudioFormat: (format: AudioFormat) => void;
+  setIsDesync: (isDesync: boolean) => void;
+  setRandomness: (val: number) => void;
 }
 
 export interface SessionState {
@@ -68,6 +73,8 @@ export const useStore = create<RootState>((set) => ({
   audioEnabled: true,
   audioVolume: 0.2,
   audioFormat: 'continuous',
+  isDesync: false,
+  randomness: 0,
   setSpeed: (speed) => set({ speed }),
   setColor: (color) => set({ color }),
   setSize: (size) => set({ size }),
@@ -77,6 +84,8 @@ export const useStore = create<RootState>((set) => ({
   setAudioEnabled: (audioEnabled) => set({ audioEnabled }),
   setAudioVolume: (audioVolume) => set({ audioVolume }),
   setAudioFormat: (audioFormat) => set({ audioFormat }),
+  setIsDesync: (isDesync) => set({ isDesync }),
+  setRandomness: (randomness) => set({ randomness }),
 
   // Session Slice
   currentPhase: SessionPhase.Idle,

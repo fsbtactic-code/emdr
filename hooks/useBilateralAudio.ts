@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useStore } from '../store/useStore';
 
 export const useBilateralAudio = () => {
-  const { speed, isPlaying, audioEnabled, audioVolume, audioFormat } = useStore();
+  const { speed, isPlaying, audioEnabled, audioVolume, audioFormat, isDesync, randomness } = useStore();
   const audioCtxRef = useRef<AudioContext | null>(null);
   
   // Continuous audio node refs
@@ -24,15 +24,27 @@ export const useBilateralAudio = () => {
     osc.type = type;
     osc.frequency.value = type === 'sine' ? 600 : 800;
 
+    // Apply randomness to frequency if needed (pitch jitter)
+    if (randomness > 0) {
+      osc.frequency.value += (Math.random() * 200 - 100) * (randomness / 100);
+    }
+
     // envelope
     gain.gain.setValueAtTime(0, ctx.currentTime);
     gain.gain.linearRampToValueAtTime(volume, ctx.currentTime + 0.01);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
 
-    panner.pan.value = isLeft ? -1 : 1;
-    if (type === 'square') { // For metronome, center it slightly more
-      panner.pan.value = isLeft ? -0.5 : 0.5;
+    let panVal = isLeft ? -1 : 1;
+    // Apply desync: reverse the audio panning compared to visual
+    if (isDesync) {
+      panVal = panVal * -1;
     }
+
+    if (type === 'square') { // For metronome, center it slightly more
+      panVal = panVal * 0.5;
+    }
+
+    panner.pan.value = panVal;
 
     osc.connect(panner);
     panner.connect(gain);
@@ -62,7 +74,6 @@ export const useBilateralAudio = () => {
 
     const ctx = audioCtxRef.current;
 
-    // Cleanup previous nodes
     if (oscillatorRef.current) {
       oscillatorRef.current.stop();
       oscillatorRef.current.disconnect();
@@ -89,7 +100,8 @@ export const useBilateralAudio = () => {
       lfoRef.current.frequency.value = speed;
       
       const lfoGain = ctx.createGain();
-      lfoGain.gain.value = 1;
+      // Apply desynchronization to continuous mode by reversing the LFO wave amplitude
+      lfoGain.gain.value = isDesync ? -1 : 1;
 
       lfoRef.current.connect(lfoGain);
       lfoGain.connect(pannerRef.current.pan);
@@ -105,23 +117,29 @@ export const useBilateralAudio = () => {
       lfoRef.current.start();
     } 
     else if (audioFormat === 'click' || audioFormat === 'metronome') {
-      // For discrete clicks, tripDuration is 1 / (2 * speed) seconds
       const halfCycleMs = (1 / (2 * speed)) * 1000;
       isLeftClickRef.current = true;
       
-      // Play first click immediately
       playClick(ctx, isLeftClickRef.current, audioVolume, audioFormat === 'click' ? 'sine' : 'square');
       isLeftClickRef.current = !isLeftClickRef.current;
 
-      intervalRef.current = setInterval(() => {
-        playClick(ctx, isLeftClickRef.current, audioVolume, audioFormat === 'click' ? 'sine' : 'square');
-        isLeftClickRef.current = !isLeftClickRef.current;
-      }, halfCycleMs);
+      const runInterval = () => {
+        // Add random timing jitter if randomness is high
+        const jitter = (Math.random() * 0.4 - 0.2) * halfCycleMs * (randomness / 100);
+        const nextTick = halfCycleMs + jitter;
+
+        intervalRef.current = setTimeout(() => {
+          playClick(ctx, isLeftClickRef.current, audioVolume, audioFormat === 'click' ? 'sine' : 'square');
+          isLeftClickRef.current = !isLeftClickRef.current;
+          runInterval();
+        }, nextTick);
+      };
+      
+      runInterval();
     }
 
     return () => {
-      // Cleanup to prevent duplicate loops when dependencies change
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (intervalRef.current) clearTimeout(intervalRef.current);
       if (oscillatorRef.current) {
         try { oscillatorRef.current.stop(); } catch(e){}
       }
@@ -129,7 +147,7 @@ export const useBilateralAudio = () => {
         try { lfoRef.current.stop(); } catch(e){}
       }
     };
-  }, [isPlaying, audioEnabled, audioFormat, speed]);
+  }, [isPlaying, audioEnabled, audioFormat, speed, isDesync, randomness]);
 
   useEffect(() => {
     if (gainRef.current && audioFormat === 'continuous') {

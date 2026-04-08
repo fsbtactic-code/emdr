@@ -5,16 +5,23 @@ import { motion } from 'framer-motion';
 import { useBilateralAudio } from '@/hooks/useBilateralAudio';
 
 export const StimulationEngine = () => {
-  const { speed, color, size, pattern, isPlaying } = useStore();
+  const { speed, color, size, pattern, isPlaying, randomness } = useStore();
   
   useBilateralAudio();
 
   const glowShadow = `0 0 20px ${color}80, 0 0 40px ${color}40`;
   const tripDuration = 1 / (2 * speed);
 
+  const jX = 20 * (randomness / 100);
+  const jY = 20 * (randomness / 100);
+
   return (
     <div className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden pointer-events-none z-0">
-      <div className="relative w-full max-w-5xl h-[80vh] flex items-center justify-center mx-12">
+      <motion.div 
+        className="relative w-full max-w-5xl h-[80vh] flex items-center justify-center mx-12"
+        animate={isPlaying && randomness > 0 ? { x: [0, jX, 0, -jX, 0], y: [0, jY, 0, -jY, 0] } : { x: 0, y: 0 }}
+        transition={{ duration: tripDuration * 0.83, repeat: Infinity, ease: 'easeInOut' }}
+      >
         
         {pattern === 'horizontal' && (
           <motion.div
@@ -82,7 +89,7 @@ export const StimulationEngine = () => {
           <ZigZagPattern size={size} color={color} shadow={glowShadow} tripDuration={tripDuration} />
         )}
 
-      </div>
+      </motion.div>
     </div>
   );
 };
