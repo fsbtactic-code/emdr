@@ -3,6 +3,7 @@
 import { useStore } from '@/store/useStore';
 import { motion } from 'framer-motion';
 import { useBilateralAudio } from '@/hooks/useBilateralAudio';
+import { useAmbientAudio } from '@/hooks/useAmbientAudio';
 import { useEffect, useState } from 'react';
 
 const getCharacters = (lang: string) => {
@@ -21,11 +22,46 @@ const getShapeClasses = (shape: string) => {
   }
 };
 
+const AnimatedBackground = ({ type }: { type: string }) => {
+  if (type === 'black') {
+    return <div className="absolute inset-0 bg-zinc-950 z-[-1]" />;
+  }
+  
+  if (type === 'stars' || type === 'pulse') {
+    return (
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-[-1] bg-zinc-950">
+        <motion.div
+          className="absolute inset-[10%] bg-cyan-500/10 blur-[100px] rounded-full"
+          animate={{ opacity: [0.2, 0.5, 0.2], scale: [0.9, 1.1, 0.9] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </div>
+    );
+  }
+
+  // Default: Aurora
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-[-1] bg-zinc-950">
+      <motion.div
+        className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full"
+        animate={{ x: [0, 100, 0], y: [0, 50, 0] }}
+        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+      />
+      <motion.div
+        className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-emerald-600/5 blur-[120px] rounded-full"
+        animate={{ x: [0, -100, 0], y: [0, -50, 0] }}
+        transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+      />
+    </div>
+  );
+};
+
 export const StimulationEngine = () => {
-  const { speed, color, size, pattern, isPlaying, randomness, cyclesPerSet, setPlaying, incrementSets, isSaccadic, showSymbols, symbolLanguage, targetShape } = useStore();
+  const { speed, color, size, pattern, isPlaying, randomness, cyclesPerSet, setPlaying, incrementSets, isSaccadic, showSymbols, symbolLanguage, targetShape, isSettingsOpen, visualBackground } = useStore();
   const [symbol, setSymbol] = useState('');
   
   useBilateralAudio();
+  useAmbientAudio();
 
   // Auto-stop after standard EMDR set
   useEffect(() => {
@@ -76,12 +112,20 @@ export const StimulationEngine = () => {
 
   return (
     <div className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden pointer-events-none z-0">
-      <motion.div 
-        className="relative w-full max-w-5xl h-[80vh] flex items-center justify-center mx-12"
-        animate={isPlaying && randomness > 0 ? { x: [0, jX, 0, -jX, 0], y: [0, jY, 0, -jY, 0] } : { x: 0, y: 0 }}
-        transition={{ duration: tripDuration * 0.83, repeat: Infinity, ease: 'easeInOut' }}
+      <AnimatedBackground type={visualBackground} />
+      <motion.div
+        className="w-full flex items-center justify-center"
+        animate={{
+          scale: isSettingsOpen ? 0.6 : 1,
+          y: isSettingsOpen ? '-20vh' : 0,
+        }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       >
-        
+        <motion.div 
+          className="relative w-full max-w-5xl h-[80vh] flex items-center justify-center mx-12"
+          animate={isPlaying && randomness > 0 ? { x: [0, jX, 0, -jX, 0], y: [0, jY, 0, -jY, 0] } : { x: 0, y: 0 }}
+          transition={{ duration: tripDuration * 0.83, repeat: Infinity, ease: 'easeInOut' }}
+        >
         {pattern === 'horizontal' && (
           <motion.div
             className={shapeClasses}
@@ -156,6 +200,7 @@ export const StimulationEngine = () => {
           <ZigZagPattern styleProps={styleProps} shapeClasses={shapeClasses} tripDuration={tripDuration} symbol={symbol} showSymbols={showSymbols} isSaccadic={isSaccadic} />
         )}
 
+        </motion.div>
       </motion.div>
     </div>
   );
