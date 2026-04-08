@@ -180,7 +180,7 @@ const LemniscatePattern = ({ size, color, shadow, tripDuration, symbol, showSymb
 };
 
 const PulsePattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, isSaccadic }: any) => {
-  const easing = isSaccadic ? "steps(1, start)" : "linear";
+  const easing = isSaccadic ? "circInOut" : "linear";
   return (
     <div className="w-full h-full absolute inset-0 flex items-center justify-between px-24">
       <div className="relative flex items-center justify-center">
@@ -210,7 +210,7 @@ const PulsePattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, 
 const BarsPattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, isSaccadic }: any) => {
   const barWidth = Math.max(10, size / 2);
   const barHeight = '60vh';
-  const easing = isSaccadic ? "steps(1, start)" : "linear";
+  const easing = isSaccadic ? "circInOut" : "linear";
 
   return (
     <div className="w-full flex justify-between absolute px-12 top-1/2 -translate-y-1/2 z-0">
@@ -235,7 +235,7 @@ const BarsPattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, i
 };
 
 const ZigZagPattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, isSaccadic }: any) => {
-  const easing = isSaccadic ? "steps(1, start)" : "linear";
+  const easing = isSaccadic ? "circInOut" : "linear";
   return (
     <motion.div
       className="rounded-full absolute flex items-center justify-center text-white font-bold"
