@@ -33,6 +33,9 @@ export interface EmdrState {
   audioFormat: AudioFormat;
   isDesync: boolean; // Desynchronize audio and visual
   randomness: number; // 0 to 100%
+  cyclesPerSet: number; // Default 24 cycles per set
+  setsCompleted: number;
+  isSettingsOpen: boolean;
   
   setSpeed: (speed: number) => void;
   setColor: (color: string) => void;
@@ -45,6 +48,9 @@ export interface EmdrState {
   setAudioFormat: (format: AudioFormat) => void;
   setIsDesync: (isDesync: boolean) => void;
   setRandomness: (val: number) => void;
+  setCyclesPerSet: (cycles: number) => void;
+  incrementSets: () => void;
+  setIsSettingsOpen: (isOpen: boolean) => void;
 }
 
 export interface SessionState {
@@ -75,6 +81,10 @@ export const useStore = create<RootState>((set) => ({
   audioFormat: 'continuous',
   isDesync: false,
   randomness: 0,
+  cyclesPerSet: 24, // Стандарт EMDR: 24 движения на подход
+  setsCompleted: 0,
+  isSettingsOpen: true, // Показываем настройки при старте сразу
+  
   setSpeed: (speed) => set({ speed }),
   setColor: (color) => set({ color }),
   setSize: (size) => set({ size }),
@@ -86,6 +96,9 @@ export const useStore = create<RootState>((set) => ({
   setAudioFormat: (audioFormat) => set({ audioFormat }),
   setIsDesync: (isDesync) => set({ isDesync }),
   setRandomness: (randomness) => set({ randomness }),
+  setCyclesPerSet: (cyclesPerSet) => set({ cyclesPerSet }),
+  incrementSets: () => set((state) => ({ setsCompleted: state.setsCompleted + 1 })),
+  setIsSettingsOpen: (isSettingsOpen) => set({ isSettingsOpen }),
 
   // Session Slice
   currentPhase: SessionPhase.Idle,

@@ -3,11 +3,28 @@
 import { useStore } from '@/store/useStore';
 import { motion } from 'framer-motion';
 import { useBilateralAudio } from '@/hooks/useBilateralAudio';
+import { useEffect } from 'react';
 
 export const StimulationEngine = () => {
-  const { speed, color, size, pattern, isPlaying, randomness } = useStore();
+  const { speed, color, size, pattern, isPlaying, randomness, cyclesPerSet, setPlaying, incrementSets } = useStore();
   
   useBilateralAudio();
+
+  // Auto-stop after standard EMDR set
+  useEffect(() => {
+    if (!isPlaying) return;
+
+    // A cycle is one exact frequency Hz (left-right-left). 
+    // Wait for the amount of cycles specified.
+    const durationMs = 1000 * (cyclesPerSet / speed);
+
+    const timer = setTimeout(() => {
+      setPlaying(false);
+      incrementSets();
+    }, durationMs);
+
+    return () => clearTimeout(timer);
+  }, [isPlaying, speed, cyclesPerSet, setPlaying, incrementSets]);
 
   const glowShadow = `0 0 20px ${color}80, 0 0 40px ${color}40`;
   const tripDuration = 1 / (2 * speed);

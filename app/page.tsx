@@ -1,6 +1,7 @@
 import { StimulationEngine } from '@/components/emdr/StimulationEngine';
 import { Controls } from '@/components/emdr/Controls';
 import { Sidebar } from '@/components/ai/Sidebar';
+import { SettingsPanel } from '@/components/emdr/SettingsPanel';
 
 export default function SessionPage() {
   return (
@@ -9,6 +10,7 @@ export default function SessionPage() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-zinc-950/80 to-zinc-950 z-0 pointer-events-none" />
       
       <StimulationEngine />
+      <SettingsPanel />
       <Controls />
       <Sidebar />
       
