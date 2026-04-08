@@ -1,13 +1,9 @@
 'use client';
 
 import { useStore } from '@/store/useStore';
-import { 
-  Settings2, Zap, ShieldAlert, Sparkles, Brain, Moon, ShieldBan, Play, Pause, 
-  Waves, CloudRain, Wind, ArrowUpDown, ArrowLeftRight, MoveDiagonal, MoveDiagonal2, 
-  Infinity as InfinityIcon, GripHorizontal, Activity, Columns, TrendingUp, 
-  Circle, Square, CircleDashed, Wand2, Orbit
-} from 'lucide-react';
+import { Settings2, Zap, ShieldAlert, Sparkles, Brain, Moon, ShieldBan, Play, Pause, Waves, CloudRain, Wind, ArrowUpDown, ArrowLeftRight, MoveDiagonal, MoveDiagonal2, Infinity as InfinityIcon, GripHorizontal, Activity, Columns, TrendingUp, Circle, Square, CircleDashed, Wand2, Orbit, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRef } from 'react';
 
 export const SettingsPanel = () => {
   const { 
@@ -29,6 +25,15 @@ export const SettingsPanel = () => {
     visualBackground, setVisualBackground,
     activePreset, applyPreset
   } = useStore();
+
+  const presetsScrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollPresets = (direction: 'left' | 'right') => {
+    if (presetsScrollRef.current) {
+      const scrollAmount = direction === 'left' ? -300 : 300;
+      presetsScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
 
   const colors = [
     { name: 'Cyan', value: '#06b6d4', shadow: 'var(--drop-shadow-glow-cyan)' },
@@ -135,31 +140,48 @@ export const SettingsPanel = () => {
               </div>
 
               {/* Presets Row */}
-              <div className="flex flex-col gap-4">
-                <span className="text-white/80 text-[10px] md:text-xs uppercase tracking-widest font-bold px-4 md:px-8">Терапевтические Программы</span>
-                <div className="flex gap-6 overflow-x-auto no-scrollbar pb-6 snap-x snap-mandatory px-4 md:px-8">
-                  {presetGroups.map((group, idx) => (
-                    <div key={idx} className="flex gap-3 shrink-0">
-                      
-                      {group.items.map(p => {
-                        const Icon = p.icon;
-                        const isActive = activePreset === p.id;
-                        return (
-                          <button
-                            key={p.id}
-                            onClick={() => applyPreset(p.id)}
-                            className={`shrink-0 snap-center min-w-[160px] md:min-w-[200px] flex items-center justify-start gap-3 p-4 md:p-5 rounded-[20px] md:rounded-[28px] transition-all duration-300 border backdrop-blur-md shadow-lg ${isActive ? `${p.bg} ${p.border} ${p.color} ring-2 ring-white/20 scale-[1.02] md:scale-105` : 'bg-white/[0.06] border-white/10 text-white/80 hover:bg-white/[0.12] hover:scale-[1.02] hover:border-white/30'}`}
-                          >
-                            <Icon size={24} className={isActive ? p.color : 'text-white/60'} />
-                            <div className="flex flex-col items-start gap-1">
-                              <span className="font-bold text-sm md:text-base tracking-wide leading-none">{p.label}</span>
-                              <span className="text-[10px] text-white/30 font-medium tracking-widest uppercase mt-0.5">{group.category}</span>
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  ))}
+              <div className="flex flex-col gap-4 relative">
+                <div className="flex justify-between items-center px-4 md:px-8">
+                  <span className="text-white/80 text-[10px] md:text-xs uppercase tracking-widest font-bold">Терапевтические Программы</span>
+                  <div className="hidden md:flex gap-2">
+                    <button onClick={() => scrollPresets('left')} className="p-1.5 rounded-full bg-white/5 hover:bg-white/20 text-white/50 hover:text-white transition-colors">
+                      <ChevronLeft size={16} />
+                    </button>
+                    <button onClick={() => scrollPresets('right')} className="p-1.5 rounded-full bg-white/5 hover:bg-white/20 text-white/50 hover:text-white transition-colors">
+                      <ChevronRight size={16} />
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="relative w-full">
+                  <div 
+                    ref={presetsScrollRef}
+                    className="flex gap-4 md:gap-6 overflow-x-auto pb-6 px-4 md:px-8 snap-x snap-mandatory no-scrollbar"
+                  >
+                    {presetGroups.map((group, idx) => (
+                      <div key={idx} className="flex gap-3 shrink-0">
+                        {group.items.map(p => {
+                          const Icon = p.icon;
+                          const isActive = activePreset === p.id;
+                          return (
+                            <button
+                              key={p.id}
+                              onClick={() => applyPreset(p.id)}
+                              className={`shrink-0 snap-center w-[160px] md:w-[190px] flex items-center justify-start gap-3 p-4 md:p-5 rounded-[20px] md:rounded-[28px] transition-all duration-300 border backdrop-blur-md shadow-lg ${isActive ? `${p.bg} ${p.border} ${p.color} ring-2 ring-white/20 scale-[1.02] md:scale-105` : 'bg-white/[0.06] border-white/10 text-white/80 hover:bg-white/[0.12] hover:scale-[1.02] hover:border-white/30'}`}
+                            >
+                              <Icon size={24} className={`shrink-0 ${isActive ? p.color : 'text-white/60'}`} />
+                              <div className="flex flex-col items-start gap-1 overflow-hidden">
+                                <span className="font-bold text-[13px] md:text-[14px] tracking-wide leading-tight text-left truncate w-full">{p.label}</span>
+                                <span className="text-[9px] md:text-[10px] text-white/30 font-medium tracking-widest uppercase mt-0.5 truncate w-full flex-shrink-0 text-left">{group.category}</span>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ))}
+                    {/* Add a spacer block at the end so the last item isn't glued to the screen edge when scrolled fully right */}
+                    <div className="w-[1px] md:w-[10px] shrink-0"></div>
+                  </div>
                 </div>
               </div>
 
