@@ -14,28 +14,50 @@ export const StimulationEngine = () => {
 
   return (
     <div className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden pointer-events-none z-0">
-      <div className="relative w-full max-w-5xl h-64 flex items-center justify-center mx-12">
+      <div className="relative w-full max-w-5xl h-[80vh] flex items-center justify-center mx-12">
         
-        {pattern === 'linear' && (
+        {pattern === 'horizontal' && (
           <motion.div
             className="rounded-full absolute"
-            style={{
-              width: size,
-              height: size,
-              backgroundColor: color,
-              boxShadow: glowShadow,
-            }}
+            style={{ width: size, height: size, backgroundColor: color, boxShadow: glowShadow }}
             animate={isPlaying ? { x: ['-45vw', '45vw'] } : { x: 0 }}
             transition={{
-              x: isPlaying ? {
-                duration: tripDuration,
-                ease: 'linear',
-                repeat: Infinity,
-                repeatType: 'mirror',
-              } : {
-                duration: 0.5,
-                ease: [0.22, 1, 0.36, 1]
-              }
+              x: isPlaying ? { duration: tripDuration, ease: 'linear', repeat: Infinity, repeatType: 'mirror' } : { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+            }}
+          />
+        )}
+
+        {pattern === 'vertical' && (
+          <motion.div
+            className="rounded-full absolute"
+            style={{ width: size, height: size, backgroundColor: color, boxShadow: glowShadow }}
+            animate={isPlaying ? { y: ['-35vh', '35vh'] } : { y: 0 }}
+            transition={{
+              y: isPlaying ? { duration: tripDuration, ease: 'linear', repeat: Infinity, repeatType: 'mirror' } : { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+            }}
+          />
+        )}
+
+        {pattern === 'diagonal-1' && (
+          <motion.div
+            className="rounded-full absolute"
+            style={{ width: size, height: size, backgroundColor: color, boxShadow: glowShadow }}
+            animate={isPlaying ? { x: ['-45vw', '45vw'], y: ['-35vh', '35vh'] } : { x: 0, y: 0 }}
+            transition={{
+              x: isPlaying ? { duration: tripDuration, ease: 'linear', repeat: Infinity, repeatType: 'mirror' } : { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+              y: isPlaying ? { duration: tripDuration, ease: 'linear', repeat: Infinity, repeatType: 'mirror' } : { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+            }}
+          />
+        )}
+
+        {pattern === 'diagonal-2' && (
+          <motion.div
+            className="rounded-full absolute"
+            style={{ width: size, height: size, backgroundColor: color, boxShadow: glowShadow }}
+            animate={isPlaying ? { x: ['-45vw', '45vw'], y: ['35vh', '-35vh'] } : { x: 0, y: 0 }}
+            transition={{
+              x: isPlaying ? { duration: tripDuration, ease: 'linear', repeat: Infinity, repeatType: 'mirror' } : { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+              y: isPlaying ? { duration: tripDuration, ease: 'linear', repeat: Infinity, repeatType: 'mirror' } : { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
             }}
           />
         )}
@@ -55,6 +77,10 @@ export const StimulationEngine = () => {
         {pattern === 'bars' && isPlaying && (
           <BarsPattern size={size} color={color} shadow={glowShadow} tripDuration={tripDuration} />
         )}
+        
+        {pattern === 'zigzag' && isPlaying && (
+          <ZigZagPattern size={size} color={color} shadow={glowShadow} tripDuration={tripDuration} />
+        )}
 
       </div>
     </div>
@@ -63,7 +89,7 @@ export const StimulationEngine = () => {
 
 const DotsPattern = ({ size, color, shadow, tripDuration }: { size: number, color: string, shadow: string, tripDuration: number }) => {
   return (
-    <div className="w-full flex justify-between absolute px-12">
+    <div className="w-full h-64 flex items-center justify-between absolute px-12 z-0">
       <motion.div
         className="rounded-full"
         style={{ width: size, height: size, backgroundColor: color, boxShadow: shadow }}
@@ -142,3 +168,19 @@ const BarsPattern = ({ size, color, shadow, tripDuration }: { size: number, colo
   );
 };
 
+const ZigZagPattern = ({ size, color, shadow, tripDuration }: { size: number, color: string, shadow: string, tripDuration: number }) => {
+  return (
+    <motion.div
+      className="rounded-full absolute"
+      style={{ width: size, height: size, backgroundColor: color, boxShadow: shadow }}
+      animate={{ 
+        x: ['-45vw', '45vw'], 
+        y: ['-20vh', '20vh', '-20vh', '20vh', '-20vh'] 
+      }}
+      transition={{ 
+        x: { duration: tripDuration, repeat: Infinity, repeatType: 'mirror', ease: 'linear' },
+        y: { duration: tripDuration * 5, repeat: Infinity, ease: 'linear' } // Different period to make a zigzag pattern
+      }}
+    />
+  );
+};

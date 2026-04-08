@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
-export type PatternType = 'linear' | 'dots' | 'lemniscate' | 'pulse' | 'bars';
+export type PatternType = 'horizontal' | 'vertical' | 'diagonal-1' | 'diagonal-2' | 'lemniscate' | 'dots' | 'pulse' | 'bars' | 'zigzag';
+export type AudioFormat = 'continuous' | 'click' | 'metronome';
 
 export enum SessionPhase {
   Idle = 'idle',
@@ -29,6 +30,7 @@ export interface EmdrState {
   isPlaying: boolean;
   audioEnabled: boolean;
   audioVolume: number;
+  audioFormat: AudioFormat;
   setSpeed: (speed: number) => void;
   setColor: (color: string) => void;
   setSize: (size: number) => void;
@@ -37,6 +39,7 @@ export interface EmdrState {
   setPlaying: (isPlaying: boolean) => void;
   setAudioEnabled: (enabled: boolean) => void;
   setAudioVolume: (volume: number) => void;
+  setAudioFormat: (format: AudioFormat) => void;
 }
 
 export interface SessionState {
@@ -60,10 +63,11 @@ export const useStore = create<RootState>((set) => ({
   speed: 1.0, // Hz
   color: '#cbd5e1', // Slate 300 base
   size: 48,
-  pattern: 'linear',
+  pattern: 'horizontal',
   isPlaying: false,
   audioEnabled: true,
   audioVolume: 0.2,
+  audioFormat: 'continuous',
   setSpeed: (speed) => set({ speed }),
   setColor: (color) => set({ color }),
   setSize: (size) => set({ size }),
@@ -72,6 +76,7 @@ export const useStore = create<RootState>((set) => ({
   setPlaying: (isPlaying) => set({ isPlaying }),
   setAudioEnabled: (audioEnabled) => set({ audioEnabled }),
   setAudioVolume: (audioVolume) => set({ audioVolume }),
+  setAudioFormat: (audioFormat) => set({ audioFormat }),
 
   // Session Slice
   currentPhase: SessionPhase.Idle,
