@@ -113,7 +113,9 @@ export const SettingsPanel = () => {
               </div>
 
               {/* Presets Row - Scrollable horizontally on mobile */}
-              <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 snap-x snap-mandatory">
+              <div className="flex flex-col gap-3">
+                <span className="text-white/80 text-[10px] md:text-xs uppercase tracking-widest font-bold px-2">Терапевтические Программы</span>
+                <div className="flex gap-3 md:gap-4 overflow-x-auto no-scrollbar pb-4 snap-x snap-mandatory">
                 {presets.map(p => {
                   const Icon = p.icon;
                   const isActive = activePreset === p.id;
@@ -121,13 +123,14 @@ export const SettingsPanel = () => {
                     <button
                       key={p.id}
                       onClick={() => applyPreset(p.id)}
-                      className={`shrink-0 snap-center min-w-[140px] md:min-w-[180px] flex items-center justify-center md:justify-start gap-2 md:gap-3 p-3 md:p-4 rounded-[20px] md:rounded-3xl transition-all duration-300 border ${isActive ? `${p.bg} ${p.border} ${p.color} ring-1 ring-white/20 scale-100 md:scale-105` : 'bg-white/[0.03] border-white/5 text-white/50 hover:bg-white/5'}`}
+                      className={`shrink-0 snap-center min-w-[140px] md:min-w-[180px] flex items-center justify-center md:justify-start gap-2 md:gap-3 p-3 md:p-4 rounded-[20px] md:rounded-3xl transition-all duration-300 border backdrop-blur-md shadow-lg ${isActive ? `${p.bg} ${p.border} ${p.color} ring-2 ring-white/20 scale-[1.02] md:scale-105` : 'bg-white/[0.08] border-white/20 text-white/90 hover:bg-white/[0.15] hover:scale-[1.02] hover:border-white/40'}`}
                     >
-                      <Icon size={20} className={isActive ? p.color : 'text-white/40'} />
+                      <Icon size={20} className={isActive ? p.color : 'text-white/70'} />
                       <span className="font-bold text-[11px] md:text-sm tracking-wide">{p.label}</span>
                     </button>
                   );
                 })}
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">

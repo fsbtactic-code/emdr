@@ -91,7 +91,7 @@ export const StimulationEngine = () => {
               x: isPlaying ? { duration: tripDuration, ease: easing, repeat: Infinity, repeatType: 'mirror' } : { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
             }}
           >
-            {showSymbols && <span className="mix-blend-difference">{symbol}</span>}
+            {showSymbols && <span className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">{symbol}</span>}
           </motion.div>
         )}
 
@@ -104,7 +104,7 @@ export const StimulationEngine = () => {
               y: isPlaying ? { duration: tripDuration, ease: easing, repeat: Infinity, repeatType: 'mirror' } : { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
             }}
           >
-            {showSymbols && <span className="mix-blend-difference">{symbol}</span>}
+            {showSymbols && <span className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">{symbol}</span>}
           </motion.div>
         )}
 
@@ -118,7 +118,7 @@ export const StimulationEngine = () => {
               y: isPlaying ? { duration: tripDuration, ease: easing, repeat: Infinity, repeatType: 'mirror' } : { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
             }}
           >
-            {showSymbols && <span className="mix-blend-difference">{symbol}</span>}
+            {showSymbols && <span className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">{symbol}</span>}
           </motion.div>
         )}
 
@@ -132,7 +132,7 @@ export const StimulationEngine = () => {
               y: isPlaying ? { duration: tripDuration, ease: easing, repeat: Infinity, repeatType: 'mirror' } : { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
             }}
           >
-            {showSymbols && <span className="mix-blend-difference">{symbol}</span>}
+            {showSymbols && <span className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">{symbol}</span>}
           </motion.div>
         )}
 
@@ -171,7 +171,7 @@ const DotsPattern = ({ styleProps, shapeClasses, tripDuration, symbol, showSymbo
         animate={{ opacity: [1, 0], scale: [1, 0.8] }}
         transition={{ duration: tripDuration, repeat: Infinity, repeatType: 'reverse', ease: easing }}
       >
-        {showSymbols && <span className="mix-blend-difference">{symbol}</span>}
+        {showSymbols && <span className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">{symbol}</span>}
       </motion.div>
       <motion.div
         className={shapeClasses}
@@ -179,7 +179,7 @@ const DotsPattern = ({ styleProps, shapeClasses, tripDuration, symbol, showSymbo
         animate={{ opacity: [0, 1], scale: [0.8, 1] }}
         transition={{ duration: tripDuration, repeat: Infinity, repeatType: 'reverse', ease: easing }}
       >
-        {showSymbols && <span className="mix-blend-difference">{symbol}</span>}
+        {showSymbols && <span className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">{symbol}</span>}
       </motion.div>
     </div>
   );
@@ -200,7 +200,7 @@ const LemniscatePattern = ({ styleProps, shapeClasses, tripDuration, symbol, sho
         y: { duration: tripDuration * 2, repeat: Infinity, ease: easing } 
       }}
     >
-      {showSymbols && <span className="mix-blend-difference">{symbol}</span>}
+      {showSymbols && <span className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">{symbol}</span>}
     </motion.div>
   );
 };
@@ -216,7 +216,7 @@ const PulsePattern = ({ styleProps, shapeClasses, tripDuration, symbol, showSymb
           animate={{ scale: [1, 4], opacity: [0.8, 0] }}
           transition={{ duration: tripDuration, repeat: Infinity, repeatType: 'reverse', ease: easing }}
         >
-          {showSymbols && <span className="mix-blend-difference">{symbol}</span>}
+          {showSymbols && <span className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">{symbol}</span>}
         </motion.div>
       </div>
       <div className="relative flex items-center justify-center">
@@ -226,7 +226,7 @@ const PulsePattern = ({ styleProps, shapeClasses, tripDuration, symbol, showSymb
           animate={{ scale: [4, 1], opacity: [0, 0.8] }}
           transition={{ duration: tripDuration, repeat: Infinity, repeatType: 'reverse', ease: easing }}
         >
-          {showSymbols && <span className="mix-blend-difference">{symbol}</span>}
+          {showSymbols && <span className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">{symbol}</span>}
         </motion.div>
       </div>
     </div>
@@ -247,7 +247,7 @@ const BarsPattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, i
         animate={{ opacity: [1, 0] }}
         transition={{ duration: tripDuration, repeat: Infinity, repeatType: 'reverse', ease: easing }}
       >
-        {showSymbols && <span className="mix-blend-difference">{symbol}</span>}
+        {showSymbols && <span className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">{symbol}</span>}
       </motion.div>
       <motion.div
         className="rounded-[10px] flex items-center justify-center text-white font-bold"
@@ -255,7 +255,7 @@ const BarsPattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, i
         animate={{ opacity: [0, 1] }}
         transition={{ duration: tripDuration, repeat: Infinity, repeatType: 'reverse', ease: easing }}
       >
-        {showSymbols && <span className="mix-blend-difference">{symbol}</span>}
+        {showSymbols && <span className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">{symbol}</span>}
       </motion.div>
     </div>
   );
@@ -276,7 +276,7 @@ const ZigZagPattern = ({ styleProps, shapeClasses, tripDuration, symbol, showSym
         y: { duration: tripDuration * 5, repeat: Infinity, ease: 'linear' } 
       }}
     >
-      {showSymbols && <span className="mix-blend-difference">{symbol}</span>}
+      {showSymbols && <span className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">{symbol}</span>}
     </motion.div>
   );
 };
