@@ -9,11 +9,29 @@ export const useBilateralAudio = () => {
   const pannerRef = useRef<StereoPannerNode | null>(null);
   const gainRef = useRef<GainNode | null>(null);
   const oscillatorRef = useRef<OscillatorNode | null>(null);
+  const noiseSourceRef = useRef<AudioBufferSourceNode | null>(null);
   const lfoRef = useRef<OscillatorNode | null>(null);
+
+  // Binaural nodes refs
+  const bLeftOscRef = useRef<OscillatorNode | null>(null);
+  const bRightOscRef = useRef<OscillatorNode | null>(null);
+  const bLeftPannerRef = useRef<StereoPannerNode | null>(null);
+  const bRightPannerRef = useRef<StereoPannerNode | null>(null);
   
   // Discrete audio interval ref
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isLeftClickRef = useRef<boolean>(true);
+
+  // Function to create White Noise Buffer
+  const createWhiteNoiseBuffer = (ctx: AudioContext) => {
+    const bufferSize = ctx.sampleRate * 2; // 2 seconds
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+    }
+    return buffer;
+  };
 
   // Function to play a discrete beep
   const playClick = (ctx: AudioContext, isLeft: boolean, volume: number, type: OscillatorType) => {
@@ -64,7 +82,7 @@ export const useBilateralAudio = () => {
     }
 
     if (!audioCtxRef.current) {
-      const AudioContextCtor = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioContextCtor = window.AudioContext || (window as unknown as any).webkitAudioContext;
       audioCtxRef.current = new AudioContextCtor();
     }
     
@@ -74,25 +92,17 @@ export const useBilateralAudio = () => {
 
     const ctx = audioCtxRef.current;
 
-    if (oscillatorRef.current) {
-      oscillatorRef.current.stop();
-      oscillatorRef.current.disconnect();
-      oscillatorRef.current = null;
-    }
-    if (lfoRef.current) {
-      lfoRef.current.stop();
-      lfoRef.current.disconnect();
-      lfoRef.current = null;
-    }
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
+    // Cleanup previous nodes
+    if (oscillatorRef.current) { oscillatorRef.current.stop(); oscillatorRef.current.disconnect(); oscillatorRef.current = null; }
+    if (noiseSourceRef.current) { noiseSourceRef.current.stop(); noiseSourceRef.current.disconnect(); noiseSourceRef.current = null; }
+    if (lfoRef.current) { lfoRef.current.stop(); lfoRef.current.disconnect(); lfoRef.current = null; }
+    if (bLeftOscRef.current) { bLeftOscRef.current.stop(); bLeftOscRef.current.disconnect(); bLeftOscRef.current = null; }
+    if (bRightOscRef.current) { bRightOscRef.current.stop(); bRightOscRef.current.disconnect(); bRightOscRef.current = null; }
+    if (intervalRef.current) { clearInterval(intervalRef.current); }
 
-    if (audioFormat === 'continuous') {
-      oscillatorRef.current = ctx.createOscillator();
-      oscillatorRef.current.type = 'sine';
-      oscillatorRef.current.frequency.value = 432;
+    const isLfoFormat = audioFormat === 'continuous' || audioFormat === 'white_noise';
 
+    if (isLfoFormat) {
       pannerRef.current = ctx.createStereoPanner();
       
       lfoRef.current = ctx.createOscillator();
@@ -100,7 +110,6 @@ export const useBilateralAudio = () => {
       lfoRef.current.frequency.value = speed;
       
       const lfoGain = ctx.createGain();
-      // Apply desynchronization to continuous mode by reversing the LFO wave amplitude
       lfoGain.gain.value = isDesync ? -1 : 1;
 
       lfoRef.current.connect(lfoGain);
@@ -109,13 +118,56 @@ export const useBilateralAudio = () => {
       gainRef.current = ctx.createGain();
       gainRef.current.gain.value = audioVolume;
 
-      oscillatorRef.current.connect(pannerRef.current);
+      if (audioFormat === 'white_noise') {
+        noiseSourceRef.current = ctx.createBufferSource();
+        noiseSourceRef.current.buffer = createWhiteNoiseBuffer(ctx);
+        noiseSourceRef.current.loop = true;
+        noiseSourceRef.current.connect(pannerRef.current);
+        noiseSourceRef.current.start();
+      } else {
+        oscillatorRef.current = ctx.createOscillator();
+        oscillatorRef.current.type = 'sine';
+        oscillatorRef.current.frequency.value = 432;
+        oscillatorRef.current.connect(pannerRef.current);
+        oscillatorRef.current.start();
+      }
+
       pannerRef.current.connect(gainRef.current);
       gainRef.current.connect(ctx.destination);
-
-      oscillatorRef.current.start();
       lfoRef.current.start();
     } 
+    else if (audioFormat === 'binaural_beats') {
+      const baseFreq = 200; // Hz
+      const beatFreq = speed * 2; // Beats per second
+
+      bLeftOscRef.current = ctx.createOscillator();
+      bLeftOscRef.current.type = 'sine';
+      bLeftOscRef.current.frequency.value = baseFreq;
+
+      bRightOscRef.current = ctx.createOscillator();
+      bRightOscRef.current.type = 'sine';
+      bRightOscRef.current.frequency.value = baseFreq + beatFreq;
+
+      bLeftPannerRef.current = ctx.createStereoPanner();
+      bLeftPannerRef.current.pan.value = isDesync ? 1 : -1;
+
+      bRightPannerRef.current = ctx.createStereoPanner();
+      bRightPannerRef.current.pan.value = isDesync ? -1 : 1;
+
+      gainRef.current = ctx.createGain();
+      gainRef.current.gain.value = audioVolume * 0.5; // Reduce volume as binaural uses two continuous waves
+
+      bLeftOscRef.current.connect(bLeftPannerRef.current);
+      bRightOscRef.current.connect(bRightPannerRef.current);
+      
+      bLeftPannerRef.current.connect(gainRef.current);
+      bRightPannerRef.current.connect(gainRef.current);
+      
+      gainRef.current.connect(ctx.destination);
+
+      bLeftOscRef.current.start();
+      bRightOscRef.current.start();
+    }
     else if (audioFormat === 'click' || audioFormat === 'metronome') {
       const halfCycleMs = (1 / (2 * speed)) * 1000;
       isLeftClickRef.current = true;
@@ -124,7 +176,6 @@ export const useBilateralAudio = () => {
       isLeftClickRef.current = !isLeftClickRef.current;
 
       const runInterval = () => {
-        // Add random timing jitter if randomness is high
         const jitter = (Math.random() * 0.4 - 0.2) * halfCycleMs * (randomness / 100);
         const nextTick = halfCycleMs + jitter;
 
@@ -138,22 +189,15 @@ export const useBilateralAudio = () => {
       runInterval();
     }
 
+    // Cleanup
     return () => {
-      if (intervalRef.current) clearTimeout(intervalRef.current);
-      if (oscillatorRef.current) {
-        try { oscillatorRef.current.stop(); } catch(e){}
-      }
-      if (lfoRef.current) {
-        try { lfoRef.current.stop(); } catch(e){}
-      }
+      if (oscillatorRef.current) oscillatorRef.current.stop();
+      if (noiseSourceRef.current) noiseSourceRef.current.stop();
+      if (lfoRef.current) lfoRef.current.stop();
+      if (bLeftOscRef.current) bLeftOscRef.current.stop();
+      if (bRightOscRef.current) bRightOscRef.current.stop();
+      if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isPlaying, audioEnabled, audioFormat, speed, isDesync, randomness]);
+  }, [isPlaying, audioEnabled, speed, audioVolume, audioFormat, isDesync, randomness]);
 
-  useEffect(() => {
-    if (gainRef.current && audioFormat === 'continuous') {
-      gainRef.current.gain.value = audioVolume;
-    }
-  }, [audioVolume, audioFormat]);
-
-  return null;
 };

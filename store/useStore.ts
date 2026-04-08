@@ -1,7 +1,9 @@
 import { create } from 'zustand';
 
 export type PatternType = 'horizontal' | 'vertical' | 'diagonal-1' | 'diagonal-2' | 'lemniscate' | 'dots' | 'pulse' | 'bars' | 'zigzag';
-export type AudioFormat = 'continuous' | 'click' | 'metronome';
+export type AudioFormat = 'continuous' | 'click' | 'metronome' | 'white_noise' | 'binaural_beats';
+export type TargetShape = 'circle' | 'square' | 'ring' | 'butterfly';
+export type SymbolLanguage = 'ru' | 'en' | 'numbers';
 
 export enum SessionPhase {
   Idle = 'idle',
@@ -40,6 +42,8 @@ export interface EmdrState {
   // New Mechanics
   isSaccadic: boolean; // Smooth pursuit vs Saccadic (jumps)
   showSymbols: boolean; // EMDR 2.0 dual task symbol flash
+  symbolLanguage: SymbolLanguage;
+  targetShape: TargetShape;
   activePreset: string | null;
 
   setSpeed: (speed: number) => void;
@@ -59,6 +63,8 @@ export interface EmdrState {
   
   setIsSaccadic: (isSaccadic: boolean) => void;
   setShowSymbols: (showSymbols: boolean) => void;
+  setSymbolLanguage: (lang: SymbolLanguage) => void;
+  setTargetShape: (shape: TargetShape) => void;
   applyPreset: (presetId: string) => void;
 }
 
@@ -93,8 +99,11 @@ export const useStore = create<RootState>((set) => ({
   cyclesPerSet: 24, // Стандарт EMDR: 24 движения на подход
   setsCompleted: 0,
   isSettingsOpen: true, // Показываем настройки при старте сразу
+  
   isSaccadic: false,
   showSymbols: false,
+  symbolLanguage: 'ru',
+  targetShape: 'circle',
   activePreset: null,
   
   setSpeed: (speed) => set({ speed, activePreset: null }),
@@ -114,13 +123,17 @@ export const useStore = create<RootState>((set) => ({
   
   setIsSaccadic: (isSaccadic) => set({ isSaccadic, activePreset: null }),
   setShowSymbols: (showSymbols) => set({ showSymbols, activePreset: null }),
+  setSymbolLanguage: (symbolLanguage) => set({ symbolLanguage }),
+  setTargetShape: (targetShape) => set({ targetShape }),
   
   applyPreset: (presetId) => {
     const presets: Record<string, Partial<EmdrState>> = {
-      'anxiety': { speed: 0.8, color: '#10b981', pattern: 'horizontal', isSaccadic: false, isDesync: false, randomness: 0, audioFormat: 'continuous', showSymbols: false },
-      'trauma': { speed: 1.4, color: '#f43f5e', pattern: 'diagonal-1', isSaccadic: true, isDesync: true, randomness: 20, audioFormat: 'click', showSymbols: true },
-      'focus': { speed: 1.2, color: '#06b6d4', pattern: 'dots', isSaccadic: false, isDesync: false, randomness: 0, audioFormat: 'click', showSymbols: false },
-      'resource': { speed: 0.6, color: '#f59e0b', pattern: 'bars', isSaccadic: false, isDesync: false, randomness: 5, audioFormat: 'continuous', showSymbols: false },
+      'anxiety': { speed: 0.8, color: '#10b981', pattern: 'horizontal', targetShape: 'circle', isSaccadic: false, isDesync: false, randomness: 0, audioFormat: 'continuous', showSymbols: false },
+      'trauma': { speed: 1.4, color: '#f43f5e', pattern: 'diagonal-1', targetShape: 'circle', isSaccadic: true, isDesync: true, randomness: 20, audioFormat: 'click', showSymbols: true, symbolLanguage: 'numbers' },
+      'focus': { speed: 1.2, color: '#06b6d4', pattern: 'dots', targetShape: 'square', isSaccadic: false, isDesync: false, randomness: 0, audioFormat: 'white_noise', showSymbols: false },
+      'resource': { speed: 0.6, color: '#f59e0b', pattern: 'bars', targetShape: 'ring', isSaccadic: false, isDesync: false, randomness: 5, audioFormat: 'continuous', showSymbols: false },
+      'sleep': { speed: 0.4, color: '#8b5cf6', pattern: 'lemniscate', targetShape: 'circle', isSaccadic: false, isDesync: false, randomness: 0, audioFormat: 'binaural_beats', showSymbols: false },
+      'panic': { speed: 0.8, color: '#3b82f6', pattern: 'horizontal', targetShape: 'square', isSaccadic: true, isDesync: true, randomness: 50, audioFormat: 'click', showSymbols: true, symbolLanguage: 'ru' },
     };
     if (presets[presetId]) {
       set({ ...presets[presetId], activePreset: presetId });

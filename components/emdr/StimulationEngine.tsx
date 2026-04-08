@@ -5,10 +5,24 @@ import { motion } from 'framer-motion';
 import { useBilateralAudio } from '@/hooks/useBilateralAudio';
 import { useEffect, useState } from 'react';
 
-const CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const getCharacters = (lang: string) => {
+  if (lang === 'ru') return 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ';
+  if (lang === 'en') return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  if (lang === 'numbers') return '0123456789';
+  return 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+};
+
+const getShapeClasses = (shape: string) => {
+  switch (shape) {
+    case 'square': return 'rounded-[20px]';
+    case 'ring': return 'rounded-full border-[6px] bg-transparent';
+    case 'butterfly': return 'rounded-[40%_60%_70%_30%_/_40%_50%_60%_50%]';
+    default: return 'rounded-full'; // circle
+  }
+};
 
 export const StimulationEngine = () => {
-  const { speed, color, size, pattern, isPlaying, randomness, cyclesPerSet, setPlaying, incrementSets, isSaccadic, showSymbols } = useStore();
+  const { speed, color, size, pattern, isPlaying, randomness, cyclesPerSet, setPlaying, incrementSets, isSaccadic, showSymbols, symbolLanguage, targetShape } = useStore();
   const [symbol, setSymbol] = useState('');
   
   useBilateralAudio();
@@ -30,15 +44,16 @@ export const StimulationEngine = () => {
       setSymbol('');
       return;
     }
+    const chars = getCharacters(symbolLanguage);
     const intervalMs = (1 / speed) * 1000;
     const interval = setInterval(() => {
-      setSymbol(CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]);
+      setSymbol(chars[Math.floor(Math.random() * chars.length)]);
     }, intervalMs / 2); // Change at every edge
     
     // Initial symbol
-    setSymbol(CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)]);
+    setSymbol(chars[Math.floor(Math.random() * chars.length)]);
     return () => clearInterval(interval);
-  }, [isPlaying, showSymbols, speed]);
+  }, [isPlaying, showSymbols, speed, symbolLanguage]);
 
   const glowShadow = `0 0 20px ${color}80, 0 0 40px ${color}40`;
   const tripDuration = 1 / (2 * speed);
@@ -47,6 +62,17 @@ export const StimulationEngine = () => {
   const jY = 20 * (randomness / 100);
 
   const easing = isSaccadic ? "circInOut" : "linear";
+
+  const getStyleProps = () => {
+    const base = { width: size, height: size, boxShadow: glowShadow, fontSize: size * 0.5 };
+    if (targetShape === 'ring') {
+      return { ...base, borderColor: color };
+    }
+    return { ...base, backgroundColor: color };
+  };
+
+  const styleProps = getStyleProps();
+  const shapeClasses = `absolute flex items-center justify-center text-white font-bold ${getShapeClasses(targetShape)}`;
 
   return (
     <div className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden pointer-events-none z-0">
@@ -58,8 +84,8 @@ export const StimulationEngine = () => {
         
         {pattern === 'horizontal' && (
           <motion.div
-            className="rounded-full absolute flex items-center justify-center text-white font-bold"
-            style={{ width: size, height: size, backgroundColor: color, boxShadow: glowShadow, fontSize: size * 0.5 }}
+            className={shapeClasses}
+            style={styleProps}
             animate={isPlaying ? { x: ['-45vw', '45vw'] } : { x: 0 }}
             transition={{
               x: isPlaying ? { duration: tripDuration, ease: easing, repeat: Infinity, repeatType: 'mirror' } : { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
@@ -71,8 +97,8 @@ export const StimulationEngine = () => {
 
         {pattern === 'vertical' && (
           <motion.div
-            className="rounded-full absolute flex items-center justify-center text-white font-bold"
-            style={{ width: size, height: size, backgroundColor: color, boxShadow: glowShadow, fontSize: size * 0.5 }}
+            className={shapeClasses}
+            style={styleProps}
             animate={isPlaying ? { y: ['-35vh', '35vh'] } : { y: 0 }}
             transition={{
               y: isPlaying ? { duration: tripDuration, ease: easing, repeat: Infinity, repeatType: 'mirror' } : { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
@@ -84,8 +110,8 @@ export const StimulationEngine = () => {
 
         {pattern === 'diagonal-1' && (
           <motion.div
-             className="rounded-full absolute flex items-center justify-center text-white font-bold"
-             style={{ width: size, height: size, backgroundColor: color, boxShadow: glowShadow, fontSize: size * 0.5 }}
+            className={shapeClasses}
+            style={styleProps}
             animate={isPlaying ? { x: ['-45vw', '45vw'], y: ['-35vh', '35vh'] } : { x: 0, y: 0 }}
             transition={{
               x: isPlaying ? { duration: tripDuration, ease: easing, repeat: Infinity, repeatType: 'mirror' } : { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
@@ -98,8 +124,8 @@ export const StimulationEngine = () => {
 
         {pattern === 'diagonal-2' && (
           <motion.div
-             className="rounded-full absolute flex items-center justify-center text-white font-bold"
-             style={{ width: size, height: size, backgroundColor: color, boxShadow: glowShadow, fontSize: size * 0.5 }}
+            className={shapeClasses}
+            style={styleProps}
             animate={isPlaying ? { x: ['-45vw', '45vw'], y: ['35vh', '-35vh'] } : { x: 0, y: 0 }}
             transition={{
               x: isPlaying ? { duration: tripDuration, ease: easing, repeat: Infinity, repeatType: 'mirror' } : { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
@@ -111,23 +137,23 @@ export const StimulationEngine = () => {
         )}
 
         {pattern === 'dots' && isPlaying && (
-          <DotsPattern size={size} color={color} shadow={glowShadow} tripDuration={tripDuration} symbol={symbol} showSymbols={showSymbols} isSaccadic={isSaccadic} />
+          <DotsPattern styleProps={styleProps} shapeClasses={shapeClasses} tripDuration={tripDuration} symbol={symbol} showSymbols={showSymbols} isSaccadic={isSaccadic} />
         )}
 
         {pattern === 'lemniscate' && isPlaying && (
-          <LemniscatePattern size={size} color={color} shadow={glowShadow} tripDuration={tripDuration} symbol={symbol} showSymbols={showSymbols} isSaccadic={isSaccadic} />
+          <LemniscatePattern styleProps={styleProps} shapeClasses={shapeClasses} tripDuration={tripDuration} symbol={symbol} showSymbols={showSymbols} isSaccadic={isSaccadic} />
         )}
 
         {pattern === 'pulse' && isPlaying && (
-          <PulsePattern size={size} color={color} shadow={glowShadow} tripDuration={tripDuration} symbol={symbol} showSymbols={showSymbols} isSaccadic={isSaccadic} />
+          <PulsePattern styleProps={styleProps} shapeClasses={shapeClasses} tripDuration={tripDuration} symbol={symbol} showSymbols={showSymbols} isSaccadic={isSaccadic} />
         )}
 
         {pattern === 'bars' && isPlaying && (
-          <BarsPattern size={size} color={color} shadow={glowShadow} tripDuration={tripDuration} symbol={symbol} showSymbols={showSymbols} isSaccadic={isSaccadic} />
+          <BarsPattern color={color} shadow={glowShadow} tripDuration={tripDuration} symbol={symbol} showSymbols={showSymbols} isSaccadic={isSaccadic} />
         )}
         
         {pattern === 'zigzag' && isPlaying && (
-          <ZigZagPattern size={size} color={color} shadow={glowShadow} tripDuration={tripDuration} symbol={symbol} showSymbols={showSymbols} isSaccadic={isSaccadic} />
+          <ZigZagPattern styleProps={styleProps} shapeClasses={shapeClasses} tripDuration={tripDuration} symbol={symbol} showSymbols={showSymbols} isSaccadic={isSaccadic} />
         )}
 
       </motion.div>
@@ -135,21 +161,21 @@ export const StimulationEngine = () => {
   );
 };
 
-const DotsPattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, isSaccadic }: any) => {
+const DotsPattern = ({ styleProps, shapeClasses, tripDuration, symbol, showSymbols, isSaccadic }: any) => {
   const easing = isSaccadic ? "circInOut" : "linear";
   return (
     <div className="w-full h-64 flex items-center justify-between absolute px-12 z-0">
       <motion.div
-        className="rounded-full flex items-center justify-center text-white font-bold"
-        style={{ width: size, height: size, backgroundColor: color, boxShadow: shadow, fontSize: size * 0.5 }}
+        className={shapeClasses}
+        style={styleProps}
         animate={{ opacity: [1, 0], scale: [1, 0.8] }}
         transition={{ duration: tripDuration, repeat: Infinity, repeatType: 'reverse', ease: easing }}
       >
         {showSymbols && <span className="mix-blend-difference">{symbol}</span>}
       </motion.div>
       <motion.div
-        className="rounded-full flex items-center justify-center text-white font-bold"
-        style={{ width: size, height: size, backgroundColor: color, boxShadow: shadow, fontSize: size * 0.5 }}
+        className={shapeClasses}
+        style={styleProps}
         animate={{ opacity: [0, 1], scale: [0.8, 1] }}
         transition={{ duration: tripDuration, repeat: Infinity, repeatType: 'reverse', ease: easing }}
       >
@@ -159,12 +185,12 @@ const DotsPattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, i
   );
 };
 
-const LemniscatePattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, isSaccadic }: any) => {
+const LemniscatePattern = ({ styleProps, shapeClasses, tripDuration, symbol, showSymbols, isSaccadic }: any) => {
   const easing = isSaccadic ? "circInOut" : "linear";
   return (
     <motion.div
-      className="rounded-full absolute flex items-center justify-center text-white font-bold"
-      style={{ width: size, height: size, backgroundColor: color, boxShadow: shadow, fontSize: size * 0.5 }}
+      className={shapeClasses}
+      style={styleProps}
       animate={{ 
         x: [0, '40vw', 0, '-40vw', 0], 
         y: [0, '-20vh', 0, '20vh', 0] 
@@ -179,15 +205,15 @@ const LemniscatePattern = ({ size, color, shadow, tripDuration, symbol, showSymb
   );
 };
 
-const PulsePattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, isSaccadic }: any) => {
+const PulsePattern = ({ styleProps, shapeClasses, tripDuration, symbol, showSymbols, isSaccadic }: any) => {
   const easing = isSaccadic ? "circInOut" : "linear";
   return (
     <div className="w-full h-full absolute inset-0 flex items-center justify-between px-24">
       <div className="relative flex items-center justify-center">
         <motion.div
-          className="rounded-full absolute border flex items-center justify-center text-white font-bold"
-          style={{ borderColor: color, boxShadow: shadow, fontSize: size * 0.5 }}
-          animate={{ width: [size, size * 4], height: [size, size * 4], opacity: [0.8, 0] }}
+          className={shapeClasses + " border-2 border-white"}
+          style={styleProps}
+          animate={{ scale: [1, 4], opacity: [0.8, 0] }}
           transition={{ duration: tripDuration, repeat: Infinity, repeatType: 'reverse', ease: easing }}
         >
           {showSymbols && <span className="mix-blend-difference">{symbol}</span>}
@@ -195,9 +221,9 @@ const PulsePattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, 
       </div>
       <div className="relative flex items-center justify-center">
         <motion.div
-          className="rounded-full absolute border flex items-center justify-center text-white font-bold"
-          style={{ borderColor: color, boxShadow: shadow, fontSize: size * 0.5 }}
-          animate={{ width: [size * 4, size], height: [size * 4, size], opacity: [0, 0.8] }}
+          className={shapeClasses + " border-2 border-white"}
+          style={styleProps}
+          animate={{ scale: [4, 1], opacity: [0, 0.8] }}
           transition={{ duration: tripDuration, repeat: Infinity, repeatType: 'reverse', ease: easing }}
         >
           {showSymbols && <span className="mix-blend-difference">{symbol}</span>}
@@ -207,15 +233,16 @@ const PulsePattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, 
   );
 };
 
+// Bars pattern is inherently rectangles, not using targetShape
 const BarsPattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, isSaccadic }: any) => {
-  const barWidth = Math.max(10, size / 2);
+  const barWidth = Math.max(10, (size || 48) / 2);
   const barHeight = '60vh';
   const easing = isSaccadic ? "circInOut" : "linear";
 
   return (
     <div className="w-full flex justify-between absolute px-12 top-1/2 -translate-y-1/2 z-0">
       <motion.div
-        className="rounded-full flex items-center justify-center text-white font-bold"
+        className="rounded-[10px] flex items-center justify-center text-white font-bold"
         style={{ width: barWidth, height: barHeight, backgroundColor: color, boxShadow: shadow, fontSize: barWidth * 0.8 }}
         animate={{ opacity: [1, 0] }}
         transition={{ duration: tripDuration, repeat: Infinity, repeatType: 'reverse', ease: easing }}
@@ -223,7 +250,7 @@ const BarsPattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, i
         {showSymbols && <span className="mix-blend-difference">{symbol}</span>}
       </motion.div>
       <motion.div
-        className="rounded-full flex items-center justify-center text-white font-bold"
+        className="rounded-[10px] flex items-center justify-center text-white font-bold"
         style={{ width: barWidth, height: barHeight, backgroundColor: color, boxShadow: shadow, fontSize: barWidth * 0.8 }}
         animate={{ opacity: [0, 1] }}
         transition={{ duration: tripDuration, repeat: Infinity, repeatType: 'reverse', ease: easing }}
@@ -234,12 +261,12 @@ const BarsPattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, i
   );
 };
 
-const ZigZagPattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, isSaccadic }: any) => {
+const ZigZagPattern = ({ styleProps, shapeClasses, tripDuration, symbol, showSymbols, isSaccadic }: any) => {
   const easing = isSaccadic ? "circInOut" : "linear";
   return (
     <motion.div
-      className="rounded-full absolute flex items-center justify-center text-white font-bold"
-      style={{ width: size, height: size, backgroundColor: color, boxShadow: shadow, fontSize: size * 0.5 }}
+      className={shapeClasses}
+      style={styleProps}
       animate={{ 
         x: ['-45vw', '45vw'], 
         y: ['-20vh', '20vh', '-20vh', '20vh', '-20vh'] 
