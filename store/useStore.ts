@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type PatternType = 'linear' | 'lemniscate' | 'dots';
+export type PatternType = 'linear' | 'dots' | 'lemniscate' | 'pulse' | 'bars';
 
 export enum SessionPhase {
   Idle = 'idle',

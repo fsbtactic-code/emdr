@@ -5,7 +5,7 @@ import { Play, Pause, Settings2 } from 'lucide-react';
 import { useState } from 'react';
 
 export const Controls = () => {
-  const { isPlaying, togglePlaying, speed, setSpeed, size, setSize, color, setColor } = useStore();
+  const { isPlaying, togglePlaying, speed, setSpeed, size, setSize, color, setColor, pattern, setPattern } = useStore();
   const [openSettings, setOpenSettings] = useState(false);
 
   const colors = [
@@ -19,7 +19,23 @@ export const Controls = () => {
   return (
     <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center space-y-4">
       {openSettings && (
-        <div className="glass-panel p-6 rounded-2xl flex flex-col gap-6 w-80 text-sm transition-all duration-300 ease-fluid">
+        <div className="glass-panel p-6 rounded-2xl flex flex-col gap-6 w-84 text-sm transition-all duration-300 ease-fluid">
+          
+          <div className="flex flex-col gap-3">
+            <span className="text-white/70">Pattern</span>
+            <div className="grid grid-cols-3 gap-2">
+              {(['linear', 'dots', 'lemniscate', 'pulse', 'bars'] as const).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setPattern(p)}
+                  className={`py-1.5 px-2 rounded-lg text-xs capitalize transition-colors ${pattern === p ? 'bg-white/20 text-white border border-white/30' : 'bg-white/5 text-white/50 hover:bg-white/10'}`}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
               <span className="text-white/70">Speed ({speed.toFixed(1)} Hz)</span>
