@@ -37,6 +37,11 @@ export interface EmdrState {
   setsCompleted: number;
   isSettingsOpen: boolean;
   
+  // New Mechanics
+  isSaccadic: boolean; // Smooth pursuit vs Saccadic (jumps)
+  showSymbols: boolean; // EMDR 2.0 dual task symbol flash
+  activePreset: string | null;
+
   setSpeed: (speed: number) => void;
   setColor: (color: string) => void;
   setSize: (size: number) => void;
@@ -51,6 +56,10 @@ export interface EmdrState {
   setCyclesPerSet: (cycles: number) => void;
   incrementSets: () => void;
   setIsSettingsOpen: (isOpen: boolean) => void;
+  
+  setIsSaccadic: (isSaccadic: boolean) => void;
+  setShowSymbols: (showSymbols: boolean) => void;
+  applyPreset: (presetId: string) => void;
 }
 
 export interface SessionState {
@@ -84,21 +93,39 @@ export const useStore = create<RootState>((set) => ({
   cyclesPerSet: 24, // Стандарт EMDR: 24 движения на подход
   setsCompleted: 0,
   isSettingsOpen: true, // Показываем настройки при старте сразу
+  isSaccadic: false,
+  showSymbols: false,
+  activePreset: null,
   
-  setSpeed: (speed) => set({ speed }),
-  setColor: (color) => set({ color }),
+  setSpeed: (speed) => set({ speed, activePreset: null }),
+  setColor: (color) => set({ color, activePreset: null }),
   setSize: (size) => set({ size }),
-  setPattern: (pattern) => set({ pattern }),
+  setPattern: (pattern) => set({ pattern, activePreset: null }),
   togglePlaying: () => set((state) => ({ isPlaying: !state.isPlaying })),
   setPlaying: (isPlaying) => set({ isPlaying }),
   setAudioEnabled: (audioEnabled) => set({ audioEnabled }),
   setAudioVolume: (audioVolume) => set({ audioVolume }),
-  setAudioFormat: (audioFormat) => set({ audioFormat }),
-  setIsDesync: (isDesync) => set({ isDesync }),
-  setRandomness: (randomness) => set({ randomness }),
+  setAudioFormat: (audioFormat) => set({ audioFormat, activePreset: null }),
+  setIsDesync: (isDesync) => set({ isDesync, activePreset: null }),
+  setRandomness: (randomness) => set({ randomness, activePreset: null }),
   setCyclesPerSet: (cyclesPerSet) => set({ cyclesPerSet }),
   incrementSets: () => set((state) => ({ setsCompleted: state.setsCompleted + 1 })),
   setIsSettingsOpen: (isSettingsOpen) => set({ isSettingsOpen }),
+  
+  setIsSaccadic: (isSaccadic) => set({ isSaccadic, activePreset: null }),
+  setShowSymbols: (showSymbols) => set({ showSymbols, activePreset: null }),
+  
+  applyPreset: (presetId) => {
+    const presets: Record<string, Partial<EmdrState>> = {
+      'anxiety': { speed: 0.8, color: '#10b981', pattern: 'horizontal', isSaccadic: false, isDesync: false, randomness: 0, audioFormat: 'continuous', showSymbols: false },
+      'trauma': { speed: 1.4, color: '#f43f5e', pattern: 'diagonal-1', isSaccadic: true, isDesync: true, randomness: 20, audioFormat: 'click', showSymbols: true },
+      'focus': { speed: 1.2, color: '#06b6d4', pattern: 'dots', isSaccadic: false, isDesync: false, randomness: 0, audioFormat: 'click', showSymbols: false },
+      'resource': { speed: 0.6, color: '#f59e0b', pattern: 'bars', isSaccadic: false, isDesync: false, randomness: 5, audioFormat: 'continuous', showSymbols: false },
+    };
+    if (presets[presetId]) {
+      set({ ...presets[presetId], activePreset: presetId });
+    }
+  },
 
   // Session Slice
   currentPhase: SessionPhase.Idle,
