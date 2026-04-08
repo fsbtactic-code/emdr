@@ -46,7 +46,7 @@ export const StimulationEngine = () => {
   const jX = 20 * (randomness / 100);
   const jY = 20 * (randomness / 100);
 
-  const easing = isSaccadic ? "steps(1, start)" : "linear";
+  const easing = isSaccadic ? "circInOut" : "linear";
 
   return (
     <div className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden pointer-events-none z-0">
@@ -136,7 +136,7 @@ export const StimulationEngine = () => {
 };
 
 const DotsPattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, isSaccadic }: any) => {
-  const easing = isSaccadic ? "steps(1, start)" : "linear";
+  const easing = isSaccadic ? "circInOut" : "linear";
   return (
     <div className="w-full h-64 flex items-center justify-between absolute px-12 z-0">
       <motion.div
@@ -160,7 +160,7 @@ const DotsPattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, i
 };
 
 const LemniscatePattern = ({ size, color, shadow, tripDuration, symbol, showSymbols, isSaccadic }: any) => {
-  const easing = isSaccadic ? "steps(1, start)" : "linear";
+  const easing = isSaccadic ? "circInOut" : "linear";
   return (
     <motion.div
       className="rounded-full absolute flex items-center justify-center text-white font-bold"
