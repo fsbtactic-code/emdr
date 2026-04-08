@@ -156,7 +156,7 @@ export const SettingsPanel = () => {
                 <div className="relative w-full">
                   <div 
                     ref={presetsScrollRef}
-                    className="flex gap-4 md:gap-6 overflow-x-auto pb-6 px-4 md:px-8 snap-x snap-mandatory no-scrollbar"
+                    className="flex gap-4 md:gap-6 overflow-x-auto pt-2 pb-6 px-4 md:px-8 snap-x snap-mandatory no-scrollbar -mt-2"
                   >
                     {presetGroups.map((group, idx) => (
                       <div key={idx} className="flex gap-3 shrink-0">
