@@ -76,6 +76,8 @@ export interface EmdrState {
   applyPreset: (presetId: string) => void;
   setIsFeedbackOpen: (isOpen: boolean) => void;
   setIsGuideOpen: (isOpen: boolean) => void;
+  applyConfig: (config: Partial<EmdrState>) => void;
+  resetSession: () => void;
 }
 
 export interface SessionState {
@@ -167,6 +169,8 @@ export const useStore = create<RootState>((set) => ({
       set({ ...presets[presetId], activePreset: presetId });
     }
   },
+  applyConfig: (config) => set((state) => ({ ...state, ...config, activePreset: 'custom' })),
+  resetSession: () => set({ setsCompleted: 0, isPlaying: false }),
 
   // Session Slice
   currentPhase: SessionPhase.Idle,

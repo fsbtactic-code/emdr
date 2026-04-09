@@ -9,9 +9,31 @@ import { EmdrGuide } from '@/components/emdr/EmdrGuide';
 import { FloatingNav } from '@/components/emdr/FloatingNav';
 import { Disclaimer } from '@/components/emdr/Disclaimer';
 import { useStore } from '@/store/useStore';
+import { useShareableState } from '@/hooks/useShareableState';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sparkles, X } from 'lucide-react';
 
 export default function SessionPage() {
-  const { isSettingsOpen } = useStore();
+  const { isSettingsOpen, applyConfig } = useStore();
+  const { decodeConfig } = useShareableState();
+  const [showToast, setShowToast] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const presetBase64 = params.get('p');
+    if (presetBase64) {
+      const config = decodeConfig(presetBase64);
+      if (config) {
+        applyConfig(config);
+        setShowToast(true);
+        // Clean up URL without reload
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, '', newUrl);
+        setTimeout(() => setShowToast(false), 5000);
+      }
+    }
+  }, []);
 
   return (
     <main className="relative w-full h-full flex bg-zinc-950 overflow-hidden">
@@ -31,6 +53,27 @@ export default function SessionPage() {
       <EmdrGuide />
       <InstallPrompt />
       <Disclaimer />
+
+      {/* Preset Applied Toast */}
+      <AnimatePresence>
+        {showToast && (
+          <motion.div
+            initial={{ y: -100, x: '-50%', opacity: 0 }}
+            animate={{ y: 24, x: '-50%', opacity: 1 }}
+            exit={{ y: -100, x: '-50%', opacity: 0 }}
+            className="fixed top-0 left-1/2 z-[100] flex items-center gap-3 px-5 py-3 bg-indigo-500 text-white rounded-2xl shadow-2xl border border-indigo-400/30"
+          >
+            <Sparkles size={18} />
+            <div className="flex flex-col">
+              <span className="text-sm font-bold leading-none">Конфигурация применена</span>
+              <span className="text-[11px] opacity-80 mt-1">Параметры от специалиста загружены</span>
+            </div>
+            <button onClick={() => setShowToast(false)} className="ml-2 p-1 hover:bg-white/10 rounded-lg">
+              <X size={14} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }

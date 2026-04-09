@@ -1,7 +1,14 @@
 'use client';
 
+import { 
+  Settings2, X, Play, Pause, Save, Share2, Copy, Check,
+  ChevronDown, ArrowLeftRight, ArrowUpDown, MoveDiagonal, MoveDiagonal2, 
+  Infinity as InfinityIcon, GripHorizontal, Activity, Columns, TrendingUp,
+  Circle, Square as SquareIcon, CircleDashed, Wand2,
+  Wind, CloudRain, Waves, Music, Headphones, Volume2, Clock, Zap, Target as TargetIcon, Brain, Sparkles, Filter, Ghost, RefreshCcw
+} from 'lucide-react';
 import { useStore } from '@/store/useStore';
-import { Settings2, Zap, ShieldAlert, Sparkles, Brain, Moon, ShieldBan, Play, Pause, Waves, CloudRain, Wind, ArrowUpDown, ArrowLeftRight, MoveDiagonal, MoveDiagonal2, Infinity as InfinityIcon, GripHorizontal, Activity, Columns, TrendingUp, Circle, Square, CircleDashed, Wand2, Orbit, ChevronDown, X, Heart, Focus, Eye, Music, Headphones } from 'lucide-react';
+import { useShareableState } from '@/hooks/useShareableState';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 
@@ -40,6 +47,15 @@ export const SettingsPanel = () => {
   } = useStore();
 
   const [expandedCategory, setExpandedCategory] = useState<string | null>('ptsd');
+  const { generateShareLink } = useShareableState();
+  const [justCopied, setJustCopied] = useState(false);
+
+  const handleShare = () => {
+    const link = generateShareLink();
+    navigator.clipboard.writeText(link);
+    setJustCopied(true);
+    setTimeout(() => setJustCopied(false), 2000);
+  };
 
   const colors = [
     { name: 'Cyan',    value: '#06b6d4', shadow: 'var(--drop-shadow-glow-cyan)' },
@@ -64,7 +80,7 @@ export const SettingsPanel = () => {
 
   const shapes = [
     { id: 'circle',    label: 'Круг',    icon: Circle },
-    { id: 'square',    label: 'Квадрат', icon: Square },
+    { id: 'square',    label: 'Квадрат', icon: SquareIcon },
     { id: 'ring',      label: 'Кольцо',  icon: CircleDashed },
     { id: 'butterfly', label: 'Бабочка', icon: Wand2 },
   ];
@@ -376,7 +392,22 @@ export const SettingsPanel = () => {
               </div>
 
               {/* ── CTA ── */}
-              <div className="px-5 py-5 shrink-0">
+              <div className="px-5 py-5 shrink-0 flex flex-col gap-3">
+                <button
+                  onClick={handleShare}
+                  className={`w-full py-3 rounded-2xl font-semibold text-[13px] tracking-wide transition-all border flex items-center justify-center gap-2 ${
+                    justCopied 
+                      ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' 
+                      : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  {justCopied ? (
+                    <><Check size={14} /> Ссылка скопирована!</>
+                  ) : (
+                    <><Share2 size={14} /> Поделиться пресетом</>
+                  )}
+                </button>
+
                 <button
                   onClick={() => setIsSettingsOpen(false)}
                   className="w-full py-3.5 bg-white hover:bg-white/90 text-zinc-950 rounded-2xl font-semibold text-[14px] tracking-wide transition-all shadow-[0_0_20px_rgba(255,255,255,0.12)] hover:shadow-[0_0_35px_rgba(255,255,255,0.25)] active:scale-[0.98] flex items-center justify-center gap-2"
