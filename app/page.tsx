@@ -7,6 +7,7 @@ import { SettingsPanel } from '@/components/emdr/SettingsPanel';
 import { InstallPrompt } from '@/components/emdr/InstallPrompt';
 import { EmdrGuide } from '@/components/emdr/EmdrGuide';
 import { FloatingNav } from '@/components/emdr/FloatingNav';
+import { Disclaimer } from '@/components/emdr/Disclaimer';
 import { useStore } from '@/store/useStore';
 
 export default function SessionPage() {
@@ -29,6 +30,7 @@ export default function SessionPage() {
       <Sidebar />
       <EmdrGuide />
       <InstallPrompt />
+      <Disclaimer />
     </main>
   );
 }

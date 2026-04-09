@@ -51,11 +51,11 @@ export const SettingsPanel = () => {
   ];
 
   const patterns = [
-    { id: 'horizontal',  label: 'Гориз.',     icon: ArrowLeftRight },
-    { id: 'vertical',    label: 'Верт.',       icon: ArrowUpDown },
-    { id: 'diagonal-1',  label: 'Диаг. 1',    icon: MoveDiagonal },
-    { id: 'diagonal-2',  label: 'Диаг. 2',    icon: MoveDiagonal2 },
-    { id: 'lemniscate',  label: 'Лемниск.',   icon: InfinityIcon },
+    { id: 'horizontal',  label: 'Горизонталь', icon: ArrowLeftRight },
+    { id: 'vertical',    label: 'Вертикаль',   icon: ArrowUpDown },
+    { id: 'diagonal-1',  label: 'Диагональ 1', icon: MoveDiagonal },
+    { id: 'diagonal-2',  label: 'Диагональ 2', icon: MoveDiagonal2 },
+    { id: 'lemniscate',  label: 'Лемниската',  icon: InfinityIcon },
     { id: 'dots',        label: 'Точки',       icon: GripHorizontal },
     { id: 'pulse',       label: 'Пульс',       icon: Activity },
     { id: 'bars',        label: 'Столбы',      icon: Columns },
@@ -70,7 +70,7 @@ export const SettingsPanel = () => {
   ];
 
   const audioNames: Record<string, string> = {
-    'continuous': 'Волна', 'click': 'Щелчки', 'metronome': 'Метр.', 'white_noise': 'Шум', 'binaural_beats': 'Бинаурал',
+    'continuous': 'Мягкий', 'click': 'Щелчки', 'metronome': 'Метроном', 'white_noise': 'Белый шум', 'binaural_beats': 'Бинаурал',
   };
 
   const langNames: Record<string, string> = { 'ru': 'Рус', 'en': 'Eng', 'numbers': '123' };
