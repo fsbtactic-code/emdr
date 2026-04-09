@@ -122,7 +122,7 @@ export const SettingsPanel = () => {
 
             <div className="flex-1 no-scrollbar overflow-y-auto w-full pb-12 max-w-7xl mx-auto flex flex-col gap-8 md:gap-10">
               
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-white/5 pb-4 shrink-0 px-4 md:px-8 gap-4">
+              <div className="flex flex-col md:flex-row landscape:flex-col justify-between items-start md:items-end landscape:items-start border-b border-white/5 pb-4 shrink-0 px-4 md:px-8 landscape:px-4 gap-4">
                 <div>
                   <h2 className="text-2xl md:text-3xl font-light tracking-wide text-white drop-shadow-md">Настройте свою сессию</h2>
                   <p className="text-white/40 mt-1 text-sm md:text-base font-medium tracking-wide">Терапевтическая EMDR-среда</p>
@@ -141,7 +141,7 @@ export const SettingsPanel = () => {
 
               {/* Presets Row */}
               <div className="flex flex-col gap-4 relative">
-                <div className="flex justify-between items-center px-4 md:px-8">
+                <div className="flex justify-between items-center px-4 md:px-8 landscape:px-4">
                   <span className="text-white/80 text-[10px] md:text-xs uppercase tracking-widest font-bold">Терапевтические Программы</span>
                   <div className="hidden md:flex gap-2">
                     <button onClick={() => scrollPresets('left')} className="p-1.5 rounded-full bg-white/5 hover:bg-white/20 text-white/50 hover:text-white transition-colors">
@@ -156,7 +156,7 @@ export const SettingsPanel = () => {
                 <div className="relative w-full">
                   <div 
                     ref={presetsScrollRef}
-                    className="flex gap-4 md:gap-6 overflow-x-auto pt-2 pb-6 px-4 md:px-8 snap-x snap-mandatory no-scrollbar -mt-2"
+                    className="flex gap-4 md:gap-6 landscape:gap-4 overflow-x-auto pt-2 pb-6 px-4 md:px-8 landscape:px-4 snap-x snap-mandatory no-scrollbar -mt-2"
                   >
                     {presetGroups.map((group, idx) => (
                       <div key={idx} className="flex gap-3 shrink-0">
@@ -185,7 +185,7 @@ export const SettingsPanel = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-4 md:px-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 landscape:grid-cols-1 gap-6 md:gap-8 landscape:gap-6 px-4 md:px-8 landscape:px-4">
                 
                 {/* Column 1: Visual Base */}
                 <div className="flex flex-col gap-6 md:gap-8 bg-white/[0.02] p-5 md:p-6 rounded-[24px] md:rounded-[32px] border border-white/5 shadow-inner">
@@ -351,7 +351,7 @@ export const SettingsPanel = () => {
 
               </div>
               
-              <div className="flex justify-center mt-2 md:mt-4 pb-6 px-4 md:px-8">
+              <div className="flex justify-center mt-2 md:mt-4 landscape:mt-2 pb-6 px-4 md:px-8 landscape:px-4">
                 <button
                   onClick={() => setIsSettingsOpen(false)}
                   className="w-full md:w-auto px-12 md:px-24 py-4 md:py-5 bg-white text-zinc-950 rounded-[24px] md:rounded-[32px] shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_rgba(255,255,255,0.5)] transition-all font-bold uppercase tracking-[0.2em] text-xs md:text-sm active:scale-95 flex items-center justify-center gap-2"
