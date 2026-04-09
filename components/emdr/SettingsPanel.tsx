@@ -141,7 +141,7 @@ export const SettingsPanel = () => {
             <div className="flex items-center justify-between px-5 pt-5 pb-4 shrink-0 border-b border-white/5">
               <div>
                 <h2 className="text-lg font-medium tracking-tight text-white">Настройки сессии</h2>
-                <p className="text-white/25 text-[12px] mt-0.5 tracking-wide">EMDR-среда</p>
+                <p className="text-white/25 text-[12px] mt-0.5 tracking-wide">Параметры сессии</p>
               </div>
               <div className="flex items-center gap-2">
                 <button

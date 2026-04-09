@@ -64,7 +64,14 @@ export const Disclaimer = () => {
                 <ChevronRight size={18} className="group-hover:translate-x-0.5 transition-transform" />
               </button>
 
-              <p className="mt-4 text-[11px] uppercase tracking-[0.15em] text-white/20 font-bold">NeuroLab EMDR Platform</p>
+              <a 
+                href="http://t.me/hackmemasters" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="mt-4 text-[11px] uppercase tracking-[0.15em] text-white/40 font-bold hover:text-white/80 transition-colors"
+              >
+                Связаться с создателем
+              </a>
             </div>
           </motion.div>
         </motion.div>

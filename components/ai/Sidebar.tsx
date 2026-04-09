@@ -110,7 +110,7 @@ export const Sidebar = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-white text-base">Обратная связь</h3>
-                  <p className="text-[10px] uppercase tracking-widest font-bold text-white/40">EMDR Платформа</p>
+                  <a href="http://t.me/hackmemasters" target="_blank" rel="noopener noreferrer" className="text-[10px] uppercase tracking-widest font-bold text-white/40 hover:text-white/80 transition-colors">Связаться с создателем</a>
                 </div>
               </div>
               <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-white/10 rounded-full transition-colors focus:outline-none">

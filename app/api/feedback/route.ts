@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const TELEGRAM_TOKEN = 'TOKEN_REMOVED';
-const CHAT_ID = 'ID_REMOVED';
+const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
+const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 export async function POST(req: NextRequest) {
   try {

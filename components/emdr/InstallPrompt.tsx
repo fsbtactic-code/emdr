@@ -61,7 +61,7 @@ export const InstallPrompt = () => {
                    <AppWindow className="text-white group-hover:scale-110 transition-transform" size={28} />
                 </div>
                 <div>
-                  <h4 className="text-white font-bold text-base tracking-tight leading-tight">Установить NeuroEMDR</h4>
+                  <h4 className="text-white font-bold text-base tracking-tight leading-tight">Установить EMDR</h4>
                   <p className="text-white/40 text-[12px] font-medium mt-0.5 tracking-wide">Для работы без границ браузера</p>
                 </div>
               </div>
