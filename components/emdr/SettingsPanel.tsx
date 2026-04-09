@@ -83,6 +83,7 @@ export const SettingsPanel = () => {
       color: 'text-rose-400',
       icon: Zap,
       presets: [
+        { id: 'trauma_flashback', label: 'Флэшбэк',       desc: 'Экстремальная переработка' },
         { id: 'trauma_acute',    label: 'Острая фаза',    desc: 'Саккады, высокая скорость' },
         { id: 'trauma_saccadic', label: 'Саккадический',   desc: 'Резкие прыжки, символы' },
         { id: 'trauma_smooth',   label: 'Плавный трекинг', desc: 'Мягкие движения' },
@@ -105,8 +106,9 @@ export const SettingsPanel = () => {
       color: 'text-cyan-400',
       icon: Brain,
       presets: [
-        { id: 'adhd_focus',     label: 'Фокус',           desc: 'Нейростимуляция внимания' },
-        { id: 'adhd_calm',      label: 'Спокойствие',     desc: 'Снижение гиперактивности' },
+        { id: 'adhd_focus',     label: 'Фокус+',          desc: 'Нейростимуляция внимания' },
+        { id: 'adhd_impulse',   label: 'Импульс',         desc: 'Контроль гиперактивности' },
+        { id: 'adhd_calm',      label: 'Спокойствие',     desc: 'Снижение возбуждения' },
         { id: 'adhd_body',      label: 'Тело',             desc: 'Заземление через ощущения' },
       ],
     },
