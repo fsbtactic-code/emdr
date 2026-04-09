@@ -194,7 +194,7 @@ export const StimulationEngine = () => {
         )}
 
         </motion.div>
-      </motion.div>
+      </div>
     </div>
   );
 };
