@@ -113,10 +113,10 @@ export const SettingsPanel = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: '100%', opacity: 0 }}
             transition={{ type: 'spring', bounce: 0, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed bottom-0 left-0 w-full h-[85vh] md:h-[80vh] bg-zinc-950/80 backdrop-blur-[100px] border-t border-white/10 rounded-t-[32px] md:rounded-t-[48px] shadow-[0_-30px_100px_-20px_rgba(0,0,0,0.8)] z-50 flex flex-col"
+            className={`fixed bottom-0 left-0 w-full ${isPlaying ? 'h-[50vh]' : 'h-[85vh] md:h-[80vh]'} landscape:h-screen landscape:w-[350px] landscape:md:w-[450px] landscape:left-auto landscape:right-0 landscape:top-0 landscape:rounded-none landscape:border-l landscape:border-t-0 rounded-t-[32px] md:rounded-t-[48px] bg-zinc-950/60 backdrop-blur-[20px] shadow-[0_-30px_100px_-20px_rgba(0,0,0,0.8)] z-50 flex flex-col transition-all duration-700`}
           >
             {/* iOS Drag Handle */}
-            <div className="w-full flex justify-center py-4 shrink-0">
+            <div className="w-full flex justify-center py-4 shrink-0 landscape:hidden">
               <div onClick={() => setIsSettingsOpen(false)} className="w-16 h-1.5 bg-white/20 hover:bg-white/40 cursor-pointer rounded-full transition-colors" />
             </div>
 
@@ -167,12 +167,12 @@ export const SettingsPanel = () => {
                             <button
                               key={p.id}
                               onClick={() => applyPreset(p.id)}
-                              className={`shrink-0 snap-center w-[160px] md:w-[190px] flex items-center justify-start gap-3 p-4 md:p-5 rounded-[20px] md:rounded-[28px] transition-all duration-300 border backdrop-blur-md shadow-lg ${isActive ? `${p.bg} ${p.border} ${p.color} ring-2 ring-white/20 scale-[1.02] md:scale-105` : 'bg-white/[0.06] border-white/10 text-white/80 hover:bg-white/[0.12] hover:scale-[1.02] hover:border-white/30'}`}
+                              className={`shrink-0 snap-center min-h-[80px] w-[160px] md:w-[190px] flex items-center justify-start gap-3 p-4 md:p-5 rounded-[20px] md:rounded-[28px] transition-all duration-300 border backdrop-blur-md shadow-lg ${isActive ? `${p.bg} ${p.border} ${p.color} ring-2 ring-white/20 scale-[1.02] md:scale-105` : 'bg-white/[0.06] border-white/10 text-white/80 hover:bg-white/[0.12] hover:scale-[1.02] hover:border-white/30'}`}
                             >
                               <Icon size={24} className={`shrink-0 ${isActive ? p.color : 'text-white/60'}`} />
-                              <div className="flex flex-col items-start gap-1 overflow-hidden">
-                                <span className="font-bold text-[13px] md:text-[14px] tracking-wide leading-tight text-left truncate w-full">{p.label}</span>
-                                <span className="text-[9px] md:text-[10px] text-white/30 font-medium tracking-widest uppercase mt-0.5 truncate w-full flex-shrink-0 text-left">{group.category}</span>
+                              <div className="flex flex-col items-start gap-1 flex-1 min-w-0">
+                                <span className="font-bold text-[13px] md:text-[14px] tracking-wide leading-tight text-left break-words w-full whitespace-normal">{p.label}</span>
+                                <span className="text-[9px] md:text-[10px] text-white/30 font-medium tracking-widest uppercase mt-0.5 truncate w-full text-left">{group.category}</span>
                               </div>
                             </button>
                           );

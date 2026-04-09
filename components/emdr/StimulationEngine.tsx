@@ -113,14 +113,7 @@ export const StimulationEngine = () => {
   return (
     <div className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden pointer-events-none z-0">
       <AnimatedBackground type={visualBackground} />
-      <motion.div
-        className="w-full flex items-center justify-center"
-        animate={{
-          scale: isSettingsOpen ? 0.6 : 1,
-          y: isSettingsOpen ? '-20vh' : 0,
-        }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      >
+      <div className="w-full flex items-center justify-center">
         <motion.div 
           className="relative w-full max-w-5xl h-[80vh] flex items-center justify-center mx-12"
           animate={isPlaying && randomness > 0 ? { x: [0, jX, 0, -jX, 0], y: [0, jY, 0, -jY, 0] } : { x: 0, y: 0 }}
