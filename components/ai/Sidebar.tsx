@@ -73,7 +73,7 @@ export const Sidebar = () => {
     <>
       <button 
         onClick={() => setIsOpen(true)}
-        className={`absolute right-0 top-1/2 -translate-y-1/2 bg-white/5 hover:bg-white/10 p-2 rounded-l-xl transition-all duration-300 z-40 backdrop-blur-md border border-r-0 border-white/10 ${isOpen ? 'translate-x-full' : 'translate-x-0'}`}
+        className={`fixed left-4 md:left-6 top-20 md:top-24 z-40 p-3 rounded-full bg-white/5 hover:bg-white/10 transition-all duration-300 backdrop-blur-md border border-white/10 ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
         <MessageSquareHeart size={24} className="text-white/70" />
       </button>
@@ -81,11 +81,11 @@ export const Sidebar = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ x: '100%' }}
+            initial={{ x: '-100%' }}
             animate={{ x: 0 }}
-            exit={{ x: '100%' }}
+            exit={{ x: '-100%' }}
             transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.4 }}
-            className="absolute right-0 top-0 h-full w-full md:w-[450px] bg-zinc-950/90 backdrop-blur-2xl border-l border-white/10 shadow-2xl z-50 flex flex-col"
+            className="fixed left-0 top-0 h-full w-full md:w-[450px] bg-zinc-950/90 backdrop-blur-2xl border-r border-white/10 shadow-2xl z-50 flex flex-col"
           >
             <div className="p-4 md:p-6 border-b border-white/5 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3">
@@ -98,7 +98,7 @@ export const Sidebar = () => {
                 </div>
               </div>
               <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-white/10 rounded-full transition-colors focus:outline-none">
-                <ChevronRight size={24} className="text-white/60" />
+                <ChevronRight size={24} className="text-white/60 rotate-180" />
               </button>
             </div>
 

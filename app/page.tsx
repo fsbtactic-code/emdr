@@ -15,14 +15,17 @@ export default function SessionPage() {
     <main className="relative w-full h-full flex flex-col bg-zinc-950 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-zinc-950/80 to-zinc-950 z-0 pointer-events-none" />
       
+      {/* When playing + settings open: compress sideways using paddingRight.
+          When not playing + settings open: float up with scale effect. */}
       <motion.div 
-        animate={{
-          scale: (isSettingsOpen && !isPlaying) ? 0.7 : 1,
-          y: (isSettingsOpen && !isPlaying) ? '-18vh' : 0,
-          borderRadius: (isSettingsOpen && !isPlaying) ? '48px' : '0px',
-          opacity: (isSettingsOpen && !isPlaying) ? 0.5 : 1
-        }}
-        transition={{ type: 'spring', bounce: 0, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        animate={
+          isSettingsOpen && isPlaying
+            ? { paddingRight: '360px', scale: 1, y: 0, borderRadius: '0px', opacity: 1 }
+            : isSettingsOpen
+              ? { paddingRight: '0px', scale: 0.7, y: '-18vh', borderRadius: '48px', opacity: 0.5 }
+              : { paddingRight: '0px', scale: 1, y: 0, borderRadius: '0px', opacity: 1 }
+        }
+        transition={{ type: 'spring', bounce: 0, duration: 0.8 }}
         className="w-full h-full relative z-10 overflow-hidden"
         style={{ transformOrigin: 'top center' }}
       >
