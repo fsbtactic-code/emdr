@@ -73,9 +73,9 @@ export const Sidebar = () => {
     <>
       <button 
         onClick={() => setIsOpen(true)}
-        className={`fixed left-4 md:left-6 top-20 md:top-24 z-40 p-3 rounded-full bg-white/5 hover:bg-white/10 transition-all duration-300 backdrop-blur-md border border-white/10 ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        className={`fixed left-4 md:left-6 top-20 md:top-24 z-40 p-3.5 rounded-2xl bg-white/8 hover:bg-white/14 transition-all duration-300 backdrop-blur-md border border-white/12 shadow-lg ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
-        <MessageSquareHeart size={24} className="text-white/70" />
+        <MessageSquareHeart size={28} className="text-white/80" />
       </button>
 
       <AnimatePresence>
