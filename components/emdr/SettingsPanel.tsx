@@ -5,7 +5,8 @@ import {
   ChevronDown, ArrowLeftRight, ArrowUpDown, MoveDiagonal, MoveDiagonal2, 
   Infinity as InfinityIcon, GripHorizontal, Activity, Columns, TrendingUp,
   Circle, Square as SquareIcon, CircleDashed, Wand2,
-  Wind, CloudRain, Waves, Music, Headphones, Volume2, Clock, Zap, Target as TargetIcon, Brain, Sparkles, Filter, Ghost, RefreshCcw
+  Wind, CloudRain, Waves, Music, Headphones, Volume2, Clock, Zap, Target as TargetIcon, Brain, Sparkles, Filter, Ghost, RefreshCcw,
+  ShieldAlert, ShieldBan, Moon, Orbit, Heart, Focus, Eye
 } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import { useShareableState } from '@/hooks/useShareableState';
