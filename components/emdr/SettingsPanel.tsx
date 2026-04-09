@@ -5,11 +5,25 @@ import { Settings2, Zap, ShieldAlert, Sparkles, Brain, Moon, ShieldBan, Play, Pa
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRef } from 'react';
 
+// ── Micro-components ────────────────────────────────────────────────────────
+
+const SectionLabel = ({ children, color = 'text-white/40' }: { children: React.ReactNode; color?: string }) => (
+  <span className={`text-[10px] uppercase tracking-[0.18em] font-semibold ${color}`}>{children}</span>
+);
+
+const ValueBadge = ({ children }: { children: React.ReactNode }) => (
+  <span className="text-white text-xs font-semibold tabular-nums bg-white/6 px-2.5 py-1 rounded-lg border border-white/8">
+    {children}
+  </span>
+);
+
+// ── Main Component ───────────────────────────────────────────────────────────
+
 export const SettingsPanel = () => {
-  const { 
-    speed, setSpeed, 
-    size, setSize, 
-    color, setColor, 
+  const {
+    speed, setSpeed,
+    size, setSize,
+    color, setColor,
     pattern, setPattern,
     audioFormat, setAudioFormat,
     ambientSound, setAmbientSound,
@@ -30,284 +44,296 @@ export const SettingsPanel = () => {
 
   const scrollPresets = (direction: 'left' | 'right') => {
     if (presetsScrollRef.current) {
-      const scrollAmount = direction === 'left' ? -300 : 300;
-      presetsScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      presetsScrollRef.current.scrollBy({ left: direction === 'left' ? -300 : 300, behavior: 'smooth' });
     }
   };
 
   const colors = [
-    { name: 'Cyan', value: '#06b6d4', shadow: 'var(--drop-shadow-glow-cyan)' },
+    { name: 'Cyan',    value: '#06b6d4', shadow: 'var(--drop-shadow-glow-cyan)' },
     { name: 'Emerald', value: '#10b981', shadow: 'var(--drop-shadow-glow-emerald)' },
-    { name: 'Amber', value: '#f59e0b', shadow: 'var(--drop-shadow-glow-amber)' },
-    { name: 'Rose', value: '#f43f5e', shadow: 'var(--drop-shadow-glow-rose)' },
-    { name: 'White', value: '#ffffff', shadow: 'var(--drop-shadow-glow-white)' },
-    { name: 'Indigo', value: '#6366f1', shadow: '0 0 20px rgba(99,102,241,0.4), 0 0 40px rgba(99,102,241,0.2)' },
+    { name: 'Amber',   value: '#f59e0b', shadow: 'var(--drop-shadow-glow-amber)' },
+    { name: 'Rose',    value: '#f43f5e', shadow: 'var(--drop-shadow-glow-rose)' },
+    { name: 'White',   value: '#ffffff', shadow: 'var(--drop-shadow-glow-white)' },
+    { name: 'Indigo',  value: '#6366f1', shadow: '0 0 20px rgba(99,102,241,0.4)' },
   ];
 
   const patterns = [
-    { id: 'horizontal', label: 'Гориз.', icon: ArrowLeftRight },
-    { id: 'vertical', label: 'Верт.', icon: ArrowUpDown },
-    { id: 'diagonal-1', label: 'Диаг. 1', icon: MoveDiagonal },
-    { id: 'diagonal-2', label: 'Диаг. 2', icon: MoveDiagonal2 },
-    { id: 'lemniscate', label: 'Бескон.', icon: InfinityIcon },
-    { id: 'dots', label: 'Точки', icon: GripHorizontal },
-    { id: 'pulse', label: 'Пульс', icon: Activity },
-    { id: 'bars', label: 'Столбы', icon: Columns },
-    { id: 'zigzag', label: 'Зигзаг', icon: TrendingUp }
+    { id: 'horizontal',  label: 'Горизонталь', icon: ArrowLeftRight },
+    { id: 'vertical',    label: 'Вертикаль',   icon: ArrowUpDown },
+    { id: 'diagonal-1',  label: 'Диагональ ↗', icon: MoveDiagonal },
+    { id: 'diagonal-2',  label: 'Диагональ ↘', icon: MoveDiagonal2 },
+    { id: 'lemniscate',  label: 'Бесконечность',icon: InfinityIcon },
+    { id: 'dots',        label: 'Точки',        icon: GripHorizontal },
+    { id: 'pulse',       label: 'Пульс',        icon: Activity },
+    { id: 'bars',        label: 'Столбы',       icon: Columns },
+    { id: 'zigzag',      label: 'Зигзаг',       icon: TrendingUp },
   ];
 
   const shapes = [
-    { id: 'circle', label: 'Круг', icon: Circle },
-    { id: 'square', label: 'Квадрат', icon: Square },
-    { id: 'ring', label: 'Кольцо', icon: CircleDashed },
-    { id: 'butterfly', label: 'Бабочка', icon: Wand2 }
+    { id: 'circle',    label: 'Круг',     icon: Circle },
+    { id: 'square',    label: 'Квадрат',  icon: Square },
+    { id: 'ring',      label: 'Кольцо',   icon: CircleDashed },
+    { id: 'butterfly', label: 'Бабочка',  icon: Wand2 },
   ];
 
   const audioFormatNames: Record<string, string> = {
-    'continuous': 'Волна',
-    'click': 'Щелчки',
-    'metronome': 'Счет',
-    'white_noise': 'Белый Шум',
-    'binaural_beats': 'Бинаурал'
+    'continuous':     'Волна',
+    'click':          'Щелчки',
+    'metronome':      'Метр.',
+    'white_noise':    'Шум',
+    'binaural_beats': 'Бинаурал',
   };
 
   const langNames: Record<string, string> = {
-    'ru': 'Русский',
-    'en': 'English',
-    'numbers': 'Цифры'
+    'ru': 'Рус', 'en': 'Eng', 'numbers': '123',
   };
 
   const presetGroups = [
     {
       category: 'Острая фаза',
       items: [
-        { id: 'anxiety', label: 'Заземление', icon: ShieldAlert, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30' },
-        { id: 'panic', label: 'Экстр. Паника', icon: ShieldBan, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/30' },
-        { id: 'trauma_saccadic', label: 'ПТСР (Саккады)', icon: Zap, color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/30' },
-        { id: 'trauma_smooth', label: 'ПТСР (Плавный)', icon: Zap, color: 'text-rose-300', bg: 'bg-rose-600/10', border: 'border-rose-600/30' },
-      ]
+        { id: 'anxiety',         label: 'Заземление',   icon: ShieldAlert, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/25', glow: 'rgba(16,185,129,0.15)' },
+        { id: 'panic',           label: 'Паника',        icon: ShieldBan,   color: 'text-blue-400',   bg: 'bg-blue-500/10',    border: 'border-blue-500/25',    glow: 'rgba(59,130,246,0.15)' },
+        { id: 'trauma_saccadic', label: 'ПТСР · Саккады',icon: Zap,         color: 'text-rose-400',   bg: 'bg-rose-500/10',    border: 'border-rose-500/25',    glow: 'rgba(244,63,94,0.15)'  },
+        { id: 'trauma_smooth',   label: 'ПТСР · Плавно', icon: Zap,         color: 'text-rose-300',   bg: 'bg-rose-600/10',    border: 'border-rose-600/25',    glow: 'rgba(251,113,133,0.15)'},
+      ],
     },
     {
       category: 'Ресурс и Фокус',
       items: [
-        { id: 'focus', label: 'Концентрация', icon: Brain, color: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/30' },
-        { id: 'resource', label: 'Ресурсирование', icon: Sparkles, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/30' },
-        { id: 'sleep', label: 'Глубокий Сон', icon: Moon, color: 'text-indigo-400', bg: 'bg-indigo-500/10', border: 'border-indigo-500/30' },
-      ]
-    }
+        { id: 'focus',    label: 'Фокус',       icon: Brain,    color: 'text-cyan-400',   bg: 'bg-cyan-500/10',   border: 'border-cyan-500/25',   glow: 'rgba(6,182,212,0.15)'  },
+        { id: 'resource', label: 'Ресурс',      icon: Sparkles, color: 'text-amber-400',  bg: 'bg-amber-500/10',  border: 'border-amber-500/25',  glow: 'rgba(245,158,11,0.15)' },
+        { id: 'sleep',    label: 'Сон',         icon: Moon,     color: 'text-indigo-400', bg: 'bg-indigo-500/10', border: 'border-indigo-500/25', glow: 'rgba(99,102,241,0.15)' },
+      ],
+    },
   ];
+
+  // ── Toggle ─────────────────────────────────────────────────────────────────
+  const Toggle = ({ enabled, onChange, accent }: { enabled: boolean; onChange: () => void; accent: string }) => (
+    <button
+      onClick={onChange}
+      className={`w-11 h-6 rounded-full relative flex items-center transition-colors duration-300 shrink-0 border ${enabled ? `${accent} border-transparent` : 'bg-white/6 border-white/10'}`}
+    >
+      <div className={`w-4 h-4 rounded-full bg-white shadow transition-transform duration-300 ${enabled ? 'translate-x-6' : 'translate-x-1'}`} />
+    </button>
+  );
 
   return (
     <>
-      <button 
+      {/* Gear trigger */}
+      <button
         onClick={() => setIsSettingsOpen(true)}
-        className={`fixed top-4 left-4 md:top-6 md:left-6 z-40 p-3 rounded-full bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-xl border border-white/10 ${isSettingsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        className={`fixed top-4 left-4 md:top-6 md:left-6 z-40 p-3 rounded-2xl bg-white/6 hover:bg-white/10 transition-all backdrop-blur-xl border border-white/10 ${isSettingsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
-        <Settings2 size={24} className="text-white/80" />
+        <Settings2 size={22} className="text-white/70" />
       </button>
 
       <AnimatePresence>
         {isSettingsOpen && (
-          <motion.div 
+          <motion.div
             initial={{ y: '100%', opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: '100%', opacity: 0 }}
-            transition={{ type: 'spring', bounce: 0, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className={`fixed bottom-0 left-0 w-full ${isPlaying ? 'h-[50vh]' : 'h-[85vh] md:h-[80vh]'} landscape:h-screen landscape:w-[350px] landscape:md:w-[450px] landscape:left-auto landscape:right-0 landscape:top-0 landscape:rounded-none landscape:border-l landscape:border-t-0 rounded-t-[32px] md:rounded-t-[48px] bg-zinc-950/60 backdrop-blur-[20px] shadow-[0_-30px_100px_-20px_rgba(0,0,0,0.8)] z-50 flex flex-col transition-all duration-700`}
+            transition={{ type: 'spring', bounce: 0, duration: 0.7 }}
+            className={`fixed bottom-0 left-0 w-full ${isPlaying ? 'h-[50vh]' : 'h-[88vh] md:h-[82vh]'} landscape:h-screen landscape:w-[360px] landscape:left-auto landscape:right-0 landscape:top-0 landscape:rounded-none landscape:border-l landscape:border-t-0 rounded-t-[28px] md:rounded-t-[36px] bg-[#0a0a0c]/80 backdrop-blur-[40px] border-t border-white/8 shadow-[0_-40px_80px_-10px_rgba(0,0,0,0.9)] z-50 flex flex-col transition-[height] duration-500`}
           >
-            {/* iOS Drag Handle */}
-            <div className="w-full flex justify-center py-4 shrink-0 landscape:hidden">
-              <div onClick={() => setIsSettingsOpen(false)} className="w-16 h-1.5 bg-white/20 hover:bg-white/40 cursor-pointer rounded-full transition-colors" />
+
+            {/* Drag Handle */}
+            <div className="w-full flex justify-center pt-3 pb-1 shrink-0 landscape:hidden">
+              <div onClick={() => setIsSettingsOpen(false)} className="w-10 h-[3px] bg-white/15 hover:bg-white/30 cursor-pointer rounded-full transition-colors" />
             </div>
 
-            <div className="flex-1 no-scrollbar overflow-y-auto w-full pb-12 max-w-7xl mx-auto flex flex-col gap-8 md:gap-10">
-              
-              <div className="flex flex-col md:flex-row landscape:flex-col justify-between items-start md:items-end landscape:items-start border-b border-white/5 pb-4 shrink-0 px-4 md:px-8 landscape:px-4 gap-4">
+            {/* Scrollable body */}
+            <div className="flex-1 no-scrollbar overflow-y-auto w-full max-w-7xl mx-auto flex flex-col landscape:pb-8">
+
+              {/* ── Header ── */}
+              <div className="flex items-center justify-between px-5 md:px-8 landscape:px-5 pt-4 pb-5 md:pt-5 md:pb-6 shrink-0 border-b border-white/5">
                 <div>
-                  <h2 className="text-2xl md:text-3xl font-light tracking-wide text-white drop-shadow-md">Настройте свою сессию</h2>
-                  <p className="text-white/40 mt-1 text-sm md:text-base font-medium tracking-wide">Терапевтическая EMDR-среда</p>
+                  <h2 className="text-xl md:text-2xl font-light tracking-[-0.01em] text-white">Настройки сессии</h2>
+                  <p className="text-white/30 text-xs mt-0.5 tracking-wide">EMDR-среда</p>
                 </div>
-                <button 
+                <button
                   onClick={() => useStore.getState().togglePlaying()}
-                  className="w-full md:w-auto px-6 py-3 md:py-2.5 bg-cyan-600/20 hover:bg-cyan-500/40 rounded-full text-cyan-50 font-bold transition-all border border-cyan-500/30 flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(6,182,212,0.2)] hover:shadow-[0_0_30px_rgba(6,182,212,0.5)] active:scale-95"
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl font-medium text-sm transition-all border ${
+                    isPlaying
+                      ? 'bg-white/8 border-white/12 text-white hover:bg-white/12'
+                      : 'bg-cyan-500/15 border-cyan-500/25 text-cyan-300 hover:bg-cyan-500/25'
+                  }`}
                 >
-                  {isPlaying ? (
-                    <><Pause size={18} className="fill-current" /> Пауза</>
-                  ) : (
-                    <><Play size={18} className="fill-current transform translate-x-[1px]" /> Тест стимуляции</>
-                  )}
+                  {isPlaying ? <><Pause size={15} className="fill-current" /> Пауза</> : <><Play size={15} className="fill-current translate-x-px" /> Тест</>}
                 </button>
               </div>
 
-              {/* Presets Row */}
-              <div className="flex flex-col gap-4 relative">
-                <div className="flex justify-between items-center px-4 md:px-8 landscape:px-4">
-                  <span className="text-white/80 text-[10px] md:text-xs uppercase tracking-widest font-bold">Терапевтические Программы</span>
-                  <div className="hidden md:flex gap-2">
-                    <button onClick={() => scrollPresets('left')} className="p-1.5 rounded-full bg-white/5 hover:bg-white/20 text-white/50 hover:text-white transition-colors">
-                      <ChevronLeft size={16} />
-                    </button>
-                    <button onClick={() => scrollPresets('right')} className="p-1.5 rounded-full bg-white/5 hover:bg-white/20 text-white/50 hover:text-white transition-colors">
-                      <ChevronRight size={16} />
-                    </button>
+              {/* ── Presets ── */}
+              <div className="flex flex-col gap-3 pt-5 pb-1 shrink-0">
+                <div className="flex justify-between items-center px-5 md:px-8 landscape:px-5">
+                  <SectionLabel>Программы</SectionLabel>
+                  <div className="hidden md:flex gap-1.5">
+                    <button onClick={() => scrollPresets('left')} className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/40 hover:text-white transition-colors"><ChevronLeft size={14} /></button>
+                    <button onClick={() => scrollPresets('right')} className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/40 hover:text-white transition-colors"><ChevronRight size={14} /></button>
                   </div>
                 </div>
-                
-                <div className="relative w-full">
-                  <div 
-                    ref={presetsScrollRef}
-                    className="flex gap-4 md:gap-6 landscape:gap-4 overflow-x-auto pt-2 pb-6 px-4 md:px-8 landscape:px-4 snap-x snap-mandatory no-scrollbar -mt-2"
-                  >
-                    {presetGroups.map((group, idx) => (
-                      <div key={idx} className="flex gap-3 shrink-0">
-                        {group.items.map(p => {
-                          const Icon = p.icon;
-                          const isActive = activePreset === p.id;
-                          return (
-                            <button
-                              key={p.id}
-                              onClick={() => applyPreset(p.id)}
-                              className={`shrink-0 snap-center min-h-[80px] w-[160px] md:w-[190px] flex items-center justify-start gap-3 p-4 md:p-5 rounded-[20px] md:rounded-[28px] transition-all duration-300 border backdrop-blur-md shadow-lg ${isActive ? `${p.bg} ${p.border} ${p.color} ring-2 ring-white/20 scale-[1.02] md:scale-105` : 'bg-white/[0.06] border-white/10 text-white/80 hover:bg-white/[0.12] hover:scale-[1.02] hover:border-white/30'}`}
-                            >
-                              <Icon size={24} className={`shrink-0 ${isActive ? p.color : 'text-white/60'}`} />
-                              <div className="flex flex-col items-start gap-1 flex-1 min-w-0">
-                                <span className="font-bold text-[13px] md:text-[14px] tracking-wide leading-tight text-left break-words w-full whitespace-normal">{p.label}</span>
-                                <span className="text-[9px] md:text-[10px] text-white/30 font-medium tracking-widest uppercase mt-0.5 truncate w-full text-left">{group.category}</span>
-                              </div>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    ))}
-                    {/* Add a spacer block at the end so the last item isn't glued to the screen edge when scrolled fully right */}
-                    <div className="w-[1px] md:w-[10px] shrink-0"></div>
-                  </div>
+
+                <div
+                  ref={presetsScrollRef}
+                  className="flex gap-2.5 overflow-x-auto px-5 md:px-8 landscape:px-5 pb-4 no-scrollbar"
+                >
+                  {presetGroups.map((group, gi) => (
+                    <div key={gi} className="flex gap-2.5 shrink-0">
+                      {group.items.map(p => {
+                        const Icon = p.icon;
+                        const isActive = activePreset === p.id;
+                        return (
+                          <button
+                            key={p.id}
+                            onClick={() => applyPreset(p.id)}
+                            style={isActive ? { boxShadow: `0 0 20px ${p.glow}` } : {}}
+                            className={`shrink-0 w-[148px] flex flex-col gap-2.5 p-3.5 rounded-[18px] text-left transition-all duration-300 border ${
+                              isActive
+                                ? `${p.bg} ${p.border} ${p.color} scale-[1.02]`
+                                : 'bg-white/[0.04] border-white/8 text-white/70 hover:bg-white/[0.08] hover:border-white/14'
+                            }`}
+                          >
+                            <Icon size={18} className={isActive ? p.color : 'text-white/40'} />
+                            <div className="flex flex-col gap-0.5">
+                              <span className="font-medium text-[13px] leading-snug">{p.label}</span>
+                              <span className="text-[10px] uppercase tracking-widest text-white/25 font-medium">{group.category}</span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ))}
+                  <div className="w-4 shrink-0" />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 landscape:grid-cols-1 gap-6 md:gap-8 landscape:gap-6 px-4 md:px-8 landscape:px-4">
-                
-                {/* Column 1: Visual Base */}
-                <div className="flex flex-col gap-6 md:gap-8 bg-white/[0.02] p-5 md:p-6 rounded-[24px] md:rounded-[32px] border border-white/5 shadow-inner">
-                  
-                  <div className="flex flex-col gap-4">
-                    <span className="text-white/80 text-[10px] md:text-xs uppercase tracking-widest font-bold">Паттерн движения</span>
-                    <div className="grid grid-cols-2 gap-3">
-                      {patterns.map((p) => {
-                        const PatternIcon = p.icon;
+              {/* ── Settings Grid ── */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 landscape:grid-cols-1 gap-px bg-white/5 border-t border-white/5">
+
+                {/* ── Col 1: Visual ── */}
+                <div className="flex flex-col gap-5 p-5 md:p-6 landscape:p-5 bg-[#0a0a0c]/60">
+                  {/* Pattern */}
+                  <div className="flex flex-col gap-3">
+                    <SectionLabel>Паттерн</SectionLabel>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {patterns.map(p => {
+                        const Icon = p.icon;
+                        const active = pattern === p.id;
                         return (
-                          <button 
-                            key={p.id} 
-                            onClick={() => setPattern(p.id as any)} 
-                            className={`py-3 px-2 rounded-[16px] md:rounded-[20px] text-[11px] md:text-[13px] font-semibold transition-all duration-300 flex flex-col gap-2 items-center justify-center ${pattern === p.id ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/30' : 'bg-white/5 text-white/50 hover:bg-white/10 border border-transparent hover:border-white/10'}`}
+                          <button
+                            key={p.id}
+                            onClick={() => setPattern(p.id as any)}
+                            className={`py-2.5 px-1 rounded-[12px] text-[11px] font-medium transition-all flex flex-col gap-1.5 items-center justify-center ${
+                              active
+                                ? 'bg-white/10 text-white border border-white/15'
+                                : 'bg-white/[0.03] text-white/40 hover:bg-white/6 border border-transparent'
+                            }`}
                           >
-                            <PatternIcon size={20} strokeWidth={2.5} />
-                            {p.label}
+                            <Icon size={16} strokeWidth={active ? 2 : 1.5} />
+                            <span className="truncate w-full text-center text-[10px]">{p.label}</span>
                           </button>
-                        )
+                        );
                       })}
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-4 pt-5 border-t border-white/5">
-                    <span className="text-white/80 text-[10px] md:text-xs uppercase tracking-widest font-bold">Форма стимула</span>
-                    <div className="grid grid-cols-2 gap-3">
-                      {shapes.map((s) => {
-                        const ShapeIcon = s.icon;
+                  {/* Shape */}
+                  <div className="flex flex-col gap-3 pt-4 border-t border-white/5">
+                    <SectionLabel>Форма стимула</SectionLabel>
+                    <div className="grid grid-cols-4 gap-1.5">
+                      {shapes.map(s => {
+                        const Icon = s.icon;
+                        const active = targetShape === s.id;
                         return (
-                          <button 
-                            key={s.id} 
-                            onClick={() => setTargetShape(s.id as any)} 
-                            className={`py-3 px-2 rounded-[16px] md:rounded-[20px] text-[11px] md:text-[13px] font-semibold transition-all duration-300 flex flex-col gap-2 items-center justify-center ${targetShape === s.id ? 'bg-indigo-500/20 text-indigo-200 border border-indigo-500/30' : 'bg-white/5 text-white/50 hover:bg-white/10 border border-transparent hover:border-white/10'}`}
+                          <button
+                            key={s.id}
+                            onClick={() => setTargetShape(s.id as any)}
+                            className={`py-2.5 rounded-[12px] text-[11px] font-medium transition-all flex flex-col gap-1.5 items-center justify-center ${
+                              active
+                                ? 'bg-indigo-500/15 text-indigo-200 border border-indigo-500/25'
+                                : 'bg-white/[0.03] text-white/40 hover:bg-white/6 border border-transparent'
+                            }`}
                           >
-                            <ShapeIcon size={20} strokeWidth={2.5} />
-                            {s.label}
+                            <Icon size={16} strokeWidth={active ? 2 : 1.5} />
+                            <span className="text-[10px]">{s.label}</span>
                           </button>
-                        )
+                        );
                       })}
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-4 mt-auto border-t border-white/5 pt-5">
-                    <span className="text-white/80 text-[10px] md:text-xs uppercase tracking-widest font-bold text-center">Цветовой маркер</span>
-                    <div className="flex gap-2 md:gap-4 justify-center bg-black/20 p-3 md:p-4 rounded-[20px] border border-white/5 overflow-x-auto no-scrollbar">
-                      {colors.map((c) => (
+                  {/* Color */}
+                  <div className="flex flex-col gap-3 pt-4 border-t border-white/5">
+                    <SectionLabel>Цвет</SectionLabel>
+                    <div className="flex gap-3 flex-wrap">
+                      {colors.map(c => (
                         <button
                           key={c.value}
                           onClick={() => setColor(c.value)}
-                          className={`w-7 h-7 md:w-8 md:h-8 rounded-full shrink-0 transition-all duration-300 ${color === c.value ? 'scale-125 ring-2 ring-white/60 ring-offset-2 ring-offset-zinc-900' : 'opacity-60 hover:opacity-100 hover:scale-110'}`}
+                          className={`w-8 h-8 rounded-full shrink-0 transition-all duration-300 ${color === c.value ? 'scale-125 ring-2 ring-white/50 ring-offset-2 ring-offset-[#0a0a0c]' : 'opacity-50 hover:opacity-90 hover:scale-110'}`}
                           style={{ backgroundColor: c.value, boxShadow: color === c.value ? c.shadow : 'none' }}
                           title={c.name}
                         />
                       ))}
                     </div>
                   </div>
-
                 </div>
 
-                {/* Column 2: Behavior & Intensity */}
-                <div className="flex flex-col gap-6 md:gap-8 bg-white/[0.02] p-5 md:p-6 rounded-[24px] md:rounded-[32px] border border-white/5 shadow-inner">
-                  
-                  <div className="flex flex-col gap-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-white/80 text-[10px] md:text-xs uppercase tracking-widest font-bold">Скорость</span>
-                      <span className="text-white/90 text-xs md:text-sm font-medium bg-black/40 px-3 py-1 rounded-xl border border-white/5">{speed.toFixed(1)} Гц</span>
+                {/* ── Col 2: Behavior ── */}
+                <div className="flex flex-col gap-5 p-5 md:p-6 landscape:p-5 bg-[#0a0a0c]/60">
+                  {[
+                    { label: 'Скорость', value: `${speed.toFixed(1)} Гц`,   min: 0.5, max: 3.0, step: 0.1, val: speed,     set: setSpeed,       parse: parseFloat },
+                    { label: 'Серия',    value: `${cyclesPerSet} цикл.`,     min: 10,  max: 60,  step: 2,   val: cyclesPerSet, set: setCyclesPerSet, parse: parseInt },
+                    { label: 'Размер',   value: `${size} px`,               min: 20,  max: 150, step: 1,   val: size,        set: setSize,        parse: parseInt },
+                  ].map((item, i) => (
+                    <div key={i} className={`flex flex-col gap-2.5 ${i > 0 ? 'pt-4 border-t border-white/5' : ''}`}>
+                      <div className="flex justify-between items-center">
+                        <SectionLabel>{item.label}</SectionLabel>
+                        <ValueBadge>{item.value}</ValueBadge>
+                      </div>
+                      <input
+                        type="range"
+                        min={item.min} max={item.max} step={item.step}
+                        value={item.val}
+                        onChange={e => (item.set as any)(item.parse(e.target.value))}
+                        className="w-full"
+                      />
                     </div>
-                    <input type="range" min="0.5" max="3.0" step="0.1" value={speed} onChange={(e) => setSpeed(parseFloat(e.target.value))} className="w-full mt-2" />
-                  </div>
+                  ))}
 
-                  <div className="flex flex-col gap-3 pt-5 border-t border-white/5">
-                    <div className="flex justify-between items-center">
-                      <span className="text-white/80 text-[10px] md:text-xs uppercase tracking-widest font-bold">Длина подхода</span>
-                      <span className="text-white/90 text-xs md:text-sm font-medium bg-black/40 px-3 py-1 rounded-xl border border-white/5">{cyclesPerSet} цикл.</span>
-                    </div>
-                    <input type="range" min="10" max="60" step="2" value={cyclesPerSet} onChange={(e) => setCyclesPerSet(parseInt(e.target.value))} className="w-full mt-2" />
+                  <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between bg-white/[0.02] rounded-xl px-4 py-3">
+                    <SectionLabel>Сессий сегодня</SectionLabel>
+                    <span className="text-cyan-400 text-2xl font-light tabular-nums">{setsCompleted}</span>
                   </div>
-
-                  <div className="flex flex-col gap-3 pt-5 border-t border-white/5">
-                    <div className="flex justify-between items-center">
-                      <span className="text-white/80 text-[10px] md:text-xs uppercase tracking-widest font-bold">Размер</span>
-                      <span className="text-white/90 text-xs md:text-sm font-medium bg-black/40 px-3 py-1 rounded-xl border border-white/5">{size} px</span>
-                    </div>
-                    <input type="range" min="20" max="150" step="1" value={size} onChange={(e) => setSize(parseInt(e.target.value))} className="w-full mt-2" />
-                  </div>
-                  
-                  <div className="flex items-center justify-between bg-black/20 border border-white/5 p-4 rounded-[20px] md:rounded-[24px] mt-auto">
-                    <span className="text-white/80 text-[10px] md:text-xs uppercase tracking-widest font-bold">Пройдено сегодня</span>
-                    <span className="text-cyan-400 text-lg md:text-xl font-bold">{setsCompleted}</span>
-                  </div>
-
                 </div>
 
-                {/* Column 3: Advanced Cognitive Mechanics */}
-                <div className="flex flex-col gap-6 md:gap-8 bg-white/[0.02] p-5 md:p-6 rounded-[24px] md:rounded-[32px] border border-white/5 shadow-inner">
-                  
+                {/* ── Col 3: Advanced ── */}
+                <div className="flex flex-col gap-5 p-5 md:p-6 landscape:p-5 bg-[#0a0a0c]/60">
+
+                  {/* Saccadic */}
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-rose-400/90 text-[10px] md:text-xs uppercase tracking-widest font-bold drop-shadow-md">Саккады (Прыжки)</span>
-                      <p className="text-white/30 text-[9px] md:text-[10px] mt-1">Резкая смена позиций объектов</p>
+                      <SectionLabel color="text-rose-400/80">Саккады</SectionLabel>
+                      <p className="text-white/30 text-[11px] mt-0.5">Резкая смена позиций</p>
                     </div>
-                    <button onClick={() => setIsSaccadic(!isSaccadic)} className={`w-12 md:w-14 h-7 md:h-8 rounded-full transition-colors relative flex items-center shadow-inner border border-white/10 shrink-0 ${isSaccadic ? 'bg-rose-500/80' : 'bg-black/50'}`}>
-                      <div className={`w-5 h-5 md:w-6 md:h-6 rounded-full bg-white transition-transform shadow-md ${isSaccadic ? 'translate-x-6 md:translate-x-7' : 'translate-x-[2px] md:translate-x-1'}`} />
-                    </button>
+                    <Toggle enabled={isSaccadic} onChange={() => setIsSaccadic(!isSaccadic)} accent="bg-rose-500/70" />
                   </div>
 
-                  <div className="flex flex-col gap-3 pt-5 border-t border-white/5">
+                  {/* Symbols */}
+                  <div className="flex flex-col gap-2.5 pt-4 border-t border-white/5">
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="text-purple-400/90 text-[10px] md:text-xs uppercase tracking-widest font-bold drop-shadow-md">Когнитивная нагрузка</span>
-                        <p className="text-white/30 text-[9px] md:text-[10px] mt-1">Чтение символов во время движения</p>
+                        <SectionLabel color="text-purple-400/80">Когн. нагрузка</SectionLabel>
+                        <p className="text-white/30 text-[11px] mt-0.5">Символы во время движения</p>
                       </div>
-                      <button onClick={() => setShowSymbols(!showSymbols)} className={`w-12 md:w-14 h-7 md:h-8 rounded-full transition-colors relative flex items-center shadow-inner border border-white/10 shrink-0 ${showSymbols ? 'bg-purple-500/80' : 'bg-black/50'}`}>
-                        <div className={`w-5 h-5 md:w-6 md:h-6 rounded-full bg-white transition-transform shadow-md ${showSymbols ? 'translate-x-6 md:translate-x-7' : 'translate-x-[2px] md:translate-x-1'}`} />
-                      </button>
+                      <Toggle enabled={showSymbols} onChange={() => setShowSymbols(!showSymbols)} accent="bg-purple-500/70" />
                     </div>
-                    
                     <AnimatePresence>
                       {showSymbols && (
-                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="flex gap-2 mt-2">
+                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="flex gap-1.5">
                           {Object.entries(langNames).map(([lang, label]) => (
-                            <button key={lang} onClick={() => setSymbolLanguage(lang as any)} className={`flex-1 py-1.5 rounded-lg text-[10px] font-bold transition-colors ${symbolLanguage === lang ? 'bg-purple-500/30 text-purple-200 border border-purple-500/30' : 'bg-white/5 text-white/40'}`}>
+                            <button key={lang} onClick={() => setSymbolLanguage(lang as any)} className={`flex-1 py-1.5 rounded-lg text-[11px] font-medium transition-colors border ${symbolLanguage === lang ? 'bg-purple-500/20 text-purple-200 border-purple-500/25' : 'bg-white/[0.03] text-white/40 border-transparent hover:bg-white/6'}`}>
                               {label}
                             </button>
                           ))}
@@ -316,47 +342,49 @@ export const SettingsPanel = () => {
                     </AnimatePresence>
                   </div>
 
-                  {/* Audio Controls (Main & Ambient) */}
-                  <div className="flex flex-col gap-3 border-t border-white/5 pt-5">
-                     <span className="text-white/80 text-[10px] md:text-xs uppercase tracking-widest font-bold mb-1">Стимул (Звук)</span>
-                    <div className="grid grid-cols-2 gap-2">
+                  {/* Audio */}
+                  <div className="flex flex-col gap-2.5 pt-4 border-t border-white/5">
+                    <SectionLabel>Звук стимула</SectionLabel>
+                    <div className="grid grid-cols-3 gap-1.5">
                       {Object.entries(audioFormatNames).map(([a, label]) => (
-                        <button key={a} onClick={() => setAudioFormat(a as any)} className={`py-2 px-1 rounded-xl text-[10px] md:text-[11px] font-semibold transition-all duration-300 flex items-center justify-center border border-transparent ${audioFormat === a ? 'bg-cyan-500/20 text-cyan-200 border-cyan-500/30' : 'bg-white/5 text-white/50 hover:bg-white/10 hover:border-white/10'}`}>
+                        <button key={a} onClick={() => setAudioFormat(a as any)} className={`py-2 rounded-xl text-[11px] font-medium transition-all border ${audioFormat === a ? 'bg-cyan-500/15 text-cyan-200 border-cyan-500/25' : 'bg-white/[0.03] text-white/40 border-transparent hover:bg-white/6'}`}>
                           {label}
                         </button>
                       ))}
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-3 border-t border-white/5 pt-5">
-                    <span className="text-white/80 text-[10px] md:text-xs uppercase tracking-widest font-bold mb-1">Эмбиент (Фон)</span>
-                    <div className="grid grid-cols-3 gap-2">
-                      <button onClick={() => setAmbientSound('none')} className={`flex-1 flex flex-col gap-1.5 items-center justify-center py-2.5 rounded-xl text-[10px] font-bold border border-transparent ${ambientSound === 'none' ? 'bg-white/20 text-white border-white/30' : 'bg-white/5 text-white/40 hover:bg-white/10 hover:border-white/10'}`}><Wind size={16}/> Выкл</button>
-                      <button onClick={() => setAmbientSound('rain')} className={`flex-1 flex flex-col gap-1.5 items-center justify-center py-2.5 rounded-xl text-[10px] font-bold border border-transparent ${ambientSound === 'rain' ? 'bg-cyan-500/30 text-cyan-200 border-cyan-500/50' : 'bg-white/5 text-white/40 hover:bg-white/10 hover:border-white/10'}`}><CloudRain size={16}/> Дождь</button>
-                      <button onClick={() => setAmbientSound('ocean')} className={`flex-1 flex flex-col gap-1.5 items-center justify-center py-2.5 rounded-xl text-[10px] font-bold border border-transparent ${ambientSound === 'ocean' ? 'bg-blue-500/30 text-blue-200 border-blue-500/50' : 'bg-white/5 text-white/40 hover:bg-white/10 hover:border-white/10'}`}><Waves size={16}/> Волны</button>
+                  {/* Ambient */}
+                  <div className="flex flex-col gap-2.5 pt-4 border-t border-white/5">
+                    <SectionLabel>Эмбиент</SectionLabel>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      <button onClick={() => setAmbientSound('none')} className={`flex flex-col gap-1 items-center py-2.5 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'none' ? 'bg-white/12 text-white border-white/15' : 'bg-white/[0.03] text-white/40 border-transparent hover:bg-white/6'}`}><Wind size={14} /> Выкл</button>
+                      <button onClick={() => setAmbientSound('rain')} className={`flex flex-col gap-1 items-center py-2.5 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'rain' ? 'bg-cyan-500/15 text-cyan-200 border-cyan-500/25' : 'bg-white/[0.03] text-white/40 border-transparent hover:bg-white/6'}`}><CloudRain size={14} /> Дождь</button>
+                      <button onClick={() => setAmbientSound('ocean')} className={`flex flex-col gap-1 items-center py-2.5 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'ocean' ? 'bg-blue-500/15 text-blue-200 border-blue-500/25' : 'bg-white/[0.03] text-white/40 border-transparent hover:bg-white/6'}`}><Waves size={14} /> Волны</button>
                     </div>
                   </div>
 
-                  {/* Visual Background (NEW) */}
-                  <div className="flex flex-col gap-3 border-t border-white/5 pt-5 mt-auto">
-                    <span className="text-white/80 text-[10px] md:text-xs uppercase tracking-widest font-bold mb-1">Визуальный Фон</span>
-                    <div className="grid grid-cols-3 gap-2">
-                      <button onClick={() => setVisualBackground('black')} className={`flex-1 flex flex-col gap-1.5 items-center justify-center py-2.5 rounded-xl text-[10px] font-bold border border-transparent ${visualBackground === 'black' ? 'bg-white/20 text-white border-white/30' : 'bg-white/5 text-white/40 hover:bg-white/10 hover:border-white/10'}`}><Moon size={16}/> Pure Black</button>
-                      <button onClick={() => setVisualBackground('aurora')} className={`flex-1 flex flex-col gap-1.5 items-center justify-center py-2.5 rounded-xl text-[10px] font-bold border border-transparent ${visualBackground === 'aurora' ? 'bg-emerald-500/30 text-emerald-200 border-emerald-500/50' : 'bg-white/5 text-white/40 hover:bg-white/10 hover:border-white/10'}`}><Orbit size={16}/> Aurora</button>
-                      <button onClick={() => setVisualBackground('stars')} className={`flex-1 flex flex-col gap-1.5 items-center justify-center py-2.5 rounded-xl text-[10px] font-bold border border-transparent ${visualBackground === 'stars' ? 'bg-indigo-500/30 text-indigo-200 border-indigo-500/50' : 'bg-white/5 text-white/40 hover:bg-white/10 hover:border-white/10'}`}><Sparkles size={16}/> Pulse</button>
+                  {/* Visual BG */}
+                  <div className="flex flex-col gap-2.5 pt-4 border-t border-white/5">
+                    <SectionLabel>Фон</SectionLabel>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      <button onClick={() => setVisualBackground('black')} className={`flex flex-col gap-1 items-center py-2.5 rounded-xl text-[11px] font-medium border transition-all ${visualBackground === 'black' ? 'bg-white/12 text-white border-white/15' : 'bg-white/[0.03] text-white/40 border-transparent hover:bg-white/6'}`}><Moon size={14} /> Чёрный</button>
+                      <button onClick={() => setVisualBackground('aurora')} className={`flex flex-col gap-1 items-center py-2.5 rounded-xl text-[11px] font-medium border transition-all ${visualBackground === 'aurora' ? 'bg-emerald-500/15 text-emerald-200 border-emerald-500/25' : 'bg-white/[0.03] text-white/40 border-transparent hover:bg-white/6'}`}><Orbit size={14} /> Aurora</button>
+                      <button onClick={() => setVisualBackground('stars')} className={`flex flex-col gap-1 items-center py-2.5 rounded-xl text-[11px] font-medium border transition-all ${visualBackground === 'stars' ? 'bg-indigo-500/15 text-indigo-200 border-indigo-500/25' : 'bg-white/[0.03] text-white/40 border-transparent hover:bg-white/6'}`}><Sparkles size={14} /> Пульс</button>
                     </div>
                   </div>
 
                 </div>
 
               </div>
-              
-              <div className="flex justify-center mt-2 md:mt-4 landscape:mt-2 pb-6 px-4 md:px-8 landscape:px-4">
+
+              {/* ── CTA ── */}
+              <div className="px-5 md:px-8 landscape:px-5 py-5 md:py-6 shrink-0">
                 <button
                   onClick={() => setIsSettingsOpen(false)}
-                  className="w-full md:w-auto px-12 md:px-24 py-4 md:py-5 bg-white text-zinc-950 rounded-[24px] md:rounded-[32px] shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_rgba(255,255,255,0.5)] transition-all font-bold uppercase tracking-[0.2em] text-xs md:text-sm active:scale-95 flex items-center justify-center gap-2"
+                  className="w-full py-3.5 bg-white hover:bg-white/90 text-zinc-950 rounded-2xl font-semibold text-sm tracking-wide transition-all shadow-[0_0_24px_rgba(255,255,255,0.15)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] active:scale-[0.98] flex items-center justify-center gap-2"
                 >
-                  <span className="animate-pulse">●</span> Начать Выполнение
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-500 animate-pulse" /> Начать выполнение
                 </button>
               </div>
 
