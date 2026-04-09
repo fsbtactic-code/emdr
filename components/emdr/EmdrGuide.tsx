@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HelpCircle, X, ChevronDown, Shield, Target, Brain, Eye, Heart, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { useStore } from '@/store/useStore';
 
 const sections = [
   {

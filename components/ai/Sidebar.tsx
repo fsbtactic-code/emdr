@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquareHeart, ChevronRight, CheckCircle2, Star } from 'lucide-react';
+import { useStore } from '@/store/useStore';
 
 export const Sidebar = () => {
   const { isFeedbackOpen: isOpen, setIsFeedbackOpen: setIsOpen } = useStore();
