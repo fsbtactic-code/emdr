@@ -1,27 +1,71 @@
 import { useEffect, useRef } from 'react';
 import { useStore } from '../store/useStore';
 
+const AMBIENT_URLS: Record<string, string> = {
+  rain: '', // procedural
+  ocean: '', // procedural
+  breath: 'https://storage.yandexcloud.net/neurolab/Audio/freepik-earthflow-breath.mp3',
+  hz528: 'https://storage.yandexcloud.net/neurolab/Audio/freepik-sacred-528-hz-celestial-repair.mp3',
+  wind_harmonics: 'https://storage.yandexcloud.net/neurolab/Audio/freepik-harmonics-in-the-wind.mp3',
+  breathform: 'https://storage.yandexcloud.net/neurolab/Audio/freepik-breathform.mp3',
+};
+
 export const useAmbientAudio = () => {
   const { ambientSound, isPlaying, audioEnabled, audioVolume } = useStore();
+  
+  // Procedural audio refs
   const audioCtxRef = useRef<AudioContext | null>(null);
   const sourceRef = useRef<AudioBufferSourceNode | null>(null);
   const gainRef = useRef<GainNode | null>(null);
   const lfoRef = useRef<OscillatorNode | null>(null);
+  
+  // File-based audio ref
+  const audioElRef = useRef<HTMLAudioElement | null>(null);
+
+  const stopProcedural = () => {
+    if (sourceRef.current) { try { sourceRef.current.stop(); } catch {} sourceRef.current.disconnect(); sourceRef.current = null; }
+    if (lfoRef.current) { try { lfoRef.current.stop(); } catch {} lfoRef.current.disconnect(); lfoRef.current = null; }
+  };
+
+  const stopFileAudio = () => {
+    if (audioElRef.current) {
+      audioElRef.current.pause();
+      audioElRef.current.currentTime = 0;
+      audioElRef.current.src = '';
+      audioElRef.current = null;
+    }
+  };
 
   useEffect(() => {
+    const isFileBased = ambientSound in AMBIENT_URLS && AMBIENT_URLS[ambientSound] !== '';
+    
     if (!audioEnabled || !isPlaying || ambientSound === 'none') {
-      if (sourceRef.current) {
-        sourceRef.current.stop();
-        sourceRef.current.disconnect();
-        sourceRef.current = null;
-      }
-      if (lfoRef.current) {
-        lfoRef.current.stop();
-        lfoRef.current.disconnect();
-        lfoRef.current = null;
-      }
+      stopProcedural();
+      stopFileAudio();
       return;
     }
+
+    // ── File-based playback ──
+    if (isFileBased) {
+      stopProcedural();
+      
+      if (audioElRef.current && audioElRef.current.src === AMBIENT_URLS[ambientSound]) {
+        audioElRef.current.volume = audioVolume * 0.5;
+        return; // Already playing the right track
+      }
+      
+      stopFileAudio();
+      
+      const el = new Audio(AMBIENT_URLS[ambientSound]);
+      el.loop = true;
+      el.volume = audioVolume * 0.5;
+      el.play().catch(() => {}); // Autoplay may be blocked
+      audioElRef.current = el;
+      return;
+    }
+
+    // ── Procedural audio ──
+    stopFileAudio();
 
     if (!audioCtxRef.current) {
       const AudioContextCtor = window.AudioContext || (window as unknown as any).webkitAudioContext;
@@ -33,18 +77,14 @@ export const useAmbientAudio = () => {
     }
 
     const ctx = audioCtxRef.current;
-
-    // Cleanup previous before starting new
-    if (sourceRef.current) { sourceRef.current.stop(); sourceRef.current.disconnect(); }
-    if (lfoRef.current) { lfoRef.current.stop(); lfoRef.current.disconnect(); }
+    stopProcedural();
 
     const bufferSize = ctx.sampleRate * 2; 
     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const data = buffer.getChannelData(0);
 
-    // Generate White Noise
     for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.random() * 2 - 1;
+      data[i] = Math.random() * 2 - 1;
     }
 
     sourceRef.current = ctx.createBufferSource();
@@ -52,21 +92,19 @@ export const useAmbientAudio = () => {
     sourceRef.current.loop = true;
 
     gainRef.current = ctx.createGain();
-    // Ambient should be a bit quieter than main therapeutic tones
     gainRef.current.gain.value = audioVolume * 0.4;
 
     if (ambientSound === 'ocean') {
-      // Ocean Waves: Pinkish noise + LowPass + LFO
       const filter = ctx.createBiquadFilter();
       filter.type = 'lowpass';
-      filter.frequency.value = 400; // Base muffled frequency
+      filter.frequency.value = 400;
 
       lfoRef.current = ctx.createOscillator();
       lfoRef.current.type = 'sine';
-      lfoRef.current.frequency.value = 0.15; // Slow wave cycle (approx 6.5s)
+      lfoRef.current.frequency.value = 0.15;
 
       const lfoGain = ctx.createGain();
-      lfoGain.gain.value = 800; // Sweep up to 1200hz
+      lfoGain.gain.value = 800;
 
       lfoRef.current.connect(lfoGain);
       lfoGain.connect(filter.frequency);
@@ -76,7 +114,6 @@ export const useAmbientAudio = () => {
       
       lfoRef.current.start();
     } else if (ambientSound === 'rain') {
-      // Rain: White noise + HighPass to sound like sizzle
       const filter = ctx.createBiquadFilter();
       filter.type = 'highpass';
       filter.frequency.value = 1000;
@@ -91,8 +128,14 @@ export const useAmbientAudio = () => {
     sourceRef.current.start();
 
     return () => {
-      if (sourceRef.current) { sourceRef.current.stop(); sourceRef.current.disconnect(); }
-      if (lfoRef.current) { lfoRef.current.stop(); lfoRef.current.disconnect(); }
+      stopProcedural();
     };
   }, [ambientSound, isPlaying, audioEnabled, audioVolume]);
+
+  // Update volume on file audio when audioVolume changes
+  useEffect(() => {
+    if (audioElRef.current) {
+      audioElRef.current.volume = audioVolume * 0.5;
+    }
+  }, [audioVolume]);
 };

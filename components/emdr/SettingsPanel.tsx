@@ -1,7 +1,7 @@
 'use client';
 
 import { useStore } from '@/store/useStore';
-import { Settings2, Zap, ShieldAlert, Sparkles, Brain, Moon, ShieldBan, Play, Pause, Waves, CloudRain, Wind, ArrowUpDown, ArrowLeftRight, MoveDiagonal, MoveDiagonal2, Infinity as InfinityIcon, GripHorizontal, Activity, Columns, TrendingUp, Circle, Square, CircleDashed, Wand2, Orbit, ChevronDown, X, Heart, Focus, Eye } from 'lucide-react';
+import { Settings2, Zap, ShieldAlert, Sparkles, Brain, Moon, ShieldBan, Play, Pause, Waves, CloudRain, Wind, ArrowUpDown, ArrowLeftRight, MoveDiagonal, MoveDiagonal2, Infinity as InfinityIcon, GripHorizontal, Activity, Columns, TrendingUp, Circle, Square, CircleDashed, Wand2, Orbit, ChevronDown, X, Heart, Focus, Eye, Music, Headphones } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 
@@ -100,14 +100,26 @@ export const SettingsPanel = () => {
       ],
     },
     {
+      id: 'adhd',
+      title: 'СДВГ',
+      color: 'text-cyan-400',
+      icon: Brain,
+      presets: [
+        { id: 'adhd_focus',     label: 'Фокус',           desc: 'Нейростимуляция внимания' },
+        { id: 'adhd_calm',      label: 'Спокойствие',     desc: 'Снижение гиперактивности' },
+        { id: 'adhd_body',      label: 'Тело',             desc: 'Заземление через ощущения' },
+      ],
+    },
+    {
       id: 'resource',
       title: 'Ресурс',
       color: 'text-amber-400',
       icon: Sparkles,
       presets: [
-        { id: 'resource',       label: 'Ресурсирование',  desc: 'Безопасное место' },
-        { id: 'focus',          label: 'Фокус',           desc: 'Концентрация внимания' },
-        { id: 'sleep',          label: 'Глубокий сон',    desc: 'Бинауральные ритмы' },
+        { id: 'resource',       label: 'Безопасное место', desc: 'Ресурсирование' },
+        { id: 'focus',          label: 'Концентрация',     desc: 'Точки, белый шум' },
+        { id: 'sleep',          label: 'Глубокий сон',    desc: '528 Гц, бинауральные ритмы' },
+        { id: 'grounding_528',  label: 'Исцеление 528 Гц',desc: 'Частота восстановления' },
       ],
     },
   ];
@@ -340,10 +352,14 @@ export const SettingsPanel = () => {
                 </div>
                 <div>
                   <Label>Эмбиент</Label>
-                  <div className="grid grid-cols-3 gap-1.5 mt-2.5">
-                    <button onClick={() => setAmbientSound('none')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[12px] font-medium border transition-all ${ambientSound === 'none' ? 'bg-white/10 text-white border-white/12' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Wind size={14} /> Выкл</button>
-                    <button onClick={() => setAmbientSound('rain')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[12px] font-medium border transition-all ${ambientSound === 'rain' ? 'bg-cyan-500/12 text-cyan-200 border-cyan-500/20' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><CloudRain size={14} /> Дождь</button>
-                    <button onClick={() => setAmbientSound('ocean')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[12px] font-medium border transition-all ${ambientSound === 'ocean' ? 'bg-blue-500/12 text-blue-200 border-blue-500/20' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Waves size={14} /> Волны</button>
+                  <div className="grid grid-cols-4 gap-1.5 mt-2.5">
+                    <button onClick={() => setAmbientSound('none')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'none' ? 'bg-white/10 text-white border-white/12' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Wind size={13} /> Выкл</button>
+                    <button onClick={() => setAmbientSound('rain')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'rain' ? 'bg-cyan-500/12 text-cyan-200 border-cyan-500/20' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><CloudRain size={13} /> Дождь</button>
+                    <button onClick={() => setAmbientSound('ocean')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'ocean' ? 'bg-blue-500/12 text-blue-200 border-blue-500/20' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Waves size={13} /> Волны</button>
+                    <button onClick={() => setAmbientSound('breath')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'breath' ? 'bg-emerald-500/12 text-emerald-200 border-emerald-500/20' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Wind size={13} /> Дыхание</button>
+                    <button onClick={() => setAmbientSound('hz528')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'hz528' ? 'bg-amber-500/12 text-amber-200 border-amber-500/20' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Music size={13} /> 528 Гц</button>
+                    <button onClick={() => setAmbientSound('wind_harmonics')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'wind_harmonics' ? 'bg-indigo-500/12 text-indigo-200 border-indigo-500/20' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Headphones size={13} /> Ветер</button>
+                    <button onClick={() => setAmbientSound('breathform')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'breathform' ? 'bg-purple-500/12 text-purple-200 border-purple-500/20' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Wind size={13} /> Бризформ</button>
                   </div>
                 </div>
                 <div>

@@ -207,20 +207,22 @@ export const StimulationEngine = () => {
 
 const DotsPattern = ({ styleProps, shapeClasses, tripDuration, symbol, showSymbols, isSaccadic }: any) => {
   const easing = isSaccadic ? "circInOut" : "linear";
+  // Remove 'absolute' from shapeClasses for dots since they're positioned by the flex container
+  const dotClasses = shapeClasses.replace('absolute ', '').replace(' absolute', '').replace('absolute', '');
   return (
-    <div className="w-full h-64 flex items-center justify-between absolute px-12 z-0">
+    <div className="w-full h-full flex items-center justify-between absolute inset-0 px-[10%]">
       <motion.div
-        className={shapeClasses}
+        className={`${dotClasses} relative`}
         style={styleProps}
-        animate={{ opacity: [1, 0], scale: [1, 0.8] }}
+        animate={{ opacity: [1, 0.1], scale: [1, 0.7] }}
         transition={{ duration: tripDuration, repeat: Infinity, repeatType: 'reverse', ease: easing }}
       >
         {showSymbols && <span className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">{symbol}</span>}
       </motion.div>
       <motion.div
-        className={shapeClasses}
+        className={`${dotClasses} relative`}
         style={styleProps}
-        animate={{ opacity: [0, 1], scale: [0.8, 1] }}
+        animate={{ opacity: [0.1, 1], scale: [0.7, 1] }}
         transition={{ duration: tripDuration, repeat: Infinity, repeatType: 'reverse', ease: easing }}
       >
         {showSymbols && <span className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">{symbol}</span>}

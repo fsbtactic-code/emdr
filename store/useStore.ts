@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 export type PatternType = 'horizontal' | 'vertical' | 'diagonal-1' | 'diagonal-2' | 'lemniscate' | 'dots' | 'pulse' | 'bars' | 'zigzag';
 export type AudioFormat = 'continuous' | 'click' | 'metronome' | 'white_noise' | 'binaural_beats';
-export type AmbientSound = 'none' | 'rain' | 'ocean';
+export type AmbientSound = 'none' | 'rain' | 'ocean' | 'breath' | 'hz528' | 'wind_harmonics' | 'breathform';
 export type TargetShape = 'circle' | 'square' | 'ring' | 'butterfly';
 export type VisualBackground = 'black' | 'aurora' | 'stars';
 export type SymbolLanguage = 'ru' | 'en' | 'numbers';
@@ -142,11 +142,16 @@ export const useStore = create<RootState>((set) => ({
       'trauma_smooth': { speed: 1.0, color: '#f43f5e', pattern: 'diagonal-1', targetShape: 'circle', isSaccadic: false, isDesync: true, randomness: 10, audioFormat: 'continuous', ambientSound: 'none', showSymbols: false, visualBackground: 'black' },
       'trauma_saccadic': { speed: 1.4, color: '#f59e0b', pattern: 'diagonal-2', targetShape: 'square', isSaccadic: true, isDesync: true, randomness: 20, audioFormat: 'click', ambientSound: 'none', showSymbols: true, symbolLanguage: 'numbers', visualBackground: 'black' },
       'trauma_acute': { speed: 1.6, color: '#ef4444', pattern: 'horizontal', targetShape: 'square', isSaccadic: true, isDesync: true, randomness: 30, audioFormat: 'click', ambientSound: 'none', showSymbols: true, symbolLanguage: 'numbers', visualBackground: 'black' },
-      'trauma_deep': { speed: 0.7, color: '#be185d', pattern: 'diagonal-1', targetShape: 'circle', isSaccadic: false, isDesync: false, randomness: 5, audioFormat: 'continuous', ambientSound: 'rain', showSymbols: false, visualBackground: 'aurora' },
+      'trauma_deep': { speed: 0.7, color: '#be185d', pattern: 'diagonal-1', targetShape: 'circle', isSaccadic: false, isDesync: false, randomness: 5, audioFormat: 'continuous', ambientSound: 'breath', showSymbols: false, visualBackground: 'aurora' },
+      'trauma_body': { speed: 0.9, color: '#fb923c', pattern: 'lemniscate', targetShape: 'ring', isSaccadic: false, isDesync: false, randomness: 0, audioFormat: 'continuous', ambientSound: 'breathform', showSymbols: false, visualBackground: 'aurora' },
       'focus': { speed: 1.2, color: '#06b6d4', pattern: 'dots', targetShape: 'square', isSaccadic: false, isDesync: false, randomness: 0, audioFormat: 'white_noise', ambientSound: 'none', showSymbols: false, visualBackground: 'aurora' },
-      'resource': { speed: 0.6, color: '#eab308', pattern: 'bars', targetShape: 'ring', isSaccadic: false, isDesync: false, randomness: 5, audioFormat: 'continuous', ambientSound: 'ocean', showSymbols: false, visualBackground: 'aurora' },
-      'sleep': { speed: 0.4, color: '#8b5cf6', pattern: 'lemniscate', targetShape: 'circle', isSaccadic: false, isDesync: false, randomness: 0, audioFormat: 'binaural_beats', ambientSound: 'rain', showSymbols: false, visualBackground: 'stars' },
+      'resource': { speed: 0.6, color: '#eab308', pattern: 'horizontal', targetShape: 'ring', isSaccadic: false, isDesync: false, randomness: 5, audioFormat: 'continuous', ambientSound: 'ocean', showSymbols: false, visualBackground: 'aurora' },
+      'sleep': { speed: 0.4, color: '#8b5cf6', pattern: 'lemniscate', targetShape: 'circle', isSaccadic: false, isDesync: false, randomness: 0, audioFormat: 'binaural_beats', ambientSound: 'hz528', showSymbols: false, visualBackground: 'stars' },
       'panic': { speed: 0.8, color: '#3b82f6', pattern: 'horizontal', targetShape: 'square', isSaccadic: true, isDesync: true, randomness: 50, audioFormat: 'click', ambientSound: 'ocean', showSymbols: true, symbolLanguage: 'ru', visualBackground: 'black' },
+      'adhd_focus': { speed: 1.3, color: '#22d3ee', pattern: 'horizontal', targetShape: 'square', isSaccadic: false, isDesync: false, randomness: 0, audioFormat: 'metronome', ambientSound: 'wind_harmonics', showSymbols: true, symbolLanguage: 'numbers', visualBackground: 'black' },
+      'adhd_calm': { speed: 0.6, color: '#a78bfa', pattern: 'lemniscate', targetShape: 'circle', isSaccadic: false, isDesync: false, randomness: 0, audioFormat: 'binaural_beats', ambientSound: 'breathform', showSymbols: false, visualBackground: 'stars' },
+      'adhd_body': { speed: 0.8, color: '#34d399', pattern: 'vertical', targetShape: 'ring', isSaccadic: false, isDesync: false, randomness: 10, audioFormat: 'continuous', ambientSound: 'breath', showSymbols: false, visualBackground: 'aurora' },
+      'grounding_528': { speed: 0.5, color: '#fbbf24', pattern: 'horizontal', targetShape: 'circle', isSaccadic: false, isDesync: false, randomness: 0, audioFormat: 'continuous', ambientSound: 'hz528', showSymbols: false, visualBackground: 'aurora' },
     };
     if (presets[presetId]) {
       set({ ...presets[presetId], activePreset: presetId });

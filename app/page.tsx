@@ -5,6 +5,7 @@ import { Controls } from '@/components/emdr/Controls';
 import { Sidebar } from '@/components/ai/Sidebar';
 import { SettingsPanel } from '@/components/emdr/SettingsPanel';
 import { InstallPrompt } from '@/components/emdr/InstallPrompt';
+import { EmdrGuide } from '@/components/emdr/EmdrGuide';
 import { useStore } from '@/store/useStore';
 
 export default function SessionPage() {
@@ -24,6 +25,7 @@ export default function SessionPage() {
       <SettingsPanel />
       <Controls />
       <Sidebar />
+      <EmdrGuide />
       <InstallPrompt />
     </main>
   );
