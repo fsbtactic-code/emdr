@@ -173,8 +173,14 @@ export const StimulationEngine = () => {
           </motion.div>
         )}
 
-        {pattern === 'dots' && isPlaying && (
-          <DotsPattern styleProps={styleProps} shapeClasses={shapeClasses} tripDuration={tripDuration} symbol={symbol} showSymbols={showSymbols} isSaccadic={isSaccadic} />
+        {pattern === 'dots' && (
+          isPlaying ? (
+            <DotsPattern styleProps={styleProps} shapeClasses={shapeClasses} tripDuration={tripDuration} symbol={symbol} showSymbols={showSymbols} isSaccadic={isSaccadic} />
+          ) : (
+            <div className={shapeClasses} style={styleProps}>
+              {showSymbols && <span className="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,1)] tracking-widest">{symbol}</span>}
+            </div>
+          )
         )}
 
         {pattern === 'lemniscate' && isPlaying && (
