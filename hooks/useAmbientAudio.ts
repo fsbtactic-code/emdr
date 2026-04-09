@@ -49,17 +49,36 @@ export const useAmbientAudio = () => {
     if (isFileBased) {
       stopProcedural();
       
-      if (audioElRef.current && audioElRef.current.src === AMBIENT_URLS[ambientSound]) {
+      const audioUrl = AMBIENT_URLS[ambientSound];
+      
+      // If already playing this track, just update volume
+      if (audioElRef.current && audioElRef.current.dataset.src === audioUrl) {
         audioElRef.current.volume = audioVolume * 0.5;
-        return; // Already playing the right track
+        if (audioElRef.current.paused && isPlaying) {
+           audioElRef.current.play().catch(e => console.warn('Audio play failed:', e));
+        }
+        return;
       }
       
       stopFileAudio();
       
-      const el = new Audio(AMBIENT_URLS[ambientSound]);
+      const el = new Audio();
+      el.src = audioUrl;
+      el.dataset.src = audioUrl; // Track the source for comparison
       el.loop = true;
+      el.crossOrigin = "anonymous";
       el.volume = audioVolume * 0.5;
-      el.play().catch(() => {}); // Autoplay may be blocked
+      
+      // Attempt to play
+      const playPromise = el.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.warn("Autoplay was prevented or audio failed to load:", error);
+          // Retry on next interaction is handled by browser native behavior usually,
+          // but we keep the element around so it can be resumed.
+        });
+      }
+      
       audioElRef.current = el;
       return;
     }
