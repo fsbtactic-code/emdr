@@ -49,6 +49,8 @@ export interface EmdrState {
   targetShape: TargetShape;
   visualBackground: VisualBackground;
   activePreset: string | null;
+  isFeedbackOpen: boolean;
+  isGuideOpen: boolean;
 
   setSpeed: (speed: number) => void;
   setColor: (color: string) => void;
@@ -72,6 +74,8 @@ export interface EmdrState {
   setTargetShape: (shape: TargetShape) => void;
   setVisualBackground: (bg: VisualBackground) => void;
   applyPreset: (presetId: string) => void;
+  setIsFeedbackOpen: (isOpen: boolean) => void;
+  setIsGuideOpen: (isOpen: boolean) => void;
 }
 
 export interface SessionState {
@@ -113,6 +117,8 @@ export const useStore = create<RootState>((set) => ({
   targetShape: 'circle',
   visualBackground: 'aurora',
   activePreset: null,
+  isFeedbackOpen: false,
+  isGuideOpen: false,
   
   setSpeed: (speed) => set({ speed, activePreset: null }),
   setColor: (color) => set({ color, activePreset: null }),
@@ -135,6 +141,8 @@ export const useStore = create<RootState>((set) => ({
   setSymbolLanguage: (symbolLanguage) => set({ symbolLanguage }),
   setTargetShape: (targetShape) => set({ targetShape }),
   setVisualBackground: (visualBackground) => set({ visualBackground }),
+  setIsFeedbackOpen: (isFeedbackOpen) => set({ isFeedbackOpen }),
+  setIsGuideOpen: (isGuideOpen) => set({ isGuideOpen }),
   
   applyPreset: (presetId) => {
     const presets: Record<string, Partial<EmdrState>> = {

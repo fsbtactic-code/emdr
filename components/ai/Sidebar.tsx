@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquareHeart, ChevronRight, CheckCircle2, Star } from 'lucide-react';
 
 export const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { isFeedbackOpen: isOpen, setIsFeedbackOpen: setIsOpen } = useStore();
   const [isSubmitted, setIsSubmitted] = useState(false);
   
   // Form State
@@ -71,13 +71,6 @@ export const Sidebar = () => {
 
   return (
     <>
-      <button 
-        onClick={() => setIsOpen(true)}
-        className={`fixed left-4 md:left-6 top-20 md:top-24 z-40 p-3.5 rounded-2xl bg-white/8 hover:bg-white/14 transition-all duration-300 backdrop-blur-md border border-white/12 shadow-lg ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
-      >
-        <MessageSquareHeart size={28} className="text-white/80" />
-      </button>
-
       <AnimatePresence>
         {isOpen && (
           <motion.div

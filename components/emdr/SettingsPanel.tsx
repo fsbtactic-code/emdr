@@ -128,13 +128,6 @@ export const SettingsPanel = () => {
 
   return (
     <>
-      <button
-        onClick={() => setIsSettingsOpen(true)}
-        className={`fixed top-4 left-4 md:top-6 md:left-6 z-40 p-3 rounded-2xl bg-white/[0.06] hover:bg-white/10 transition-all backdrop-blur-xl border border-white/[0.08] ${isSettingsOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
-      >
-        <Settings2 size={22} className="text-white/70" />
-      </button>
-
       <AnimatePresence>
         {isSettingsOpen && (
           <motion.div
@@ -142,7 +135,7 @@ export const SettingsPanel = () => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', bounce: 0, duration: 0.6 }}
-            className="fixed right-0 top-0 h-full w-[380px] md:w-[420px] bg-[#0a0a0c]/85 backdrop-blur-[40px] border-l border-white/[0.06] shadow-[-20px_0_60px_-10px_rgba(0,0,0,0.8)] z-50 flex flex-col"
+            className="fixed right-0 top-0 h-full w-[340px] md:w-[420px] bg-[#0a0a0c]/85 backdrop-blur-[40px] border-l border-white/[0.06] shadow-[-20px_0_60px_-10px_rgba(0,0,0,0.8)] z-50 flex flex-col"
           >
             {/* ── Header ── */}
             <div className="flex items-center justify-between px-5 pt-5 pb-4 shrink-0 border-b border-white/5">
@@ -235,7 +228,7 @@ export const SettingsPanel = () => {
               {/* ── Pattern ── */}
               <div className="px-5 py-3">
                 <Label>Паттерн</Label>
-                <div className="grid grid-cols-3 gap-1.5 mt-3">
+                <div className="grid grid-cols-3 gap-2 mt-3">
                   {patterns.map(p => {
                     const Icon = p.icon;
                     const active = pattern === p.id;
@@ -243,12 +236,12 @@ export const SettingsPanel = () => {
                       <button
                         key={p.id}
                         onClick={() => setPattern(p.id as any)}
-                        className={`py-2 rounded-xl text-[12px] font-medium transition-all flex flex-col gap-1 items-center justify-center border ${
-                          active ? 'bg-white/10 text-white border-white/12' : 'bg-white/[0.02] text-white/35 hover:bg-white/[0.06] border-transparent'
+                        className={`min-h-[56px] py-2 px-1 rounded-xl text-[12px] font-medium transition-all flex flex-col gap-1 items-center justify-center border ${
+                          active ? 'bg-white/10 text-white border-white/12 shadow-lg' : 'bg-white/[0.02] text-white/35 hover:bg-white/[0.06] border-transparent'
                         }`}
                       >
-                        <Icon size={15} strokeWidth={active ? 2 : 1.5} />
-                        <span>{p.label}</span>
+                        <Icon size={16} strokeWidth={active ? 2 : 1.5} />
+                        <span className="text-center leading-none">{p.label}</span>
                       </button>
                     );
                   })}
@@ -258,7 +251,7 @@ export const SettingsPanel = () => {
               {/* ── Shape + Color Row ── */}
               <div className="px-5 py-3 border-t border-white/5">
                 <Label>Форма</Label>
-                <div className="grid grid-cols-4 gap-1.5 mt-3">
+                <div className="grid grid-cols-4 gap-2 mt-3">
                   {shapes.map(s => {
                     const Icon = s.icon;
                     const active = targetShape === s.id;
@@ -266,12 +259,12 @@ export const SettingsPanel = () => {
                       <button
                         key={s.id}
                         onClick={() => setTargetShape(s.id as any)}
-                        className={`py-2 rounded-xl text-[12px] font-medium transition-all flex flex-col gap-1 items-center justify-center border ${
-                          active ? 'bg-indigo-500/12 text-indigo-200 border-indigo-500/20' : 'bg-white/[0.02] text-white/35 hover:bg-white/[0.06] border-transparent'
+                        className={`min-h-[56px] py-2 px-1 rounded-xl text-[12px] font-medium transition-all flex flex-col gap-1 items-center justify-center border ${
+                          active ? 'bg-indigo-500/12 text-indigo-200 border-indigo-500/20 shadow-lg' : 'bg-white/[0.02] text-white/35 hover:bg-white/[0.06] border-transparent'
                         }`}
                       >
-                        <Icon size={15} strokeWidth={active ? 2 : 1.5} />
-                        <span>{s.label}</span>
+                        <Icon size={16} strokeWidth={active ? 2 : 1.5} />
+                        <span className="text-center">{s.label}</span>
                       </button>
                     );
                   })}
@@ -346,7 +339,7 @@ export const SettingsPanel = () => {
                   <Label>Звук стимула</Label>
                   <div className="grid grid-cols-3 gap-1.5 mt-2.5">
                     {Object.entries(audioNames).map(([a, label]) => (
-                      <button key={a} onClick={() => setAudioFormat(a as any)} className={`py-2 rounded-xl text-[12px] font-medium transition-all border ${audioFormat === a ? 'bg-cyan-500/12 text-cyan-200 border-cyan-500/20' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}>
+                      <button key={a} onClick={() => setAudioFormat(a as any)} className={`min-h-[44px] py-2 px-1 rounded-xl text-[12px] font-medium transition-all border ${audioFormat === a ? 'bg-cyan-500/12 text-cyan-200 border-cyan-500/20 shadow-lg' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}>
                         {label}
                       </button>
                     ))}
@@ -354,14 +347,14 @@ export const SettingsPanel = () => {
                 </div>
                 <div>
                   <Label>Эмбиент</Label>
-                  <div className="grid grid-cols-4 gap-1.5 mt-2.5">
-                    <button onClick={() => setAmbientSound('none')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'none' ? 'bg-white/10 text-white border-white/12' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Wind size={13} /> Выкл</button>
-                    <button onClick={() => setAmbientSound('rain')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'rain' ? 'bg-cyan-500/12 text-cyan-200 border-cyan-500/20' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><CloudRain size={13} /> Дождь</button>
-                    <button onClick={() => setAmbientSound('ocean')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'ocean' ? 'bg-blue-500/12 text-blue-200 border-blue-500/20' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Waves size={13} /> Волны</button>
-                    <button onClick={() => setAmbientSound('breath')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'breath' ? 'bg-emerald-500/12 text-emerald-200 border-emerald-500/20' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Wind size={13} /> Дыхание</button>
-                    <button onClick={() => setAmbientSound('hz528')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'hz528' ? 'bg-amber-500/12 text-amber-200 border-amber-500/20' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Music size={13} /> 528 Гц</button>
-                    <button onClick={() => setAmbientSound('wind_harmonics')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'wind_harmonics' ? 'bg-indigo-500/12 text-indigo-200 border-indigo-500/20' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Headphones size={13} /> Ветер</button>
-                    <button onClick={() => setAmbientSound('breathform')} className={`flex flex-col gap-1 items-center py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'breathform' ? 'bg-purple-500/12 text-purple-200 border-purple-500/20' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Wind size={13} /> Бризформ</button>
+                  <div className="grid grid-cols-4 gap-2 mt-2.5">
+                    <button onClick={() => setAmbientSound('none')} className={`flex flex-col gap-1 items-center min-h-[56px] py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'none' ? 'bg-white/10 text-white border-white/12 shadow-lg' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Wind size={13} /> Выкл</button>
+                    <button onClick={() => setAmbientSound('rain')} className={`flex flex-col gap-1 items-center min-h-[56px] py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'rain' ? 'bg-cyan-500/12 text-cyan-200 border-cyan-500/20 shadow-lg' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><CloudRain size={13} /> Дождь</button>
+                    <button onClick={() => setAmbientSound('ocean')} className={`flex flex-col gap-1 items-center min-h-[56px] py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'ocean' ? 'bg-blue-500/12 text-blue-200 border-blue-500/20 shadow-lg' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Waves size={13} /> Волны</button>
+                    <button onClick={() => setAmbientSound('breath')} className={`flex flex-col gap-1 items-center min-h-[56px] py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'breath' ? 'bg-emerald-500/12 text-emerald-200 border-emerald-500/20 shadow-lg' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Wind size={13} /> Дыхание</button>
+                    <button onClick={() => setAmbientSound('hz528')} className={`flex flex-col gap-1 items-center min-h-[56px] py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'hz528' ? 'bg-amber-500/12 text-amber-200 border-amber-500/20 shadow-lg' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Music size={13} /> 528 Гц</button>
+                    <button onClick={() => setAmbientSound('wind_harmonics')} className={`flex flex-col gap-1 items-center min-h-[56px] py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'wind_harmonics' ? 'bg-indigo-500/12 text-indigo-200 border-indigo-500/20 shadow-lg' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Headphones size={13} /> Ветер</button>
+                    <button onClick={() => setAmbientSound('breathform')} className={`flex flex-col gap-1 items-center min-h-[56px] py-2 rounded-xl text-[11px] font-medium border transition-all ${ambientSound === 'breathform' ? 'bg-purple-500/12 text-purple-200 border-purple-500/20 shadow-lg' : 'bg-white/[0.02] text-white/35 border-transparent hover:bg-white/[0.06]'}`}><Wind size={13} /> Бризформ</button>
                   </div>
                 </div>
                 <div>
