@@ -25,12 +25,30 @@ export const Sidebar = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call to Google Sheets / Backend
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          hasTherapy,
+          visualRating,
+          settingsRating,
+          featuresToAdd,
+          initialProblems,
+          stoppingReason,
+          otherReason,
+          whatWouldHelp,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Submission failed');
+
       setIsSubmitting(false);
       setIsSubmitted(true);
       
@@ -46,8 +64,12 @@ export const Sidebar = () => {
         setStoppingReason('');
         setOtherReason('');
         setWhatWouldHelp('');
-      }, 3000);
-    }, 1000);
+      }, 5000);
+    } catch (err) {
+      console.error(err);
+      setIsSubmitting(false);
+      alert('Произошла ошибка при отправке. Пожалуйста, попробуйте позже.');
+    }
   };
 
   const StarRating = ({ value, onChange }: { value: number, onChange: (v: number) => void }) => {
