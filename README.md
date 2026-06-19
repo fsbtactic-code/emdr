@@ -1,5 +1,7 @@
 # EMDR Trainer
 
+**Free EMDR tool for specialists and their clients.**
+
 Тренажер билатеральной стимуляции для заземления, ресурсирования и релаксации. С режимом сессии под управлением специалиста, честной доказательной базой и поддержкой 7 языков.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-7c5cff.svg)](LICENSE)

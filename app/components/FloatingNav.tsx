@@ -1,7 +1,7 @@
 'use client';
 
 import { useStore } from '../store/useStore';
-import { Settings2, MessageSquareHeart, HelpCircle, LifeBuoy, Users } from 'lucide-react';
+import { Settings2, MessageSquareHeart, HelpCircle, LifeBuoy, Users, Github } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useT } from '../i18n/useT';
 
@@ -97,6 +97,19 @@ export const FloatingNav = () => {
                 </button>
               );
             })}
+          </div>
+
+          <div className="flex flex-col gap-1.5 p-1.5 rounded-[22px] bg-[#0a0a0c]/40 backdrop-blur-2xl border border-white/10 shadow-2xl">
+            <a
+              href="https://github.com/fsbtactic-code/emdr"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="GitHub"
+              aria-label="GitHub"
+              className="w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-[18px] bg-white/5 text-white/60 hover:text-white hover:bg-white/10 hover:scale-105 active:scale-95 transition-all"
+            >
+              <Github size={20} />
+            </a>
           </div>
         </motion.div>
       )}
