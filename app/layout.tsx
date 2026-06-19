@@ -9,18 +9,24 @@ const manrope = Manrope({
   display: "swap"
 });
 
-const preview = "https://s3.twcstorage.ru/strelo/emdr/preview.jpg";
+const ogImage = "https://s3.twcstorage.ru/strelo/emdr/og.jpg";
+const description =
+  "Free EMDR tool for specialists and their clients. Bilateral stimulation for grounding and relaxation, with a therapist-led session mode. Evidence-based, multilingual, open-source.";
 
 export const metadata: Metadata = {
   title: "EMDR Trainer",
-  description:
-    "Open-source bilateral stimulation trainer for grounding, resourcing and relaxation. Evidence-based, multilingual, with a therapist-led remote session mode.",
+  description,
   openGraph: {
     title: "EMDR Trainer",
-    description:
-      "Bilateral stimulation trainer for grounding and relaxation, with a therapist-led session mode.",
+    description,
     type: "website",
-    images: [{ url: preview, width: 1280, height: 720 }]
+    images: [{ url: ogImage, width: 1200, height: 675, alt: "EMDR Trainer" }]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "EMDR Trainer",
+    description,
+    images: [ogImage]
   }
 };
 
