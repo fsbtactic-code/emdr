@@ -1,5 +1,11 @@
 <div align="center">
 
+<b>Русский</b> &nbsp;|&nbsp; <a href="README.en.md">English</a> &nbsp;|&nbsp; <a href="README.es.md">Espanol</a> &nbsp;|&nbsp; <a href="README.it.md">Italiano</a> &nbsp;|&nbsp; <a href="README.de.md">Deutsch</a> &nbsp;|&nbsp; <a href="README.fr.md">Francais</a> &nbsp;|&nbsp; <a href="README.pt.md">Portugues</a>
+
+</div>
+
+<div align="center">
+
 <img src="https://s3.twcstorage.ru/strelo/emdr/og.jpg" width="840" alt="EMDR Trainer" />
 
 # EMDR Trainer
