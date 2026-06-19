@@ -84,7 +84,7 @@ Guide integre avec une evaluation honnete de l'efficacite par trouble et des lie
 
 ## Demo
 
-[![Demo video](https://s3.twcstorage.ru/strelo/emdr/preview.jpg)](https://s3.twcstorage.ru/strelo/emdr/preview.mp4)
+[![Demo video](https://s3.twcstorage.ru/strelo/emdr/demo.gif)](https://s3.twcstorage.ru/strelo/emdr/preview.mp4)
 
 Video complete : [preview.mp4](https://s3.twcstorage.ru/strelo/emdr/preview.mp4) &nbsp;|&nbsp; Version en ligne : [bananamaster.ru/emdr](https://bananamaster.ru/emdr)
 

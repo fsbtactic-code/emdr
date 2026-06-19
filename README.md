@@ -84,7 +84,7 @@
 
 ## Демо
 
-[![Видео-демо](https://s3.twcstorage.ru/strelo/emdr/preview.jpg)](https://s3.twcstorage.ru/strelo/emdr/preview.mp4)
+[![Видео-демо](https://s3.twcstorage.ru/strelo/emdr/demo.gif)](https://s3.twcstorage.ru/strelo/emdr/preview.mp4)
 
 Полное видео: [preview.mp4](https://s3.twcstorage.ru/strelo/emdr/preview.mp4) &nbsp;|&nbsp; Живая версия: [bananamaster.ru/emdr](https://bananamaster.ru/emdr)
 

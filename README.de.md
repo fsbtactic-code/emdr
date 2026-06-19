@@ -84,7 +84,7 @@ Ein integrierter Leitfaden mit einer ehrlichen Einschaetzung der Wirksamkeit nac
 
 ## Demo
 
-[![Video-Demo](https://s3.twcstorage.ru/strelo/emdr/preview.jpg)](https://s3.twcstorage.ru/strelo/emdr/preview.mp4)
+[![Video-Demo](https://s3.twcstorage.ru/strelo/emdr/demo.gif)](https://s3.twcstorage.ru/strelo/emdr/preview.mp4)
 
 Vollstaendiges Video: [preview.mp4](https://s3.twcstorage.ru/strelo/emdr/preview.mp4) &nbsp;|&nbsp; Live-Version: [bananamaster.ru/emdr](https://bananamaster.ru/emdr)
 

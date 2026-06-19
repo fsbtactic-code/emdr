@@ -84,7 +84,7 @@ Una guida integrata con una valutazione onesta dell'efficacia per condizione e c
 
 ## Demo
 
-[![Video demo](https://s3.twcstorage.ru/strelo/emdr/preview.jpg)](https://s3.twcstorage.ru/strelo/emdr/preview.mp4)
+[![Video demo](https://s3.twcstorage.ru/strelo/emdr/demo.gif)](https://s3.twcstorage.ru/strelo/emdr/preview.mp4)
 
 Video completo: [preview.mp4](https://s3.twcstorage.ru/strelo/emdr/preview.mp4) &nbsp;|&nbsp; Versione live: [bananamaster.ru/emdr](https://bananamaster.ru/emdr)
 
