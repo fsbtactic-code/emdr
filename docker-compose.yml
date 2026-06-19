@@ -1,0 +1,12 @@
+services:
+  emdr:
+    build:
+      context: .
+    container_name: emdr_trainer
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    # Optional: Telegram delivery for the in-app feedback form.
+    # environment:
+    #   - TELEGRAM_TOKEN=...
+    #   - TELEGRAM_CHAT_ID=...
