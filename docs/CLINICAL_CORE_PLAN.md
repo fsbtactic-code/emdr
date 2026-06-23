@@ -89,7 +89,27 @@ Overall status: ALL tasks below DONE. `npm run typecheck` and `npm run build` ar
 | I3 | Engine: vestibular cap, `visualEnabled` gate, call `useHapticBLS` | `app/components/StimulationEngine.tsx` | DONE |
 | I4 | Forced safe closure + grounding gate + crisis contacts in grounding | `app/components/Controls.tsx`, `GroundingOverlay.tsx` | DONE |
 
+## Session 2 additions (modes, onboarding, conduct UX, polish) - DONE
+
+- Two tools via `appMode` ('specialist' | 'selfhelp', persisted in localStorage `emdr_mode`):
+  `ModeChooser.tsx` is the split entry; `FloatingNav` hides clinical/session/journal outside
+  specialist mode and exposes switch-mode + relaunch-onboarding buttons.
+- `OnboardingFlow.tsx`: per-mode guided walkthrough, persisted per mode in localStorage
+  (`emdr_ob_specialist` / `emdr_ob_selfhelp`), auto-runs the first time a mode is active,
+  re-launchable from the rail (GraduationCap button). Store: isOnboardingOpen, onboardingMode,
+  onboardingSeenSpecialist/Selfhelp, markOnboardingSeen, set* (see useStore.ts).
+- TherapistPanel: live "Quick controls" (speed/amplitude/pattern) during a session +
+  host-local mute (audioEnabled, NOT broadcast, so the client keeps hearing) + create-session
+  button in the solo lock.
+- Controls: single labeled start button (tpStartSet in specialist mode, else start).
+- crisis.ts: proper Cyrillic (ru) + native diacritics. White card/ring outlines removed across
+  overlays (filled surfaces). Reliable close (X + backdrop) on overlays.
+
 ## Follow-ups (next agent / Codex can pick up)
+
+- Translations: `ModeChooser` uses central dict keys (ru+en, others fall back to en).
+  `OnboardingFlow`, `ResourceExercises`, `SessionJournal`, `PreSessionGate` keep LOCAL strings
+  with ru+en only - translate them (and the new central keys) into es/it/de/fr/pt for full i18n.
 
 - Translations: new strings exist only in `ru` + `en`. es/it/de/fr/pt fall back to en. Translate the
   new dict keys (channels, signals, closure, `tp*`, `nav*`) and the local string blocks inside
