@@ -8,6 +8,7 @@ export type TargetShape = 'circle' | 'square' | 'ring' | 'butterfly';
 export type VisualBackground = 'black' | 'aurora' | 'stars';
 export type SymbolLanguage = 'ru' | 'en' | 'numbers';
 export type ClientSignal = 'ok' | 'pause' | 'stop';
+export type AppMode = 'specialist' | 'selfhelp';
 
 export interface SudsEntry { t: number; phase: string; value: number }
 export interface SetObservation { set: number; note: string; suds: number | null }
@@ -51,6 +52,9 @@ export interface EmdrState {
 
   lang: Locale;
 
+  // which tool surface is active: practitioner-led or self-help. null = not chosen yet.
+  appMode: AppMode | null;
+
   isClient: boolean;
   isHost: boolean;
   roomId: string | null;
@@ -73,6 +77,12 @@ export interface EmdrState {
   isJournalOpen: boolean;
   isGateOpen: boolean;
   isClinicalOpen: boolean;
+
+  // guided onboarding (per mode, persisted, re-launchable)
+  isOnboardingOpen: boolean;
+  onboardingMode: AppMode | null;
+  onboardingSeenSpecialist: boolean;
+  onboardingSeenSelfhelp: boolean;
 
   // pre-session safety gate
   consentGiven: boolean;
@@ -114,6 +124,7 @@ export interface EmdrState {
   setSafeMode: (safeMode: boolean) => void;
   setIsGroundingOpen: (isOpen: boolean) => void;
   setLang: (lang: Locale) => void;
+  setAppMode: (mode: AppMode | null) => void;
   setIsClient: (isClient: boolean) => void;
   setIsHost: (isHost: boolean) => void;
   setRoomId: (roomId: string | null) => void;
@@ -130,6 +141,9 @@ export interface EmdrState {
   setIsJournalOpen: (v: boolean) => void;
   setIsGateOpen: (v: boolean) => void;
   setIsClinicalOpen: (v: boolean) => void;
+  setIsOnboardingOpen: (v: boolean) => void;
+  setOnboardingMode: (m: AppMode | null) => void;
+  markOnboardingSeen: (m: AppMode) => void;
   setConsentGiven: (v: boolean) => void;
   setDissociationScreenPassed: (v: boolean) => void;
   setClientSignal: (v: ClientSignal | null) => void;
@@ -194,6 +208,7 @@ export const useStore = create<RootState>((set) => ({
   isFeedbackOpen: false,
   isGuideOpen: false,
   lang: 'ru',
+  appMode: null,
   isClient: false,
   isHost: false,
   roomId: null,
@@ -210,6 +225,10 @@ export const useStore = create<RootState>((set) => ({
   isJournalOpen: false,
   isGateOpen: false,
   isClinicalOpen: false,
+  isOnboardingOpen: false,
+  onboardingMode: null,
+  onboardingSeenSpecialist: false,
+  onboardingSeenSelfhelp: false,
   consentGiven: false,
   dissociationScreenPassed: false,
   clientSignal: null,
@@ -247,6 +266,13 @@ export const useStore = create<RootState>((set) => ({
   setLang: (lang) => {
     try { localStorage.setItem('emdr_lang', lang); } catch {}
     set({ lang });
+  },
+  setAppMode: (appMode) => {
+    try {
+      if (appMode) localStorage.setItem('emdr_mode', appMode);
+      else localStorage.removeItem('emdr_mode');
+    } catch {}
+    set({ appMode });
   },
   setIsClient: (isClient) => set({ isClient }),
   setIsHost: (isHost) => set({ isHost }),
@@ -288,6 +314,12 @@ export const useStore = create<RootState>((set) => ({
   setIsJournalOpen: (isJournalOpen) => set({ isJournalOpen }),
   setIsGateOpen: (isGateOpen) => set({ isGateOpen }),
   setIsClinicalOpen: (isClinicalOpen) => set({ isClinicalOpen }),
+  setIsOnboardingOpen: (isOnboardingOpen) => set({ isOnboardingOpen }),
+  setOnboardingMode: (onboardingMode) => set({ onboardingMode }),
+  markOnboardingSeen: (m) => {
+    try { localStorage.setItem('emdr_ob_' + m, '1'); } catch {}
+    set(m === 'specialist' ? { onboardingSeenSpecialist: true } : { onboardingSeenSelfhelp: true });
+  },
   setConsentGiven: (consentGiven) => set({ consentGiven }),
   setDissociationScreenPassed: (dissociationScreenPassed) => set({ dissociationScreenPassed }),
   setClientSignal: (clientSignal) => set({ clientSignal, signalAt: clientSignal ? Date.now() : null }),

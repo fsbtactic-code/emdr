@@ -13,13 +13,13 @@ export const SessionClientOverlay = () => {
   const t = useT();
 
   const signalBtn = (active: boolean, base: string) =>
-    `px-4 py-2.5 flex items-center justify-center rounded-2xl text-[12px] font-semibold backdrop-blur-md border transition-all active:scale-95 ${base} ${active ? 'ring-2 ring-white/40' : ''}`;
+    `px-4 py-2.5 flex items-center justify-center rounded-2xl text-[12px] font-semibold backdrop-blur-md border transition-all active:scale-95 ${base} ${active ? 'brightness-125 saturate-150' : ''}`;
 
   return (
     <>
       {}
       <div className="fixed top-4 inset-x-0 z-40 flex justify-center px-4 pointer-events-none">
-        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#0a0a0c]/50 backdrop-blur-xl border border-white/10 shadow-lg max-w-full">
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#0a0a0c]/50 backdrop-blur-xl border border-white/[0.06] shadow-lg max-w-full">
           <Users size={14} className="text-cyan-400 shrink-0" />
           <span className="text-[12px] font-medium text-white/70 truncate">{t.sessClientBadge}</span>
         </div>

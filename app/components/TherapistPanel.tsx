@@ -2,9 +2,10 @@
 
 import {
   X, Lock, Play, Pause, Save, Check, RotateCcw,
-  ClipboardList, Activity, ChevronRight, BookOpen
+  ClipboardList, Activity, ChevronRight, BookOpen, Radio,
+  Gauge, VolumeX
 } from 'lucide-react';
-import { useStore, SessionPhase } from '../store/useStore';
+import { useStore, SessionPhase, PatternType } from '../store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { useT } from '../i18n/useT';
@@ -26,6 +27,28 @@ const Label = ({ children, color = 'text-white/35' }: { children: React.ReactNod
   <span className={`text-[11px] uppercase tracking-[0.15em] font-semibold ${color}`}>{children}</span>
 );
 
+// Filled value pill (no white outline).
+const Badge = ({ children }: { children: React.ReactNode }) => (
+  <span className="text-white/80 text-[13px] font-medium tabular-nums bg-white/[0.05] px-2.5 py-1 rounded-lg border border-transparent">
+    {children}
+  </span>
+);
+
+// Toggle styled like SettingsPanel: accent fill when on, filled track when off.
+const Toggle = ({ enabled, onChange, accent }: { enabled: boolean; onChange: () => void; accent: string }) => (
+  <button
+    onClick={onChange}
+    className={`w-11 h-6 rounded-full relative flex items-center transition-colors duration-300 shrink-0 border ${enabled ? `${accent} border-transparent` : 'bg-white/[0.06] border-transparent'}`}
+  >
+    <div className={`w-4 h-4 rounded-full bg-white shadow transition-transform duration-300 ${enabled ? 'translate-x-6' : 'translate-x-1'}`} />
+  </button>
+);
+
+// Ordered pattern ids for the compact picker (matches PatternType union).
+const QUICK_PATTERNS: PatternType[] = [
+  'horizontal', 'vertical', 'diagonal-1', 'diagonal-2', 'lemniscate', 'dots', 'pulse', 'bars', 'zigzag'
+];
+
 const Field = ({ label, value, onChange, placeholder, rows = 2 }: {
   label: string;
   value: string;
@@ -40,7 +63,7 @@ const Field = ({ label, value, onChange, placeholder, rows = 2 }: {
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
       rows={rows}
-      className="w-full resize-none rounded-xl bg-white/[0.03] border border-white/[0.06] px-3 py-2 text-[13px] text-white/85 placeholder:text-white/20 focus:outline-none focus:border-white/15 transition-colors no-scrollbar"
+      className="w-full resize-none rounded-xl bg-white/[0.03] border border-white/[0.06] px-3 py-2 text-[13px] text-white/85 placeholder:text-white/20 focus:outline-none focus:border-white/[0.12] transition-colors no-scrollbar"
     />
   </div>
 );
@@ -80,6 +103,7 @@ export function TherapistPanel() {
   const isClinicalOpen = useStore((s) => s.isClinicalOpen);
   const setIsClinicalOpen = useStore((s) => s.setIsClinicalOpen);
   const setIsResourcesOpen = useStore((s) => s.setIsResourcesOpen);
+  const setIsSessionOpen = useStore((s) => s.setIsSessionOpen);
   const isHost = useStore((s) => s.isHost);
 
   // clinical slice
@@ -111,6 +135,17 @@ export function TherapistPanel() {
   const sessionStartedAt = useStore((s) => s.sessionStartedAt);
   const isPlaying = useStore((s) => s.isPlaying);
   const setPlaying = useStore((s) => s.setPlaying);
+
+  // live stimulation controls (broadcast to client via room.state)
+  const speed = useStore((s) => s.speed);
+  const setSpeed = useStore((s) => s.setSpeed);
+  const amplitude = useStore((s) => s.amplitude);
+  const setAmplitude = useStore((s) => s.setAmplitude);
+  const pattern = useStore((s) => s.pattern);
+  const setPattern = useStore((s) => s.setPattern);
+  // host-local audio (NOT broadcast: muting here only affects the host device)
+  const audioEnabled = useStore((s) => s.audioEnabled);
+  const setAudioEnabled = useStore((s) => s.setAudioEnabled);
 
   // per-set local state for the desensitization loop
   const [setObsNote, setSetObsNote] = useState('');
@@ -229,6 +264,90 @@ export function TherapistPanel() {
               </div>
             </div>
 
+            {/* Quick controls (host only): reachable in every phase, esp. Desensitization.
+                These bind to the SAME store fields broadcast to the client, so changes apply live. */}
+            {isHost && (
+              <div className="px-5 py-4 border-t border-white/5 flex flex-col gap-4">
+                <div className="flex items-center gap-2">
+                  <Gauge size={14} className="text-cyan-300/80" />
+                  <Label color="text-cyan-300/70">{t.tpQuick}</Label>
+                </div>
+
+                {/* speed + amplitude sliders */}
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex justify-between items-center gap-3">
+                      <Label>{t.speedLabel}</Label>
+                      <Badge>{`${speed.toFixed(1)} ${t.hzUnit}`}</Badge>
+                    </div>
+                    <input
+                      type="range"
+                      min={0.5}
+                      max={3}
+                      step={0.1}
+                      value={speed}
+                      onChange={(e) => setSpeed(parseFloat(e.target.value))}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex justify-between items-center gap-3">
+                      <Label>{t.amplitudeLabel}</Label>
+                      <Badge>{`${amplitude}%`}</Badge>
+                    </div>
+                    <input
+                      type="range"
+                      min={40}
+                      max={100}
+                      step={1}
+                      value={amplitude}
+                      onChange={(e) => setAmplitude(parseInt(e.target.value))}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+
+                {/* compact pattern picker */}
+                <div className="flex flex-col gap-2">
+                  <Label>{t.patternLabel}</Label>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {QUICK_PATTERNS.map((id) => {
+                      const active = pattern === id;
+                      return (
+                        <button
+                          key={id}
+                          onClick={() => setPattern(id)}
+                          className={`min-h-[40px] py-2 px-1.5 rounded-lg text-[12px] font-medium leading-tight text-center transition-all border min-w-0 truncate ${
+                            active
+                              ? 'bg-cyan-500/15 text-cyan-100 border-cyan-500/25 shadow-lg'
+                              : 'bg-white/[0.03] text-white/40 border-transparent hover:bg-white/[0.07]'
+                          }`}
+                        >
+                          {t.patterns[id]}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* host-local mute (NOT broadcast) */}
+                <div className="flex items-center justify-between gap-3 rounded-xl bg-white/[0.03] border border-transparent px-3.5 py-3">
+                  <div className="flex items-start gap-2.5 min-w-0">
+                    <VolumeX size={15} className={`shrink-0 mt-0.5 ${!audioEnabled ? 'text-cyan-300/80' : 'text-white/30'}`} />
+                    <div className="min-w-0">
+                      <Label color={!audioEnabled ? 'text-cyan-300/70' : 'text-white/35'}>{t.tpLocalMute}</Label>
+                      <p className="text-white/30 text-[12px] mt-0.5 leading-relaxed">{t.tpLocalMuteHint}</p>
+                    </div>
+                  </div>
+                  <Toggle
+                    enabled={!audioEnabled}
+                    onChange={() => setAudioEnabled(!audioEnabled)}
+                    accent="bg-cyan-500/70"
+                  />
+                </div>
+              </div>
+            )}
+
             {!isHost ? (
               /* solo lock: phases 1-2 info is shown above; reprocessing is gated */
               <div className="px-5 py-4">
@@ -238,6 +357,12 @@ export function TherapistPanel() {
                     <p className="text-[13px] text-amber-100/85 leading-relaxed">{t.tpSoloLock}</p>
                   </div>
                   <p className="text-[12px] text-white/40 leading-relaxed">{t.tpHostOnly}</p>
+                  <button
+                    onClick={() => { setIsClinicalOpen(false); setIsSessionOpen(true); }}
+                    className="w-full py-3 rounded-xl font-semibold text-[13px] bg-white text-zinc-950 hover:bg-zinc-200 transition-all flex items-center justify-center gap-2"
+                  >
+                    <Radio size={15} /> {t.specStartBtn}
+                  </button>
                   <button
                     onClick={() => setIsResourcesOpen(true)}
                     className="w-full py-3 rounded-xl font-medium text-[13px] border border-amber-500/25 bg-amber-500/10 text-amber-100 hover:bg-amber-500/20 transition-all flex items-center justify-center gap-2"
@@ -285,7 +410,7 @@ export function TherapistPanel() {
                   {isPlaying && (
                     <button
                       onClick={stopSet}
-                      className="w-full py-3 rounded-xl font-medium text-[13px] border border-white/12 bg-white/[0.06] text-white hover:bg-white/12 transition-all flex items-center justify-center gap-2"
+                      className="w-full py-3 rounded-xl font-medium text-[13px] border border-transparent bg-white/[0.06] text-white hover:bg-white/[0.1] transition-all flex items-center justify-center gap-2"
                     >
                       <Pause size={14} className="fill-current" /> {t.tpStopSet}
                     </button>
@@ -305,7 +430,7 @@ export function TherapistPanel() {
                           onChange={(e) => setSetObsNote(e.target.value)}
                           placeholder={t.tpObsPh}
                           rows={2}
-                          className="w-full resize-none rounded-xl bg-white/[0.03] border border-white/[0.06] px-3 py-2 text-[13px] text-white/85 placeholder:text-white/20 focus:outline-none focus:border-white/15 transition-colors no-scrollbar"
+                          className="w-full resize-none rounded-xl bg-white/[0.03] border border-white/[0.06] px-3 py-2 text-[13px] text-white/85 placeholder:text-white/20 focus:outline-none focus:border-white/[0.12] transition-colors no-scrollbar"
                         />
                         <div className="flex flex-col gap-2">
                           <Label>{t.tpSuds}</Label>
@@ -320,7 +445,7 @@ export function TherapistPanel() {
                           </button>
                           <button
                             onClick={nextSet}
-                            className="flex-1 py-2.5 rounded-xl font-medium text-[13px] border border-white/10 bg-white/[0.04] text-white/70 hover:bg-white/[0.08] transition-all"
+                            className="flex-1 py-2.5 rounded-xl font-medium text-[13px] border border-transparent bg-white/[0.04] text-white/70 hover:bg-white/[0.08] transition-all"
                           >
                             {t.tpNextSet}
                           </button>
@@ -388,14 +513,14 @@ export function TherapistPanel() {
                     className={`w-full py-3 rounded-2xl font-semibold text-[13px] tracking-wide transition-all border flex items-center justify-center gap-2 ${
                       saved
                         ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-                        : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white'
+                        : 'bg-white/[0.05] border-transparent text-white/70 hover:bg-white/[0.1] hover:text-white'
                     }`}
                   >
                     {saved ? (<><Check size={14} /> {t.tpSaved}</>) : (<><Save size={14} /> {t.tpSaveSession}</>)}
                   </button>
                   <button
                     onClick={resetClinical}
-                    className="w-full py-3 rounded-2xl font-medium text-[13px] tracking-wide transition-all border border-white/10 bg-transparent text-white/50 hover:bg-white/[0.05] hover:text-white/80 flex items-center justify-center gap-2"
+                    className="w-full py-3 rounded-2xl font-medium text-[13px] tracking-wide transition-all border border-transparent bg-white/[0.03] text-white/50 hover:bg-white/[0.07] hover:text-white/80 flex items-center justify-center gap-2"
                   >
                     <RotateCcw size={14} /> {t.tpReset}
                   </button>

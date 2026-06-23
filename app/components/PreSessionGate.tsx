@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, AlertTriangle, Phone } from 'lucide-react';
+import { ShieldCheck, AlertTriangle, Phone, X } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import type { Locale } from '../i18n/dict';
 
@@ -163,6 +163,11 @@ export function PreSessionGate() {
     setIsGateOpen(false);
   };
 
+  // Escape hatch: close without granting consent.
+  const handleDismiss = () => {
+    setIsGateOpen(false);
+  };
+
   return (
     <AnimatePresence onExitComplete={handleOpen}>
       {isGateOpen && (
@@ -171,6 +176,7 @@ export function PreSessionGate() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          onClick={handleDismiss}
           className="fixed inset-0 z-[130] flex items-center justify-center p-4 bg-zinc-950/90 backdrop-blur-2xl"
         >
           <motion.div
@@ -179,10 +185,20 @@ export function PreSessionGate() {
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.96, y: 16, opacity: 0 }}
             transition={{ type: 'spring', damping: 26, stiffness: 200 }}
-            className="w-full max-w-lg bg-[#0d0d0f] border border-white/10 rounded-[28px] p-7 shadow-2xl relative overflow-hidden max-h-[92vh] overflow-y-auto no-scrollbar"
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-lg bg-[#0d0d0f] border border-white/[0.06] rounded-[28px] p-7 shadow-2xl relative overflow-hidden max-h-[92vh] overflow-y-auto no-scrollbar"
           >
             {/* Glow */}
             <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-48 bg-cyan-500/10 blur-[60px] rounded-full pointer-events-none" />
+
+            {/* Close (escape hatch): dismisses without granting consent */}
+            <button
+              onClick={handleDismiss}
+              aria-label={lang === 'en' ? 'Close' : 'Закрыть'}
+              className="absolute top-3.5 right-3.5 w-10 h-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full text-white/40 hover:text-white transition-all z-20"
+            >
+              <X size={18} />
+            </button>
 
             <div className="relative z-10 flex flex-col items-center text-center">
               {/* Badge */}
@@ -224,7 +240,7 @@ export function PreSessionGate() {
                               'mt-[2px] flex-shrink-0 w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors',
                               active
                                 ? 'border-rose-400 bg-rose-500'
-                                : 'border-white/20 bg-transparent',
+                                : 'border-white/15 bg-transparent',
                             ].join(' ')}
                           >
                             {active && (
@@ -308,7 +324,7 @@ export function PreSessionGate() {
                               'mt-[2px] flex-shrink-0 w-4 h-4 rounded border-2 flex items-center justify-center transition-colors',
                               checked
                                 ? 'border-emerald-400 bg-emerald-500'
-                                : 'border-white/20 bg-transparent',
+                                : 'border-white/15 bg-transparent',
                             ].join(' ')}
                           >
                             {checked && (

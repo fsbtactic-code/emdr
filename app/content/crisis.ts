@@ -16,24 +16,24 @@ export type CrisisContact = {
 export const CRISIS_CONTACTS: Record<Locale, CrisisContact[]> = {
   ru: [
     {
-      name: 'Telefon ekstrennoy psikhologicheskoy pomoshchi',
+      name: 'Телефон неотложной психологической помощи',
       phone: '8-800-2000-122',
-      note: 'Besplatno, kruglosutochno. Federalnyy telefon doveriya dlya vzroslykh i detey.',
+      note: 'Бесплатно, круглосуточно. Федеральный телефон доверия для взрослых и детей.',
     },
     {
-      name: 'Skoraya pomoshch / Edinaya sluzhba spaseniia',
+      name: 'Скорая помощь / Единая служба спасения',
       phone: '112',
-      note: 'Pri neposredstvennoy ugroze zhizni zvonite 112.',
+      note: 'При непосредственной угрозе жизни звоните 112.',
     },
     {
-      name: 'Moskovskiy telefon doveriya',
+      name: 'Московский телефон доверия',
       phone: '8-800-100-49-94',
-      note: 'Psikhologicheskaya pomoshch, besplatno.',
+      note: 'Психологическая помощь, бесплатно.',
     },
     {
-      name: 'Mezhdunarodnye linii pomoshchi',
+      name: 'Международные линии помощи',
       url: 'https://www.iasp.info/resources/Crisis_Centres/',
-      note: 'Katalog krizisnyh sluzhb po vsemu miru (IASP).',
+      note: 'Каталог кризисных служб по всему миру (IASP).',
     },
   ],
 
@@ -76,15 +76,15 @@ export const CRISIS_CONTACTS: Record<Locale, CrisisContact[]> = {
 
   es: [
     {
-      name: 'Linea de atencion a la conducta suicida (Spain)',
+      name: 'Línea de atención a la conducta suicida (España)',
       phone: '024',
-      note: 'Linea nacional de prevencion del suicidio, gratuita, disponible 24h.',
+      note: 'Línea nacional de prevención del suicidio, gratuita, disponible 24h.',
     },
     {
-      name: 'Telefono de la Esperanza',
+      name: 'Teléfono de la Esperanza',
       phone: '717 003 717',
       url: 'https://www.telefonodelaesperanza.org',
-      note: 'Apoyo emocional y prevencion del suicidio, disponible 24h.',
+      note: 'Apoyo emocional y prevención del suicidio, disponible 24h.',
     },
     {
       name: 'Emergencias',
@@ -94,7 +94,7 @@ export const CRISIS_CONTACTS: Record<Locale, CrisisContact[]> = {
     {
       name: 'Directorio internacional de centros de crisis',
       url: 'https://www.iasp.info/resources/Crisis_Centres/',
-      note: 'Recursos en otros paises hispanohablantes (IASP).',
+      note: 'Recursos en otros países hispanohablantes (IASP).',
     },
   ],
 
@@ -119,7 +119,7 @@ export const CRISIS_CONTACTS: Record<Locale, CrisisContact[]> = {
     {
       name: 'Emergenze',
       phone: '112',
-      note: 'Se la vita e in pericolo immediato, chiama il 112.',
+      note: "Se la vita è in pericolo immediato, chiama il 112.",
     },
     {
       name: 'Elenco internazionale centri di crisi',
@@ -144,7 +144,7 @@ export const CRISIS_CONTACTS: Record<Locale, CrisisContact[]> = {
       name: 'Nummer gegen Kummer (Kinder und Jugendliche)',
       phone: '116 111',
       url: 'https://www.nummergegenkummer.de',
-      note: 'Kostenlos fuer Kinder und Jugendliche.',
+      note: 'Kostenlos für Kinder und Jugendliche.',
     },
     {
       name: 'Notruf',
@@ -160,26 +160,26 @@ export const CRISIS_CONTACTS: Record<Locale, CrisisContact[]> = {
 
   fr: [
     {
-      name: '3114 - Numero national de prevention du suicide',
+      name: '3114 - Numéro national de prévention du suicide',
       phone: '3114',
       url: 'https://www.3114.fr',
       note: 'Ligne nationale gratuite, disponible 24h/24, 7j/7.',
     },
     {
-      name: 'SOS Amitie',
+      name: 'SOS Amitié',
       phone: '09 72 39 40 50',
       url: 'https://www.sos-amitie.com',
-      note: 'Ecoute anonyme, 24h/24.',
+      note: 'Écoute anonyme, 24h/24.',
     },
     {
       name: 'Urgences',
       phone: '15 (SAMU) / 112',
-      note: 'En cas de danger immediat pour la vie, appelez le 15 ou le 112.',
+      note: 'En cas de danger immédiat pour la vie, appelez le 15 ou le 112.',
     },
     {
       name: 'Annuaire international des centres de crise',
       url: 'https://www.iasp.info/resources/Crisis_Centres/',
-      note: 'Ressources dans d\'autres pays (IASP).',
+      note: "Ressources dans d'autres pays (IASP).",
     },
   ],
 
@@ -188,28 +188,28 @@ export const CRISIS_CONTACTS: Record<Locale, CrisisContact[]> = {
       name: 'SOS Voz Amiga',
       phone: '213 544 545',
       url: 'https://www.sosvozamiga.org',
-      note: 'Apoio emocional, disponivel das 16h a meia-noite todos os dias.',
+      note: 'Apoio emocional, disponível das 16h à meia-noite todos os dias.',
     },
     {
       name: 'Voz de Apoio',
       phone: '225 506 070',
       url: 'https://vozdeapoio.pt',
-      note: 'Apoio emocional e prevencao do suicidio, Porto.',
+      note: 'Apoio emocional e prevenção do suicídio, Porto.',
     },
     {
       name: 'Centro de Apoio ao Luto e Crise (CALC)',
       phone: '800 202 664',
-      note: 'Linha de apoio em situacao de crise, gratuita.',
+      note: 'Linha de apoio em situação de crise, gratuita.',
     },
     {
-      name: 'Emergencia',
+      name: 'Emergência',
       phone: '112',
-      note: 'Se a vida esta em perigo imediato, ligue para o 112.',
+      note: 'Se a vida está em perigo imediato, ligue para o 112.',
     },
     {
-      name: 'Diretorio internacional de centros de crise',
+      name: 'Diretório internacional de centros de crise',
       url: 'https://www.iasp.info/resources/Crisis_Centres/',
-      note: 'Recursos em outros paises (IASP).',
+      note: 'Recursos em outros países (IASP).',
     },
   ],
 };

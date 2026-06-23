@@ -232,6 +232,32 @@ export interface Dict {
   tpSudsTrend: string;
   tpSoloLock: string;
   tpHostOnly: string;
+
+  // mode chooser + per-mode intro + nav
+  modeChooseTitle: string;
+  modeChooseSub: string;
+  modeSpecialist: string;
+  modeSpecialistDesc: string;
+  modeSelfHelp: string;
+  modeSelfHelpDesc: string;
+  modeSwitch: string;
+  modeContinue: string;
+  specIntroTitle: string;
+  specStep1: string;
+  specStep2: string;
+  specStep3: string;
+  specStartBtn: string;
+  selfIntroTitle: string;
+  selfIntro1: string;
+  selfIntro2: string;
+  selfIntro3: string;
+  selfStartBtn: string;
+
+  // quick controls during conduct + host-local mute + onboarding nav
+  navOnboarding: string;
+  tpQuick: string;
+  tpLocalMute: string;
+  tpLocalMuteHint: string;
 }
 
 export const ru: Dict = {
@@ -553,5 +579,29 @@ export const ru: Dict = {
   tpReset: "Новая сессия",
   tpSudsTrend: "Динамика SUD",
   tpSoloLock: "Полный протокол с десенсибилизацией доступен только в режиме сессии со специалистом. В одиночку доступны подготовка, ресурсные упражнения и заземление.",
-  tpHostOnly: "Создайте сессию (панель слева), чтобы вести протокол с клиентом"
+  tpHostOnly: "Создайте сессию (панель слева), чтобы вести протокол с клиентом",
+
+  modeChooseTitle: "Как вы будете работать?",
+  modeChooseSub: "Режим можно сменить в любой момент в боковом меню",
+  modeSpecialist: "Для специалиста",
+  modeSpecialistDesc: "Веду сессию с клиентом: создаю комнату, отправляю ссылку, провожу протокол по фазам с замерами SUD и VOC.",
+  modeSelfHelp: "Для самопомощи",
+  modeSelfHelpDesc: "Сам для себя: стабилизация, ресурсные упражнения, заземление и расслабление. Без самостоятельной переработки травмы.",
+  modeSwitch: "Сменить режим",
+  modeContinue: "Продолжить",
+  specIntroTitle: "Как провести сессию",
+  specStep1: "Откройте панель Сессия со специалистом и нажмите Создать сессию.",
+  specStep2: "Скопируйте ссылку и отправьте ее клиенту. Когда он подключится, появится статус Клиент подключен.",
+  specStep3: "Откройте Ведение сессии: протокол по фазам с замерами SUD и VOC разблокируется, когда вы стали ведущим.",
+  specStartBtn: "Создать сессию",
+  selfIntroTitle: "С чего начать",
+  selfIntro1: "Начните с ресурсов и стабилизации: безопасное место, контейнер, дыхание.",
+  selfIntro2: "В любой момент доступна кнопка Стоп и заземление.",
+  selfIntro3: "Это инструмент самопомощи. Переработку травмы ведет специалист, а не приложение.",
+  selfStartBtn: "Открыть ресурсы",
+
+  navOnboarding: "Обучение",
+  tpQuick: "Быстрые настройки",
+  tpLocalMute: "Звук только у меня",
+  tpLocalMuteHint: "Заглушить звук на вашем устройстве. У клиента звук продолжает воспроизводиться."
 };

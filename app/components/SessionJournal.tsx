@@ -191,6 +191,7 @@ export function SessionJournal() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          onClick={() => setIsJournalOpen(false)}
           className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-zinc-950/90 backdrop-blur-2xl"
         >
           <motion.div
@@ -198,16 +199,17 @@ export function SessionJournal() {
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.96, y: 16, opacity: 0 }}
             transition={{ type: 'spring', damping: 26, stiffness: 200 }}
-            className="w-full max-w-2xl bg-[#0d0d0f] border border-white/10 rounded-[28px] p-7 shadow-2xl relative overflow-hidden max-h-[92vh] overflow-y-auto no-scrollbar"
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-2xl bg-[#0d0d0f] border border-white/[0.06] rounded-[28px] p-7 shadow-2xl relative overflow-hidden max-h-[92vh] overflow-y-auto no-scrollbar"
           >
             <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-48 bg-cyan-500/10 blur-[60px] rounded-full pointer-events-none" />
 
             <button
               onClick={() => setIsJournalOpen(false)}
               aria-label={t.close}
-              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full text-white/40 hover:text-white transition-all z-10"
+              className="absolute top-3 right-3 p-2 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full text-white/40 hover:text-white transition-all z-20"
             >
-              <X size={16} />
+              <X size={18} />
             </button>
 
             <div className="relative z-10">
@@ -221,14 +223,14 @@ export function SessionJournal() {
                 <button
                   onClick={handleJson}
                   disabled={entries.length === 0}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/[0.06] text-[12px] font-medium text-white/70 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-transparent text-[12px] font-medium text-white/70 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   <FileJson size={14} /> {t.downloadJson}
                 </button>
                 <button
                   onClick={handleCsv}
                   disabled={entries.length === 0}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/[0.06] text-[12px] font-medium text-white/70 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-transparent text-[12px] font-medium text-white/70 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   <Download size={14} /> {t.downloadCsv}
                 </button>
@@ -251,7 +253,7 @@ export function SessionJournal() {
                   return (
                     <div
                       key={e.id}
-                      className="rounded-2xl bg-white/[0.03] border border-white/[0.05] p-4"
+                      className="rounded-2xl bg-white/[0.04] border border-transparent p-4"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
@@ -290,7 +292,7 @@ export function SessionJournal() {
                           </span>
                         )}
                         {e.observations.length > 0 && (
-                          <span className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/[0.06] text-[12px] text-white/55 tabular-nums">
+                          <span className="px-2.5 py-1 rounded-lg bg-white/[0.05] border border-transparent text-[12px] text-white/55 tabular-nums">
                             {e.observations.length} {t.observations}
                           </span>
                         )}

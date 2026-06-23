@@ -45,7 +45,7 @@ export const Disclaimer = () => {
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.95, y: 20, opacity: 0 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="w-full max-w-md bg-[#0d0d0f] border border-white/10 rounded-[28px] p-7 shadow-2xl relative overflow-hidden max-h-[90vh] overflow-y-auto no-scrollbar"
+            className="w-full max-w-md bg-[#0d0d0f] border border-white/[0.06] rounded-[28px] p-7 shadow-2xl relative overflow-hidden max-h-[90vh] overflow-y-auto no-scrollbar"
           >
             <div className="absolute -top-12 -right-12 w-32 h-32 bg-rose-500/10 blur-[50px] rounded-full pointer-events-none" />
             <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-cyan-500/10 blur-[50px] rounded-full pointer-events-none" />
@@ -91,7 +91,7 @@ export const Disclaimer = () => {
                     onClick={() => setConfirmed((v) => !v)}
                     className="flex items-start gap-3 text-left mb-5 group"
                   >
-                    <span className={`mt-0.5 w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors ${confirmed ? 'bg-emerald-500/80 border-emerald-400' : 'bg-white/[0.04] border-white/20 group-hover:border-white/40'}`}>
+                    <span className={`mt-0.5 w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors ${confirmed ? 'bg-emerald-500/80 border-emerald-400' : 'bg-white/[0.04] border-white/15 group-hover:bg-white/[0.07]'}`}>
                       {confirmed && <Check size={13} className="text-white" />}
                     </span>
                     <span className="text-[13px] text-white/70 leading-relaxed">{t.discConfirm}</span>

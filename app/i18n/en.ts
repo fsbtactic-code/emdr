@@ -319,5 +319,29 @@ The sounds and "frequencies" here (including 528 Hz and binaural beats) are rela
   tpReset: "New session",
   tpSudsTrend: "SUD trend",
   tpSoloLock: "The full protocol with desensitization is available only in a session with a practitioner. Solo mode offers preparation, resource exercises and grounding.",
-  tpHostOnly: "Create a session (left panel) to run the protocol with a client"
+  tpHostOnly: "Create a session (left panel) to run the protocol with a client",
+
+  modeChooseTitle: "How will you work?",
+  modeChooseSub: "You can switch the mode anytime from the side menu",
+  modeSpecialist: "For a practitioner",
+  modeSpecialistDesc: "I run a session with a client: create a room, send the link, run the phase protocol with SUD and VOC ratings.",
+  modeSelfHelp: "For self-help",
+  modeSelfHelpDesc: "On my own: stabilization, resource exercises, grounding and relaxation. No self-administered trauma reprocessing.",
+  modeSwitch: "Switch mode",
+  modeContinue: "Continue",
+  specIntroTitle: "How to run a session",
+  specStep1: "Open the Session with a practitioner panel and tap Create session.",
+  specStep2: "Copy the link and send it to your client. When they join, the status shows Client connected.",
+  specStep3: "Open Session conduct: the phase protocol with SUD and VOC ratings unlocks once you are the host.",
+  specStartBtn: "Create session",
+  selfIntroTitle: "Where to start",
+  selfIntro1: "Start with resources and stabilization: safe place, container, breathing.",
+  selfIntro2: "The Stop and ground button is available at any time.",
+  selfIntro3: "This is a self-help tool. Trauma reprocessing is led by a practitioner, not by an app.",
+  selfStartBtn: "Open resources",
+
+  navOnboarding: "Onboarding",
+  tpQuick: "Quick controls",
+  tpLocalMute: "Mute on my side only",
+  tpLocalMuteHint: "Silence audio on your device. The client keeps hearing the sound."
 };

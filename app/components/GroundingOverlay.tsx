@@ -40,6 +40,7 @@ export const GroundingOverlay = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          onClick={() => setIsGroundingOpen(false)}
           className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-zinc-950/90 backdrop-blur-2xl"
         >
           <motion.div
@@ -47,16 +48,17 @@ export const GroundingOverlay = () => {
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.96, y: 16, opacity: 0 }}
             transition={{ type: 'spring', damping: 26, stiffness: 200 }}
-            className="w-full max-w-lg bg-[#0d0d0f] border border-white/10 rounded-[28px] p-7 shadow-2xl relative overflow-hidden max-h-[92vh] overflow-y-auto no-scrollbar"
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-lg bg-[#0d0d0f] border border-white/[0.06] rounded-[28px] p-7 shadow-2xl relative overflow-hidden max-h-[92vh] overflow-y-auto no-scrollbar"
           >
             <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-48 bg-emerald-500/10 blur-[60px] rounded-full pointer-events-none" />
 
             <button
               onClick={() => setIsGroundingOpen(false)}
               aria-label="Close"
-              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full text-white/40 hover:text-white transition-all z-10"
+              className="absolute top-3 right-3 p-2 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full text-white/40 hover:text-white transition-all z-20"
             >
-              <X size={16} />
+              <X size={18} />
             </button>
 
             <div className="relative z-10 flex flex-col items-center text-center">
@@ -83,7 +85,7 @@ export const GroundingOverlay = () => {
                 <p className="text-white/40 text-[11px] font-semibold uppercase tracking-wider mb-2">{t.nameAloud}</p>
                 <div className="flex flex-col gap-1.5">
                   {t.grounding5432.map((g) => (
-                    <div key={g} className="flex gap-2.5 items-center p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
+                    <div key={g} className="flex gap-2.5 items-center p-2.5 rounded-xl bg-white/[0.04] border border-transparent">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/70 shrink-0" />
                       <span className="text-[13px] text-white/70">{g}</span>
                     </div>

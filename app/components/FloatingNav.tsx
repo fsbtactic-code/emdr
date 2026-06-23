@@ -1,7 +1,7 @@
 'use client';
 
 import { useStore } from '../store/useStore';
-import { Settings2, MessageSquareHeart, HelpCircle, LifeBuoy, Users, Github, Heart, ClipboardList, BookOpen } from 'lucide-react';
+import { Settings2, MessageSquareHeart, HelpCircle, LifeBuoy, Users, Github, Heart, ClipboardList, BookOpen, Repeat, GraduationCap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useT } from '../i18n/useT';
 
@@ -15,6 +15,8 @@ export const FloatingNav = () => {
     isClinicalOpen, setIsClinicalOpen,
     isJournalOpen, setIsJournalOpen,
     setIsGroundingOpen,
+    appMode, setAppMode,
+    setOnboardingMode, setIsOnboardingOpen,
     isPlaying
   } = useStore();
   const t = useT();
@@ -29,7 +31,9 @@ export const FloatingNav = () => {
     setIsJournalOpen(false);
   };
 
-  const navItems = [
+  // specialistOnly items only appear in practitioner mode, so nothing clinical
+  // is shown to a self-help user. Common items appear in both modes.
+  const allNavItems = [
     {
       id: 'settings',
       icon: Settings2,
@@ -47,6 +51,7 @@ export const FloatingNav = () => {
     {
       id: 'session',
       icon: Users,
+      specialistOnly: true,
       active: isSessionOpen,
       title: t.sessHost,
       onClick: () => { const v = !isSessionOpen; closeAll(); setIsSessionOpen(v); }
@@ -54,6 +59,7 @@ export const FloatingNav = () => {
     {
       id: 'clinical',
       icon: ClipboardList,
+      specialistOnly: true,
       active: isClinicalOpen,
       title: t.tpTitle,
       onClick: () => { const v = !isClinicalOpen; closeAll(); setIsClinicalOpen(v); }
@@ -68,6 +74,7 @@ export const FloatingNav = () => {
     {
       id: 'journal',
       icon: BookOpen,
+      specialistOnly: true,
       active: isJournalOpen,
       title: t.navJournal,
       onClick: () => { const v = !isJournalOpen; closeAll(); setIsJournalOpen(v); }
@@ -88,6 +95,10 @@ export const FloatingNav = () => {
     }
   ];
 
+  const navItems = allNavItems.filter(
+    (it) => appMode === 'specialist' || !('specialistOnly' in it && it.specialistOnly)
+  );
+
   return (
     <AnimatePresence>
       {!isPlaying && (
@@ -97,7 +108,7 @@ export const FloatingNav = () => {
           exit={{ opacity: 0, x: -20 }}
           className="fixed left-4 top-4 md:left-6 md:top-6 z-40 flex flex-col gap-2"
         >
-          <div className="flex flex-col gap-1.5 p-1.5 rounded-[22px] bg-[#0a0a0c]/40 backdrop-blur-2xl border border-white/10 shadow-2xl">
+          <div className="flex flex-col gap-1.5 p-1.5 rounded-[22px] bg-[#0a0a0c]/40 backdrop-blur-2xl border border-white/[0.08] shadow-2xl">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -126,7 +137,27 @@ export const FloatingNav = () => {
             })}
           </div>
 
-          <div className="flex flex-col gap-1.5 p-1.5 rounded-[22px] bg-[#0a0a0c]/40 backdrop-blur-2xl border border-white/10 shadow-2xl">
+          <div className="flex flex-col gap-1.5 p-1.5 rounded-[22px] bg-[#0a0a0c]/40 backdrop-blur-2xl border border-white/[0.08] shadow-2xl">
+            {appMode && (
+              <button
+                onClick={() => { closeAll(); setOnboardingMode(appMode); setIsOnboardingOpen(true); }}
+                title={t.navOnboarding}
+                aria-label={t.navOnboarding}
+                className="w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-[18px] bg-white/5 text-white/60 hover:text-white hover:bg-white/10 hover:scale-105 active:scale-95 transition-all"
+              >
+                <GraduationCap size={20} />
+              </button>
+            )}
+            {appMode && (
+              <button
+                onClick={() => { closeAll(); setAppMode(null); }}
+                title={t.modeSwitch}
+                aria-label={t.modeSwitch}
+                className="w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-[18px] bg-white/5 text-white/60 hover:text-white hover:bg-white/10 hover:scale-105 active:scale-95 transition-all"
+              >
+                <Repeat size={20} />
+              </button>
+            )}
             <a
               href="https://github.com/fsbtactic-code/emdr"
               target="_blank"

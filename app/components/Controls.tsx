@@ -7,7 +7,8 @@ import { useT } from '../i18n/useT';
 export const Controls = () => {
   const {
     isPlaying, togglePlaying, setPlaying, setsCompleted, isSettingsOpen, setIsSettingsOpen,
-    setIsGroundingOpen, suds, consentGiven, setIsGateOpen, sessionStartedAt, setSessionStartedAt
+    setIsGroundingOpen, suds, consentGiven, setIsGateOpen, sessionStartedAt, setSessionStartedAt,
+    appMode
   } = useStore();
   const t = useT();
 
@@ -44,6 +45,8 @@ export const Controls = () => {
 
   if (isSettingsOpen) return null;
 
+  const startLabel = appMode === 'specialist' ? t.tpStartSet : t.start;
+
   return (
     <div className="fixed bottom-10 inset-x-0 z-40 flex flex-col items-center space-y-4">
       <div className="flex flex-col items-center">
@@ -58,9 +61,10 @@ export const Controls = () => {
             togglePlaying();
             setIsSettingsOpen(false);
           }}
-          className="w-20 h-20 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 hover:scale-105 active:scale-95 transition-all duration-300 text-white shadow-xl backdrop-blur-xl border border-white/5"
+          className="px-8 py-4 rounded-2xl bg-white text-zinc-950 font-semibold text-[15px] shadow-xl hover:bg-zinc-200 active:scale-95 transition-all flex items-center gap-2"
         >
-          <Play size={32} fill="currentColor" style={{ transform: 'translateX(2px)' }} />
+          <Play size={18} fill="currentColor" style={{ transform: 'translateX(1px)' }} />
+          {startLabel}
         </button>
         {setsCompleted > 0 && (
           <p className="mt-4 text-xs tracking-widest uppercase text-white/50 font-medium">

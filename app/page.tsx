@@ -17,6 +17,8 @@ import { TherapistPanel } from './components/TherapistPanel';
 import { ResourceExercises } from './components/ResourceExercises';
 import { SessionJournal } from './components/SessionJournal';
 import { PreSessionGate } from './components/PreSessionGate';
+import { ModeChooser } from './components/ModeChooser';
+import { OnboardingFlow } from './components/OnboardingFlow';
 import { useStore } from './store/useStore';
 import { useShareableState } from './hooks/useShareableState';
 import { useState, useEffect } from 'react';
@@ -26,7 +28,11 @@ import { useT } from './i18n/useT';
 import { isLocale } from './i18n';
 
 export default function SessionPage() {
-  const { isSettingsOpen, applyConfig, setSafeMode, setLang, isClient } = useStore();
+  const {
+    isSettingsOpen, applyConfig, setSafeMode, setLang, setAppMode, isClient,
+    appMode, onboardingSeenSpecialist, onboardingSeenSelfhelp,
+    markOnboardingSeen, setOnboardingMode, setIsOnboardingOpen
+  } = useStore();
   const { decodeConfig } = useShareableState();
   const t = useT();
   const [showToast, setShowToast] = useState(false);
@@ -39,6 +45,14 @@ export default function SessionPage() {
     try { savedLang = localStorage.getItem('emdr_lang'); } catch {}
     if (isLocale(urlLang)) setLang(urlLang);
     else if (isLocale(savedLang)) setLang(savedLang);
+
+    try {
+      const savedMode = localStorage.getItem('emdr_mode');
+      if (savedMode === 'specialist' || savedMode === 'selfhelp') setAppMode(savedMode);
+      // hydrate which onboardings were already seen (cookie-like, localStorage)
+      if (localStorage.getItem('emdr_ob_specialist')) markOnboardingSeen('specialist');
+      if (localStorage.getItem('emdr_ob_selfhelp')) markOnboardingSeen('selfhelp');
+    } catch {}
 
     if (typeof window !== 'undefined' && window.matchMedia) {
       const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -59,6 +73,17 @@ export default function SessionPage() {
     }
     return () => { if (toastTimer) clearTimeout(toastTimer); };
   }, []);
+
+  // Auto-run the guided onboarding the first time a mode is active (per mode,
+  // persisted). Returning users (seen flag in localStorage) are not interrupted.
+  useEffect(() => {
+    if (isClient || !appMode) return;
+    const seen = appMode === 'specialist' ? onboardingSeenSpecialist : onboardingSeenSelfhelp;
+    if (!seen) {
+      setOnboardingMode(appMode);
+      setIsOnboardingOpen(true);
+    }
+  }, [isClient, appMode, onboardingSeenSpecialist, onboardingSeenSelfhelp, setOnboardingMode, setIsOnboardingOpen]);
 
   if (isClient) {
     return (
@@ -98,6 +123,8 @@ export default function SessionPage() {
       <Disclaimer />
       <GroundingOverlay />
       <PreSessionGate />
+      <ModeChooser />
+      <OnboardingFlow />
       <LanguagePicker />
       <SessionManager />
 

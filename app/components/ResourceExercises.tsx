@@ -438,6 +438,7 @@ export function ResourceExercises() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          onClick={handleClose}
           className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-zinc-950/90 backdrop-blur-2xl"
         >
           <motion.div
@@ -445,6 +446,7 @@ export function ResourceExercises() {
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.96, y: 16, opacity: 0 }}
             transition={{ type: 'spring', damping: 26, stiffness: 200 }}
+            onClick={(e) => e.stopPropagation()}
             className="w-full max-w-md bg-[#0d0d0f] border border-white/[0.06] rounded-[28px] p-6 shadow-2xl relative overflow-hidden max-h-[92vh] flex flex-col"
           >
             {/* Ambient glow */}
@@ -454,9 +456,9 @@ export function ResourceExercises() {
             <button
               onClick={handleClose}
               aria-label="Close"
-              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full text-white/40 hover:text-white transition-all z-10"
+              className="absolute top-3 right-3 p-2 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full text-white/40 hover:text-white transition-all z-20"
             >
-              <X size={16} />
+              <X size={18} />
             </button>
 
             {/* Back button when exercise is open */}
@@ -468,9 +470,9 @@ export function ResourceExercises() {
                   exit={{ opacity: 0, x: -8 }}
                   onClick={() => setActiveId(null)}
                   aria-label="Back to list"
-                  className="absolute top-4 left-4 w-8 h-8 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full text-white/40 hover:text-white transition-all z-10"
+                  className="absolute top-3 left-3 p-2 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full text-white/40 hover:text-white transition-all z-20"
                 >
-                  <ChevronLeft size={16} />
+                  <ChevronLeft size={18} />
                 </motion.button>
               )}
             </AnimatePresence>
@@ -515,7 +517,7 @@ export function ResourceExercises() {
                             <button
                               key={card.id}
                               onClick={() => setActiveId(card.id)}
-                              className="group w-full text-left flex items-center gap-4 p-4 rounded-2xl border border-white/[0.06] bg-white/[0.015] hover:bg-white/[0.04] hover:border-white/[0.1] transition-all active:scale-[0.99]"
+                              className="group w-full text-left flex items-center gap-4 p-4 rounded-2xl border border-transparent bg-white/[0.03] hover:bg-white/[0.07] transition-all active:scale-[0.99]"
                             >
                               <div
                                 className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"

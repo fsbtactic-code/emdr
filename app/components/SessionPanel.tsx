@@ -64,7 +64,7 @@ export const SessionPanel = () => {
         >
           <div className="px-5 pt-5 pb-4 border-b border-white/5 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 to-indigo-500/20 border border-white/10 flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 to-indigo-500/20 border border-white/[0.06] flex items-center justify-center shrink-0">
                 <Users size={20} className="text-cyan-400" />
               </div>
               <div className="min-w-0">
@@ -72,7 +72,11 @@ export const SessionPanel = () => {
                 <p className="text-white/25 text-[12px] mt-0.5 leading-snug">{t.sessHostSub}</p>
               </div>
             </div>
-            <button onClick={() => setIsSessionOpen(false)} className="p-2 rounded-xl hover:bg-white/[0.08] text-white/40 hover:text-white transition-colors shrink-0">
+            <button
+              onClick={() => setIsSessionOpen(false)}
+              aria-label={lang === 'en' ? 'Close' : 'Закрыть'}
+              className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/[0.08] text-white/40 hover:text-white transition-colors shrink-0"
+            >
               <X size={18} />
             </button>
           </div>
@@ -87,7 +91,7 @@ export const SessionPanel = () => {
               </button>
             ) : (
               <>
-                <div className={`flex items-center gap-2.5 px-4 py-3 rounded-2xl border ${clientActive ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-200' : 'bg-white/[0.03] border-white/[0.08] text-white/50'}`}>
+                <div className={`flex items-center gap-2.5 px-4 py-3 rounded-2xl border ${clientActive ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-200' : 'bg-white/[0.03] border-white/[0.06] text-white/50'}`}>
                   <span className={`w-2.5 h-2.5 rounded-full ${clientActive ? 'bg-emerald-400 animate-pulse' : 'bg-white/30'}`} />
                   <span className="text-[13px] font-medium">{clientActive ? t.sessLive : t.sessConnecting}</span>
                 </div>
@@ -95,9 +99,9 @@ export const SessionPanel = () => {
                 <div className="flex flex-col gap-2">
                   <p className="text-[11px] uppercase tracking-[0.15em] font-semibold text-white/35">{t.sigHeading}</p>
                   {!incomingSignal ? (
-                    <p className="px-4 py-3 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-white/45 text-[13px]">{t.sigNone}</p>
+                    <p className="px-4 py-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] text-white/45 text-[13px]">{t.sigNone}</p>
                   ) : (
-                    <div className="flex items-center justify-between gap-2 px-4 py-3 rounded-2xl border bg-white/[0.03]">
+                    <div className="flex items-center justify-between gap-2 px-4 py-3 rounded-2xl border border-white/[0.06] bg-white/[0.03]">
                       <span
                         className={`text-[14px] font-semibold ${
                           incomingSignal === 'ok'
@@ -111,7 +115,7 @@ export const SessionPanel = () => {
                       </span>
                       <button
                         onClick={() => setIncomingSignal(null)}
-                        className="shrink-0 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 text-[12px] font-semibold transition-all"
+                        className="shrink-0 px-3 py-1.5 rounded-xl bg-white/5 border border-white/[0.06] text-white/60 hover:bg-white/10 text-[12px] font-semibold transition-all"
                       >
                         {t.sigClear}
                       </button>
@@ -126,11 +130,11 @@ export const SessionPanel = () => {
                       readOnly
                       value={clientLink}
                       onFocus={(e) => e.currentTarget.select()}
-                      className="flex-1 min-w-0 bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2.5 text-[12px] text-white/70 focus:outline-none focus:border-cyan-500/40"
+                      className="flex-1 min-w-0 bg-white/[0.04] border border-white/[0.06] rounded-xl px-3 py-2.5 text-[12px] text-white/70 focus:outline-none focus:border-cyan-500/40"
                     />
                     <button
                       onClick={copy}
-                      className={`shrink-0 px-3 rounded-xl border flex items-center gap-1.5 text-[12px] font-semibold transition-all ${copied ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300' : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10'}`}
+                      className={`shrink-0 px-3 rounded-xl border flex items-center gap-1.5 text-[12px] font-semibold transition-all ${copied ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300' : 'bg-white/5 border-white/[0.06] text-white/70 hover:bg-white/10'}`}
                     >
                       {copied ? <Check size={14} /> : <Copy size={14} />}
                     </button>
