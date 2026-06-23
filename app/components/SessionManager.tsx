@@ -31,7 +31,8 @@ export const SessionManager = () => {
     isSaccadic: s.isSaccadic, showSymbols: s.showSymbols, symbolLanguage: s.symbolLanguage,
     targetShape: s.targetShape, visualBackground: s.visualBackground, isDesync: s.isDesync,
     randomness: s.randomness, amplitude: s.amplitude, safeMode: s.safeMode,
-    isPlaying: s.isPlaying, isGroundingOpen: s.isGroundingOpen, lang: s.lang
+    isPlaying: s.isPlaying, isGroundingOpen: s.isGroundingOpen, lang: s.lang,
+    clientCue: s.clientCue
   });
 
   useEffect(() => {

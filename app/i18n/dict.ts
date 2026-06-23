@@ -258,6 +258,15 @@ export interface Dict {
   tpQuick: string;
   tpLocalMute: string;
   tpLocalMuteHint: string;
+
+  // push calming mechanics to the client + crisis block
+  cueTitle: string;
+  cueHint: string;
+  cueButterfly: string;
+  cueBreathing: string;
+  cueGrounding: string;
+  cueClear: string;
+  crisisHeading: string;
 }
 
 export const ru: Dict = {
@@ -603,5 +612,13 @@ export const ru: Dict = {
   navOnboarding: "Обучение",
   tpQuick: "Быстрые настройки",
   tpLocalMute: "Звук только у меня",
-  tpLocalMuteHint: "Заглушить звук на вашем устройстве. У клиента звук продолжает воспроизводиться."
+  tpLocalMuteHint: "Заглушить звук на вашем устройстве. У клиента звук продолжает воспроизводиться.",
+
+  cueTitle: "Показать клиенту",
+  cueHint: "Выводит спокойную механику на экран клиента поверх стимуляции.",
+  cueButterfly: "Бабочка",
+  cueBreathing: "Дыхание",
+  cueGrounding: "Заземление",
+  cueClear: "Убрать",
+  crisisHeading: "Кризисная помощь"
 };

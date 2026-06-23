@@ -13,6 +13,7 @@ import { LanguagePicker } from './components/LanguagePicker';
 import { SessionManager } from './components/SessionManager';
 import { SessionPanel } from './components/SessionPanel';
 import { SessionClientOverlay } from './components/SessionClientOverlay';
+import { ClientCueOverlay } from './components/ClientCueOverlay';
 import { TherapistPanel } from './components/TherapistPanel';
 import { ResourceExercises } from './components/ResourceExercises';
 import { SessionJournal } from './components/SessionJournal';
@@ -93,6 +94,7 @@ export default function SessionPage() {
           <StimulationEngine />
         </div>
         <SessionClientOverlay />
+        <ClientCueOverlay />
         <GroundingOverlay />
         <SessionManager />
       </main>

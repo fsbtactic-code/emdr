@@ -46,6 +46,7 @@ const BGS = ['black', 'aurora', 'stars'];
 const SYM = ['ru', 'en', 'numbers'];
 const LOCS = ['ru', 'en', 'es', 'it', 'de', 'fr', 'pt'];
 const SIGNALS = ['ok', 'pause', 'stop'];
+const CUES = ['none', 'butterfly', 'breathing', 'grounding'];
 
 function sanitize(raw: any): Record<string, unknown> {
   const c = raw || {};
@@ -75,6 +76,7 @@ function sanitize(raw: any): Record<string, unknown> {
   put('safeMode', b(c.safeMode));
   put('isPlaying', b(c.isPlaying));
   put('isGroundingOpen', b(c.isGroundingOpen));
+  put('clientCue', one(c.clientCue, CUES));
   return o;
 }
 

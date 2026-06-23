@@ -343,5 +343,13 @@ The sounds and "frequencies" here (including 528 Hz and binaural beats) are rela
   navOnboarding: "Onboarding",
   tpQuick: "Quick controls",
   tpLocalMute: "Mute on my side only",
-  tpLocalMuteHint: "Silence audio on your device. The client keeps hearing the sound."
+  tpLocalMuteHint: "Silence audio on your device. The client keeps hearing the sound.",
+
+  cueTitle: "Show to the client",
+  cueHint: "Displays a calm mechanic on the client screen over the stimulation.",
+  cueButterfly: "Butterfly hug",
+  cueBreathing: "Breathing",
+  cueGrounding: "Grounding",
+  cueClear: "Clear",
+  crisisHeading: "Crisis support"
 };

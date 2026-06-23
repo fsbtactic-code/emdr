@@ -9,6 +9,8 @@ export type VisualBackground = 'black' | 'aurora' | 'stars';
 export type SymbolLanguage = 'ru' | 'en' | 'numbers';
 export type ClientSignal = 'ok' | 'pause' | 'stop';
 export type AppMode = 'specialist' | 'selfhelp';
+// calming mechanic the practitioner can push onto the client screen during a session
+export type ClientCue = 'none' | 'butterfly' | 'breathing' | 'grounding';
 
 export interface SudsEntry { t: number; phase: string; value: number }
 export interface SetObservation { set: number; note: string; suds: number | null }
@@ -94,6 +96,9 @@ export interface EmdrState {
   signalAt: number | null;
   connectionLost: boolean;             // client stopped receiving host updates
 
+  // calming mechanic pushed by the host onto the client screen (broadcast, host -> client)
+  clientCue: ClientCue;
+
   sessionStartedAt: number | null;
 
   setSpeed: (speed: number) => void;
@@ -149,6 +154,7 @@ export interface EmdrState {
   setClientSignal: (v: ClientSignal | null) => void;
   setIncomingSignal: (v: ClientSignal | null) => void;
   setConnectionLost: (v: boolean) => void;
+  setClientCue: (v: ClientCue) => void;
   setSessionStartedAt: (v: number | null) => void;
 }
 
@@ -235,6 +241,7 @@ export const useStore = create<RootState>((set) => ({
   incomingSignal: null,
   signalAt: null,
   connectionLost: false,
+  clientCue: 'none',
   sessionStartedAt: null,
 
   setSpeed: (speed) => set({ speed, activePreset: null }),
@@ -325,6 +332,7 @@ export const useStore = create<RootState>((set) => ({
   setClientSignal: (clientSignal) => set({ clientSignal, signalAt: clientSignal ? Date.now() : null }),
   setIncomingSignal: (incomingSignal) => set({ incomingSignal }),
   setConnectionLost: (connectionLost) => set({ connectionLost }),
+  setClientCue: (clientCue) => set({ clientCue }),
   setSessionStartedAt: (sessionStartedAt) => set({ sessionStartedAt }),
 
   currentPhase: SessionPhase.Idle,

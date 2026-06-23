@@ -3,9 +3,9 @@
 import {
   X, Lock, Play, Pause, Save, Check, RotateCcw,
   ClipboardList, Activity, ChevronRight, BookOpen, Radio,
-  Gauge, VolumeX
+  Gauge, VolumeX, Sparkles, Wind, Anchor, Leaf, EyeOff
 } from 'lucide-react';
-import { useStore, SessionPhase, PatternType } from '../store/useStore';
+import { useStore, SessionPhase, PatternType, ClientCue } from '../store/useStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { useT } from '../i18n/useT';
@@ -146,6 +146,9 @@ export function TherapistPanel() {
   // host-local audio (NOT broadcast: muting here only affects the host device)
   const audioEnabled = useStore((s) => s.audioEnabled);
   const setAudioEnabled = useStore((s) => s.setAudioEnabled);
+  // calming mechanic the host pushes onto the client screen (broadcast)
+  const clientCue = useStore((s) => s.clientCue);
+  const setClientCue = useStore((s) => s.setClientCue);
 
   // per-set local state for the desensitization loop
   const [setObsNote, setSetObsNote] = useState('');
@@ -344,6 +347,49 @@ export function TherapistPanel() {
                     onChange={() => setAudioEnabled(!audioEnabled)}
                     accent="bg-cyan-500/70"
                   />
+                </div>
+
+                {/* Show to the client: push a calming mechanic onto the client screen (broadcast). */}
+                <div className="flex flex-col gap-2.5 pt-1">
+                  <div className="flex items-center gap-2">
+                    <Sparkles size={14} className="text-violet-300/80" />
+                    <Label color="text-violet-300/70">{t.cueTitle}</Label>
+                  </div>
+                  <p className="text-white/30 text-[12px] leading-relaxed">{t.cueHint}</p>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {([
+                      { cue: 'butterfly', label: t.cueButterfly, Icon: Wind },
+                      { cue: 'breathing', label: t.cueBreathing, Icon: Anchor },
+                      { cue: 'grounding', label: t.cueGrounding, Icon: Leaf },
+                    ] as { cue: ClientCue; label: string; Icon: typeof Wind }[]).map(({ cue, label, Icon }) => {
+                      const active = clientCue === cue;
+                      return (
+                        <button
+                          key={cue}
+                          onClick={() => setClientCue(cue)}
+                          className={`min-h-[44px] px-3 py-2.5 rounded-xl text-[13px] font-medium flex items-center gap-2 border transition-all min-w-0 ${
+                            active
+                              ? 'bg-violet-500/15 text-violet-100 border-violet-500/25 shadow-lg'
+                              : 'bg-white/[0.03] text-white/45 border-transparent hover:bg-white/[0.07]'
+                          }`}
+                        >
+                          <Icon size={14} className="shrink-0" />
+                          <span className="truncate">{label}</span>
+                        </button>
+                      );
+                    })}
+                    <button
+                      onClick={() => setClientCue('none')}
+                      className={`min-h-[44px] px-3 py-2.5 rounded-xl text-[13px] font-medium flex items-center gap-2 border transition-all min-w-0 ${
+                        clientCue === 'none'
+                          ? 'bg-white/[0.08] text-white/70 border-transparent'
+                          : 'bg-white/[0.03] text-white/45 border-transparent hover:bg-white/[0.07]'
+                      }`}
+                    >
+                      <EyeOff size={14} className="shrink-0" />
+                      <span className="truncate">{t.cueClear}</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             )}

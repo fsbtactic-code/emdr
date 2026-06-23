@@ -275,6 +275,55 @@ function StepAnimation({ exerciseId, stepIndex, accent }: { exerciseId: string; 
 }
 
 // ---------------------------------------------------------------------------
+// Warm glow layer for Light Stream exercise
+// ---------------------------------------------------------------------------
+
+function WarmGlowLayer() {
+  return (
+    <div className="absolute inset-0 overflow-hidden rounded-[28px] pointer-events-none">
+      {/* Glow 1 - top-left amber orb */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          width: 280,
+          height: 280,
+          background: 'radial-gradient(circle, rgba(251,191,36,0.28) 0%, rgba(251,146,60,0.12) 50%, transparent 75%)',
+          filter: 'blur(24px)',
+          top: -60,
+          left: -40,
+        }}
+        animate={{
+          x: [0, 18, -10, 0],
+          y: [0, 12, 24, 0],
+          scale: [1, 1.08, 0.95, 1],
+          opacity: [0.7, 1, 0.8, 0.7],
+        }}
+        transition={{ duration: 9, ease: 'easeInOut', repeat: Infinity }}
+      />
+      {/* Glow 2 - bottom-right rose orb */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          width: 220,
+          height: 220,
+          background: 'radial-gradient(circle, rgba(251,113,133,0.22) 0%, rgba(253,186,116,0.12) 50%, transparent 75%)',
+          filter: 'blur(28px)',
+          bottom: -40,
+          right: -30,
+        }}
+        animate={{
+          x: [0, -14, 8, 0],
+          y: [0, -10, -20, 0],
+          scale: [1, 0.92, 1.1, 1],
+          opacity: [0.6, 0.9, 0.65, 0.6],
+        }}
+        transition={{ duration: 12, ease: 'easeInOut', repeat: Infinity, delay: 1.5 }}
+      />
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Step runner
 // ---------------------------------------------------------------------------
 
@@ -290,6 +339,7 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
   const [step, setStep] = useState(0);
   const total = exercise.steps.length;
   const isLast = step === total - 1;
+  const isLightStream = exercise.id === 'light_stream';
 
   const goNext = () => {
     if (isLast) {
@@ -300,13 +350,96 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
   };
   const goBack = () => setStep((p) => Math.max(0, p - 1));
 
+  if (isLightStream) {
+    return (
+      <div className="flex flex-col h-full relative">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-5">
+          <div
+            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+            style={{ backgroundColor: 'rgba(251,191,36,0.18)' }}
+          >
+            {icon}
+          </div>
+          <div className="min-w-0">
+            <div className="text-[14px] font-semibold text-amber-950 leading-tight">{exercise.name}</div>
+            <div className="text-[11px] text-orange-800/60 mt-0.5">{exercise.tagline}</div>
+          </div>
+        </div>
+
+        {/* Disclaimer badge - warm tones */}
+        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-500/[0.12] border border-amber-600/20 mb-5">
+          <Shield size={12} className="text-amber-700/80 shrink-0" />
+          <span className="text-[11px] text-amber-900/70 leading-tight">{s.disclaimer}</span>
+        </div>
+
+        {/* Step content */}
+        <div className="flex-1 flex flex-col">
+          {/* Progress dots */}
+          <div className="flex gap-1.5 justify-center mb-4">
+            {exercise.steps.map((_, i) => (
+              <motion.div
+                key={i}
+                className="h-1 rounded-full"
+                animate={{
+                  width: i === step ? 20 : 6,
+                  backgroundColor: i <= step ? '#d97706' : 'rgba(120,53,15,0.18)',
+                }}
+                transition={{ duration: 0.25 }}
+              />
+            ))}
+          </div>
+
+          <div className="text-[11px] text-amber-800/50 text-center mb-3 tabular-nums">
+            {s.stepOf(step + 1, total)}
+          </div>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+            >
+              <StepAnimation exerciseId={exercise.id} stepIndex={step} accent="#f59e0b" />
+
+              <p className="text-[14px] text-amber-950/85 leading-[1.75] text-center px-2">
+                {exercise.steps[step]}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Nav buttons */}
+        <div className="flex gap-3 mt-6 pt-4 border-t border-amber-800/15">
+          <button
+            onClick={goBack}
+            disabled={step === 0}
+            className="flex items-center gap-1.5 px-4 py-3 rounded-xl bg-amber-900/[0.08] text-amber-900/60 text-[13px] font-medium disabled:opacity-30 hover:bg-amber-900/[0.14] hover:text-amber-950 transition-all active:scale-[0.97]"
+          >
+            <ChevronLeft size={15} />
+            {s.back}
+          </button>
+          <button
+            onClick={goNext}
+            className="flex-1 py-3 rounded-xl font-semibold text-[13px] flex items-center justify-center gap-1.5 transition-all active:scale-[0.97] bg-amber-500/80 text-white hover:bg-amber-500 shadow-sm"
+          >
+            {isLast ? s.finish : s.next}
+            {!isLast && <ChevronRight size={15} />}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="flex items-center gap-3 mb-5">
         <div
           className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-          style={{ backgroundColor: `${accent}20`, borderColor: `${accent}30`, border: '1px solid' }}
+          style={{ backgroundColor: `${accent}20` }}
         >
           {icon}
         </div>
@@ -430,6 +563,7 @@ export function ResourceExercises() {
 
   const activeCard = CARDS.find((c) => c.id === activeId) ?? null;
   const activeExercise = s.exercises.find((e) => e.id === activeId) ?? null;
+  const isLightStream = activeId === 'light_stream';
 
   return (
     <AnimatePresence>
@@ -447,16 +581,30 @@ export function ResourceExercises() {
             exit={{ scale: 0.96, y: 16, opacity: 0 }}
             transition={{ type: 'spring', damping: 26, stiffness: 200 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md bg-[#0d0d0f] border border-white/[0.06] rounded-[28px] p-6 shadow-2xl relative overflow-hidden max-h-[92vh] flex flex-col"
+            className="w-full max-w-md rounded-[28px] p-6 shadow-2xl relative overflow-hidden max-h-[92vh] flex flex-col"
+            style={
+              isLightStream
+                ? { background: 'linear-gradient(135deg, #fffbeb 0%, #fed7aa 45%, #ffe4e6 100%)', border: 'none' }
+                : { backgroundColor: '#0d0d0f', border: '1px solid rgba(255,255,255,0.06)' }
+            }
           >
-            {/* Ambient glow */}
-            <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-64 bg-indigo-500/8 blur-[80px] rounded-full pointer-events-none" />
+            {/* Ambient glow - dark theme only */}
+            {!isLightStream && (
+              <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-64 bg-indigo-500/8 blur-[80px] rounded-full pointer-events-none" />
+            )}
+
+            {/* Warm animated glows - light stream only */}
+            {isLightStream && <WarmGlowLayer />}
 
             {/* Close button */}
             <button
               onClick={handleClose}
               aria-label="Close"
-              className="absolute top-3 right-3 p-2 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full text-white/40 hover:text-white transition-all z-20"
+              className={`absolute top-3 right-3 p-2 flex items-center justify-center rounded-full transition-all z-20 ${
+                isLightStream
+                  ? 'bg-amber-900/10 hover:bg-amber-900/20 text-amber-900/50 hover:text-amber-950'
+                  : 'bg-white/5 hover:bg-white/10 text-white/40 hover:text-white'
+              }`}
             >
               <X size={18} />
             </button>
@@ -470,7 +618,11 @@ export function ResourceExercises() {
                   exit={{ opacity: 0, x: -8 }}
                   onClick={() => setActiveId(null)}
                   aria-label="Back to list"
-                  className="absolute top-3 left-3 p-2 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full text-white/40 hover:text-white transition-all z-20"
+                  className={`absolute top-3 left-3 p-2 flex items-center justify-center rounded-full transition-all z-20 ${
+                    isLightStream
+                      ? 'bg-amber-900/10 hover:bg-amber-900/20 text-amber-900/50 hover:text-amber-950'
+                      : 'bg-white/5 hover:bg-white/10 text-white/40 hover:text-white'
+                  }`}
                 >
                   <ChevronLeft size={18} />
                 </motion.button>
@@ -523,8 +675,6 @@ export function ResourceExercises() {
                                 className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                                 style={{
                                   backgroundColor: `${card.accent}18`,
-                                  borderColor: `${card.accent}28`,
-                                  border: '1px solid',
                                 }}
                               >
                                 {card.icon}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, LifeBuoy } from 'lucide-react';
+import { X, LifeBuoy, Phone, Globe } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { BOX_BREATH_SECONDS, BREATH_SCALE } from '../content';
 import { useT } from '../i18n/useT';
@@ -93,29 +93,71 @@ export const GroundingOverlay = () => {
                 </div>
               </div>
 
-              <div className="w-full mt-6 rounded-2xl border border-rose-500/15 bg-rose-500/5 p-4">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-rose-300/60 mb-3">
-                  {lang === 'ru' ? 'Кризисная помощь' : 'Crisis support'}
-                </p>
+              <div className="w-full mt-6 rounded-2xl bg-rose-500/[0.04] p-3">
+                {/* heading row */}
+                <div className="flex items-center gap-2 mb-3">
+                  <LifeBuoy size={13} className="text-rose-400/80 shrink-0" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-rose-300/70">
+                    {t.crisisHeading}
+                  </span>
+                </div>
+
+                {/* contact cards */}
                 <div className="flex flex-col gap-2">
-                  {getCrisisContacts(lang).map((c: CrisisContact) => (
-                    <div key={c.name} className="flex flex-col gap-0.5">
-                      <span className="text-[12px] text-white/60 font-medium leading-tight">{c.name}</span>
-                      {c.phone && (
-                        <span className="text-[12px] text-rose-300/80 font-semibold tabular-nums">{c.phone}</span>
-                      )}
-                      {c.url && (
-                        <a
-                          href={c.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[11px] text-amber-400/70 hover:text-amber-300 underline underline-offset-2 break-all transition-colors"
+                  {getCrisisContacts(lang).map((c: CrisisContact) => {
+                    const hasPhone = Boolean(c.phone);
+                    const hasUrl = Boolean(c.url);
+                    return (
+                      <div
+                        key={c.name}
+                        className="flex items-start gap-3 bg-white/[0.03] rounded-xl px-3 py-2.5"
+                      >
+                        {/* icon chip */}
+                        <div
+                          className={[
+                            'mt-0.5 w-7 h-7 rounded-full flex items-center justify-center shrink-0',
+                            hasPhone
+                              ? 'bg-rose-500/[0.15]'
+                              : 'bg-amber-500/[0.15]',
+                          ].join(' ')}
                         >
-                          {c.url}
-                        </a>
-                      )}
-                    </div>
-                  ))}
+                          {hasPhone ? (
+                            <Phone size={13} className="text-rose-300/80" />
+                          ) : (
+                            <Globe size={13} className="text-amber-300/80" />
+                          )}
+                        </div>
+
+                        {/* text column */}
+                        <div className="flex flex-col gap-0.5 min-w-0">
+                          <span className="text-[13px] text-white/70 leading-snug">{c.name}</span>
+
+                          {hasPhone && (
+                            <span className="text-[13px] text-rose-200 font-semibold tabular-nums leading-tight">
+                              {c.phone}
+                            </span>
+                          )}
+
+                          {hasUrl && (
+                            <a
+                              href={c.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[11px] text-amber-300/80 hover:text-amber-200 underline underline-offset-2 truncate transition-colors"
+                            >
+                              {c.url}
+                            </a>
+                          )}
+
+                          {c.note && (
+                            <span className="text-[11px] text-white/35 leading-snug mt-0.5">
+                              {c.note}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
