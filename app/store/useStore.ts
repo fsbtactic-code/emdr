@@ -72,6 +72,7 @@ export interface EmdrState {
   isResourcesOpen: boolean;
   isJournalOpen: boolean;
   isGateOpen: boolean;
+  isClinicalOpen: boolean;
 
   // pre-session safety gate
   consentGiven: boolean;
@@ -128,6 +129,7 @@ export interface EmdrState {
   setIsResourcesOpen: (v: boolean) => void;
   setIsJournalOpen: (v: boolean) => void;
   setIsGateOpen: (v: boolean) => void;
+  setIsClinicalOpen: (v: boolean) => void;
   setConsentGiven: (v: boolean) => void;
   setDissociationScreenPassed: (v: boolean) => void;
   setClientSignal: (v: ClientSignal | null) => void;
@@ -206,6 +208,7 @@ export const useStore = create<RootState>((set) => ({
   isResourcesOpen: false,
   isJournalOpen: false,
   isGateOpen: false,
+  isClinicalOpen: false,
   consentGiven: false,
   dissociationScreenPassed: false,
   clientSignal: null,
@@ -283,6 +286,7 @@ export const useStore = create<RootState>((set) => ({
   setIsResourcesOpen: (isResourcesOpen) => set({ isResourcesOpen }),
   setIsJournalOpen: (isJournalOpen) => set({ isJournalOpen }),
   setIsGateOpen: (isGateOpen) => set({ isGateOpen }),
+  setIsClinicalOpen: (isClinicalOpen) => set({ isClinicalOpen }),
   setConsentGiven: (consentGiven) => set({ consentGiven }),
   setDissociationScreenPassed: (dissociationScreenPassed) => set({ dissociationScreenPassed }),
   setClientSignal: (clientSignal) => set({ clientSignal, signalAt: clientSignal ? Date.now() : null }),
