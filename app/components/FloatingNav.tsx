@@ -37,11 +37,11 @@ function NavTooltip({ label, visible }: { label: string; visible: boolean }) {
           />
           {/* Pill body: gradient surface, accent ring, soft indigo glow, shimmer sweep */}
           <span
-            className="relative flex items-center gap-2 overflow-hidden rounded-xl px-3 py-1.5 text-[13px] font-medium text-white whitespace-nowrap backdrop-blur-xl"
+            className="relative flex items-center gap-2 overflow-hidden rounded-xl px-3 py-1.5 text-[13px] font-bold text-white/90 whitespace-nowrap backdrop-blur-xl"
             style={{
-              background: 'linear-gradient(180deg, rgba(28,28,34,0.95), rgba(12,12,16,0.95))',
+              background: 'linear-gradient(180deg, rgba(28,28,34,0.7), rgba(12,12,16,0.72))',
               boxShadow:
-                '0 0 0 1px rgba(255,255,255,0.08), 0 10px 30px -8px rgba(99,102,241,0.5), 0 4px 12px -4px rgba(0,0,0,0.7)',
+                '0 0 0 1px rgba(255,255,255,0.08), 0 10px 30px -8px rgba(99,102,241,0.45), 0 4px 12px -4px rgba(0,0,0,0.6)',
             }}
           >
             <motion.span
@@ -183,6 +183,7 @@ export const FloatingNav = () => {
                 <div key={item.id} className="relative overflow-visible">
                   <button
                     onClick={item.onClick}
+                    data-tour={item.id}
                     aria-label={item.title}
                     onMouseEnter={() => setHoveredId(item.id)}
                     onMouseLeave={() => setHoveredId(null)}
@@ -216,6 +217,7 @@ export const FloatingNav = () => {
               <div className="relative overflow-visible">
                 <button
                   onClick={() => { closeAll(); setOnboardingMode(appMode); setIsOnboardingOpen(true); }}
+                  data-tour="onboarding"
                   aria-label={t.navOnboarding}
                   onMouseEnter={() => setHoveredId('onboarding')}
                   onMouseLeave={() => setHoveredId(null)}
@@ -232,6 +234,7 @@ export const FloatingNav = () => {
               <div className="relative overflow-visible">
                 <button
                   onClick={() => { closeAll(); setAppMode(null); }}
+                  data-tour="switch"
                   aria-label={t.modeSwitch}
                   onMouseEnter={() => setHoveredId('switch')}
                   onMouseLeave={() => setHoveredId(null)}
