@@ -105,6 +105,21 @@ Overall status: ALL tasks below DONE. `npm run typecheck` and `npm run build` ar
 - crisis.ts: proper Cyrillic (ru) + native diacritics. White card/ring outlines removed across
   overlays (filled surfaces). Reliable close (X + backdrop) on overlays.
 
+## Session 3 additions (tooltips, push-to-client, specialist rules, polish) - DONE
+
+- Store `clientCue` ('none'|'butterfly'|'breathing'|'grounding'): broadcast host -> client
+  via room.state (added to SessionManager broadcastKey + route.ts sanitize CUES whitelist).
+  `ClientCueOverlay.tsx` (mounted in the isClient branch of page.tsx) renders the pushed
+  mechanic; `TherapistPanel` "Показать клиенту" buttons (host mode) set it. Host-local mute
+  in TherapistPanel uses audioEnabled (NOT broadcast, so the client keeps hearing).
+- Specialist gate rules (Controls.tsx): when appMode === 'specialist', starting a set does
+  NOT trigger the screening/consent gate and stopping does NOT auto-open grounding. Self-help
+  keeps both safety behaviours.
+- FloatingNav: custom animated tooltips (NavTooltip) on every rail icon.
+- ResourceExercises: Light Stream has a warm light inverted animated theme (detect by id
+  'light_stream'); exercise icon tiles have no white border. GroundingOverlay crisis block is
+  now icon cards (Phone/Globe), uses t.crisisHeading. crisis.ts is Cyrillic (ru).
+
 ## Follow-ups (next agent / Codex can pick up)
 
 - Translations: `ModeChooser` uses central dict keys (ru+en, others fall back to en).
