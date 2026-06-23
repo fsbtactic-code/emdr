@@ -6,12 +6,20 @@ import { X, Users, Copy, Check, Radio, Power } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { useT } from '../i18n/useT';
 
-const genId = () => Math.random().toString(36).slice(2, 10);
+const genId = () => {
+  // CSPRNG id, >=12 chars, [a-z0-9] so validRoom/validId still accept it
+  const bytes = new Uint8Array(12);
+  crypto.getRandomValues(bytes);
+  let out = '';
+  for (let i = 0; i < bytes.length; i++) out += (bytes[i] % 36).toString(36);
+  return out;
+};
 
 export const SessionPanel = () => {
   const {
     isSessionOpen, setIsSessionOpen,
-    roomId, setRoomId, isHost, setIsHost, clientActive, lang
+    roomId, setRoomId, isHost, setIsHost, clientActive, lang,
+    incomingSignal, setIncomingSignal
   } = useStore();
   const t = useT();
   const [copied, setCopied] = useState(false);
@@ -82,6 +90,33 @@ export const SessionPanel = () => {
                 <div className={`flex items-center gap-2.5 px-4 py-3 rounded-2xl border ${clientActive ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-200' : 'bg-white/[0.03] border-white/[0.08] text-white/50'}`}>
                   <span className={`w-2.5 h-2.5 rounded-full ${clientActive ? 'bg-emerald-400 animate-pulse' : 'bg-white/30'}`} />
                   <span className="text-[13px] font-medium">{clientActive ? t.sessLive : t.sessConnecting}</span>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <p className="text-[11px] uppercase tracking-[0.15em] font-semibold text-white/35">{t.sigHeading}</p>
+                  {!incomingSignal ? (
+                    <p className="px-4 py-3 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-white/45 text-[13px]">{t.sigNone}</p>
+                  ) : (
+                    <div className="flex items-center justify-between gap-2 px-4 py-3 rounded-2xl border bg-white/[0.03]">
+                      <span
+                        className={`text-[14px] font-semibold ${
+                          incomingSignal === 'ok'
+                            ? 'text-emerald-300'
+                            : incomingSignal === 'pause'
+                            ? 'text-amber-300'
+                            : 'text-rose-300'
+                        }`}
+                      >
+                        {incomingSignal === 'ok' ? t.sigOkH : incomingSignal === 'pause' ? t.sigPauseH : t.sigStopH}
+                      </span>
+                      <button
+                        onClick={() => setIncomingSignal(null)}
+                        className="shrink-0 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 text-[12px] font-semibold transition-all"
+                      >
+                        {t.sigClear}
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex flex-col gap-2">

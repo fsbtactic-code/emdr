@@ -9,9 +9,10 @@ const validRoom = (r: string) => /^[a-z0-9]{4,32}$/i.test(r);
 export const SessionManager = () => {
   const s = useStore();
   const {
-    isHost, isClient, roomId,
+    isHost, isClient, roomId, clientSignal,
     setIsHost, setIsClient, setRoomId, setClientActive,
-    applyConfig, setPlaying, setIsGroundingOpen, setLang
+    applyConfig, setPlaying, setIsGroundingOpen, setLang,
+    setIncomingSignal, setConnectionLost
   } = s;
 
   useEffect(() => {
@@ -42,20 +43,29 @@ export const SessionManager = () => {
         body: JSON.stringify({ state: JSON.parse(broadcastKey) })
       })
         .then((r) => r.json())
-        .then((d) => setClientActive(!!d?.clientActive))
+        .then((d) => {
+          setClientActive(!!d?.clientActive);
+          setIncomingSignal(d && d.signal ? d.signal.value : null);
+        })
         .catch(() => {});
     }, 200);
     return () => clearTimeout(tid);
-  }, [isHost, roomId, broadcastKey, setClientActive]);
+  }, [isHost, roomId, broadcastKey, setClientActive, setIncomingSignal]);
 
   useEffect(() => {
     if (!isClient || !roomId) return;
     let lastV = -1;
+    let lastSuccess = Date.now();
     const tick = async () => {
       try {
         const r = await fetch(`/api/session/${roomId}`, { cache: 'no-store' });
+        if (!r.ok) return;
         const d = await r.json();
-        if (d && typeof d.v === 'number' && d.v !== lastV && d.state) {
+        if (!d || typeof d.v !== 'number') return;
+        // a 200 with data refreshes the connection regardless of staleness
+        lastSuccess = Date.now();
+        setConnectionLost(false);
+        if (d.v !== lastV && d.state) {
           lastV = d.v;
           const { isPlaying, isGroundingOpen, lang, ...cfg } = d.state as Record<string, unknown>;
           applyConfig(cfg);
@@ -63,12 +73,31 @@ export const SessionManager = () => {
           if (typeof isGroundingOpen === 'boolean') setIsGroundingOpen(isGroundingOpen);
           if (isLocale(lang)) setLang(lang);
         }
-      } catch {}
+      } catch {
+        // failed/throwing fetch does not refresh lastSuccess
+      }
+      if (Date.now() - lastSuccess > 5000) {
+        setConnectionLost(true);
+        setPlaying(false);
+      }
     };
     tick();
     const iv = setInterval(tick, 700);
     return () => clearInterval(iv);
-  }, [isClient, roomId, applyConfig, setPlaying, setIsGroundingOpen, setLang]);
+  }, [isClient, roomId, applyConfig, setPlaying, setIsGroundingOpen, setLang, setConnectionLost]);
+
+  // client -> host signal sender: POST when clientSignal changes
+  useEffect(() => {
+    if (!isClient || !roomId || !clientSignal) return;
+    const tid = setTimeout(() => {
+      fetch(`/api/session/${roomId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ signal: clientSignal })
+      }).catch(() => {});
+    }, 150);
+    return () => clearTimeout(tid);
+  }, [isClient, roomId, clientSignal]);
 
   return null;
 };

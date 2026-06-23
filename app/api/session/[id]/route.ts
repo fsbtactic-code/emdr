@@ -3,16 +3,39 @@ import { NextRequest, NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-type Room = { state: Record<string, unknown>; v: number; ts: number; lastPoll: number };
+type Signal = { value: 'ok' | 'pause' | 'stop'; at: number };
+type Room = { state: Record<string, unknown>; v: number; ts: number; lastPoll: number; signal: Signal | null };
 
-const g = globalThis as unknown as { __emdrRooms?: Map<string, Room> };
+const g = globalThis as unknown as {
+  __emdrRooms?: Map<string, Room>;
+  __emdrHits?: Map<string, number[]>;
+};
 const rooms: Map<string, Room> = g.__emdrRooms ?? (g.__emdrRooms = new Map());
+const hits: Map<string, number[]> = g.__emdrHits ?? (g.__emdrHits = new Map());
 
 const ROOM_TTL = 1000 * 60 * 60 * 2;
+
+// lightweight in-memory rate limiter: max ~150 requests per id in a 10s window
+const RATE_WINDOW = 10000;
+const RATE_MAX = 150;
+
+function rateLimited(id: string): boolean {
+  const now = Date.now();
+  const arr = hits.get(id) ?? [];
+  const recent = arr.filter((t) => now - t < RATE_WINDOW);
+  recent.push(now);
+  hits.set(id, recent);
+  return recent.length > RATE_MAX;
+}
 
 function gc() {
   const now = Date.now();
   for (const [id, r] of rooms) if (now - r.ts > ROOM_TTL) rooms.delete(id);
+  for (const [id, arr] of hits) {
+    const recent = arr.filter((t) => now - t < RATE_WINDOW);
+    if (recent.length === 0) hits.delete(id);
+    else hits.set(id, recent);
+  }
 }
 
 const PATTERNS = ['horizontal', 'vertical', 'diagonal-1', 'diagonal-2', 'lemniscate', 'dots', 'pulse', 'bars', 'zigzag'];
@@ -22,6 +45,7 @@ const SHAPES = ['circle', 'square', 'ring', 'butterfly'];
 const BGS = ['black', 'aurora', 'stars'];
 const SYM = ['ru', 'en', 'numbers'];
 const LOCS = ['ru', 'en', 'es', 'it', 'de', 'fr', 'pt'];
+const SIGNALS = ['ok', 'pause', 'stop'];
 
 function sanitize(raw: any): Record<string, unknown> {
   const c = raw || {};
@@ -59,21 +83,51 @@ const validId = (id: string) => /^[a-z0-9]{4,32}$/i.test(id);
 export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
   if (!validId(id)) return NextResponse.json({ error: 'bad id' }, { status: 400 });
+  if (rateLimited(id)) return NextResponse.json({ error: 'rate' }, { status: 429 });
   gc();
   const body = await req.json().catch(() => ({}));
+  const now = Date.now();
+
+  // client -> host signal: ephemeral enum only, counts as client activity
+  if (body && typeof body.signal === 'string' && SIGNALS.includes(body.signal)) {
+    const prev = rooms.get(id);
+    const value = body.signal as Signal['value'];
+    const room: Room = {
+      state: prev?.state ?? {},
+      v: prev?.v ?? 0,
+      ts: now,
+      lastPoll: now,
+      signal: { value, at: now }
+    };
+    rooms.set(id, room);
+    return NextResponse.json({ ok: true });
+  }
+
+  // host -> client state broadcast
   const state = sanitize(body?.state);
   const prev = rooms.get(id);
-  const now = Date.now();
-  const room: Room = { state, v: (prev?.v ?? 0) + 1, ts: now, lastPoll: prev?.lastPoll ?? 0 };
+  const room: Room = {
+    state,
+    v: (prev?.v ?? 0) + 1,
+    ts: now,
+    lastPoll: prev?.lastPoll ?? 0,
+    signal: prev?.signal ?? null
+  };
   rooms.set(id, room);
-  return NextResponse.json({ ok: true, v: room.v, clientActive: now - room.lastPoll < 6000 });
+  return NextResponse.json({
+    ok: true,
+    v: room.v,
+    clientActive: now - room.lastPoll < 6000,
+    signal: room.signal
+  });
 }
 
 export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
   if (!validId(id)) return NextResponse.json({ error: 'bad id' }, { status: 400 });
+  if (rateLimited(id)) return NextResponse.json({ error: 'rate' }, { status: 429 });
   const room = rooms.get(id);
-  if (!room) return NextResponse.json({ state: null, v: 0 });
+  if (!room) return NextResponse.json({ state: null, v: 0, signal: null });
   room.lastPoll = Date.now();
-  return NextResponse.json({ state: room.state, v: room.v });
+  return NextResponse.json({ state: room.state, v: room.v, signal: room.signal ?? null });
 }
