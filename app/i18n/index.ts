@@ -19,12 +19,19 @@ export const LOCALE_META: Record<Locale, { native: string; flag: string }> = {
   pt: { native: "Português", flag: "🇵🇹" }
 };
 
-export const DICTS: Record<Locale, Dict> = { ru, en, es, it, de, fr, pt };
+export const DICTS: Record<Locale, Partial<Dict>> = { ru, en, es, it, de, fr, pt };
 
 export const LOCALES = Object.keys(DICTS) as Locale[];
 
+// Fallback chain: ru is the type-source and always complete; en is the
+// secondary base for new keys not yet translated; the requested locale
+// overrides on top. This lets us add new UI strings without breaking the
+// typecheck on the 6 partially-translated locales.
 export function getDict(lang: Locale): Dict {
-  return DICTS[lang] ?? ru;
+  if (lang === "ru") return ru;
+  const base = { ...ru, ...en } as Dict;
+  if (lang === "en") return base;
+  return { ...base, ...DICTS[lang] } as Dict;
 }
 
 export function isLocale(v: unknown): v is Locale {

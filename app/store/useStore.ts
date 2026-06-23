@@ -7,6 +7,10 @@ export type AmbientSound = 'none' | 'rain' | 'ocean' | 'breath' | 'hz528' | 'win
 export type TargetShape = 'circle' | 'square' | 'ring' | 'butterfly';
 export type VisualBackground = 'black' | 'aurora' | 'stars';
 export type SymbolLanguage = 'ru' | 'en' | 'numbers';
+export type ClientSignal = 'ok' | 'pause' | 'stop';
+
+export interface SudsEntry { t: number; phase: string; value: number }
+export interface SetObservation { set: number; note: string; suds: number | null }
 
 export enum SessionPhase {
   Idle = 'idle',
@@ -56,6 +60,31 @@ export interface EmdrState {
   safeMode: boolean;
   isGroundingOpen: boolean;
 
+  // audio: separate ambient volume bus (BLS volume is audioVolume)
+  ambientVolume: number;
+
+  // stimulation channels / clinical accessibility
+  hapticEnabled: boolean;     // tactile BLS via Vibration API
+  visualEnabled: boolean;     // when false: audio/haptic-only path (low vision, motion sickness)
+  vestibularSafe: boolean;    // motion-sickness limiter (caps speed/amplitude)
+
+  // panels
+  isResourcesOpen: boolean;
+  isJournalOpen: boolean;
+  isGateOpen: boolean;
+
+  // pre-session safety gate
+  consentGiven: boolean;
+  dissociationScreenPassed: boolean;
+
+  // remote two-way signal channel (ephemeral, no PII, separate from room.state)
+  clientSignal: ClientSignal | null;   // what the client is sending (client side)
+  incomingSignal: ClientSignal | null; // what the host sees (host side)
+  signalAt: number | null;
+  connectionLost: boolean;             // client stopped receiving host updates
+
+  sessionStartedAt: number | null;
+
   setSpeed: (speed: number) => void;
   setColor: (color: string) => void;
   setSize: (size: number) => void;
@@ -91,13 +120,47 @@ export interface EmdrState {
   setClientActive: (active: boolean) => void;
   applyConfig: (config: Partial<EmdrState>) => void;
   resetSession: () => void;
+
+  setAmbientVolume: (v: number) => void;
+  setHapticEnabled: (v: boolean) => void;
+  setVisualEnabled: (v: boolean) => void;
+  setVestibularSafe: (v: boolean) => void;
+  setIsResourcesOpen: (v: boolean) => void;
+  setIsJournalOpen: (v: boolean) => void;
+  setIsGateOpen: (v: boolean) => void;
+  setConsentGiven: (v: boolean) => void;
+  setDissociationScreenPassed: (v: boolean) => void;
+  setClientSignal: (v: ClientSignal | null) => void;
+  setIncomingSignal: (v: ClientSignal | null) => void;
+  setConnectionLost: (v: boolean) => void;
+  setSessionStartedAt: (v: number | null) => void;
 }
 
 export interface SessionState {
   currentPhase: SessionPhase;
   suds: number | null;
+  vocInitial: number | null;
+  vocCurrent: number | null;
+  targetDesc: string;
+  negCognition: string;
+  posCognition: string;
+  emotions: string;
+  bodyLocation: string;
+  sudsLog: SudsEntry[];
+  observations: SetObservation[];
+  therapistNotes: string;
   setPhase: (phase: SessionPhase) => void;
-  setSuds: (suds: number) => void;
+  setSuds: (suds: number | null) => void;
+  setVocInitial: (v: number | null) => void;
+  setVocCurrent: (v: number | null) => void;
+  setTargetDesc: (v: string) => void;
+  setNegCognition: (v: string) => void;
+  setPosCognition: (v: string) => void;
+  setEmotions: (v: string) => void;
+  setBodyLocation: (v: string) => void;
+  logSuds: (value: number) => void;
+  addObservation: (obs: SetObservation) => void;
+  resetClinical: () => void;
 }
 
 export type RootState = EmdrState & SessionState;
@@ -135,6 +198,21 @@ export const useStore = create<RootState>((set) => ({
   clientActive: false,
   safeMode: false,
   isGroundingOpen: false,
+
+  ambientVolume: 0.5,
+  hapticEnabled: false,
+  visualEnabled: true,
+  vestibularSafe: false,
+  isResourcesOpen: false,
+  isJournalOpen: false,
+  isGateOpen: false,
+  consentGiven: false,
+  dissociationScreenPassed: false,
+  clientSignal: null,
+  incomingSignal: null,
+  signalAt: null,
+  connectionLost: false,
+  sessionStartedAt: null,
 
   setSpeed: (speed) => set({ speed, activePreset: null }),
   setColor: (color) => set({ color, activePreset: null }),
@@ -198,8 +276,46 @@ export const useStore = create<RootState>((set) => ({
   applyConfig: (config) => set((state) => ({ ...state, ...config, activePreset: 'custom' })),
   resetSession: () => set({ setsCompleted: 0, isPlaying: false }),
 
+  setAmbientVolume: (ambientVolume) => set({ ambientVolume }),
+  setHapticEnabled: (hapticEnabled) => set({ hapticEnabled }),
+  setVisualEnabled: (visualEnabled) => set({ visualEnabled }),
+  setVestibularSafe: (vestibularSafe) => set({ vestibularSafe }),
+  setIsResourcesOpen: (isResourcesOpen) => set({ isResourcesOpen }),
+  setIsJournalOpen: (isJournalOpen) => set({ isJournalOpen }),
+  setIsGateOpen: (isGateOpen) => set({ isGateOpen }),
+  setConsentGiven: (consentGiven) => set({ consentGiven }),
+  setDissociationScreenPassed: (dissociationScreenPassed) => set({ dissociationScreenPassed }),
+  setClientSignal: (clientSignal) => set({ clientSignal, signalAt: clientSignal ? Date.now() : null }),
+  setIncomingSignal: (incomingSignal) => set({ incomingSignal }),
+  setConnectionLost: (connectionLost) => set({ connectionLost }),
+  setSessionStartedAt: (sessionStartedAt) => set({ sessionStartedAt }),
+
   currentPhase: SessionPhase.Idle,
   suds: null,
+  vocInitial: null,
+  vocCurrent: null,
+  targetDesc: '',
+  negCognition: '',
+  posCognition: '',
+  emotions: '',
+  bodyLocation: '',
+  sudsLog: [],
+  observations: [],
+  therapistNotes: '',
   setPhase: (currentPhase) => set({ currentPhase }),
-  setSuds: (suds) => set({ suds })
+  setSuds: (suds) => set({ suds }),
+  setVocInitial: (vocInitial) => set({ vocInitial }),
+  setVocCurrent: (vocCurrent) => set({ vocCurrent }),
+  setTargetDesc: (targetDesc) => set({ targetDesc }),
+  setNegCognition: (negCognition) => set({ negCognition }),
+  setPosCognition: (posCognition) => set({ posCognition }),
+  setEmotions: (emotions) => set({ emotions }),
+  setBodyLocation: (bodyLocation) => set({ bodyLocation }),
+  logSuds: (value) => set((s) => ({ suds: value, sudsLog: [...s.sudsLog, { t: Date.now(), phase: s.currentPhase, value }] })),
+  addObservation: (obs) => set((s) => ({ observations: [...s.observations, obs] })),
+  resetClinical: () => set({
+    currentPhase: SessionPhase.Idle, suds: null, vocInitial: null, vocCurrent: null,
+    targetDesc: '', negCognition: '', posCognition: '', emotions: '', bodyLocation: '',
+    sudsLog: [], observations: [], therapistNotes: ''
+  })
 }));

@@ -1,6 +1,6 @@
 import type { Dict } from "./dict";
 
-export const en: Dict = {
+export const en: Partial<Dict> = {
   start: "Start",
   next: "Next",
   back: "Back",
@@ -263,5 +263,61 @@ The sounds and "frequencies" here (including 528 Hz and binaural beats) are rela
   sessClientBadge: "The session is led by a specialist",
   sessClientWaiting: "Waiting for the host. Relax and breathe steadily.",
   sessClientHint: "The specialist controls the settings. You do not need to press anything.",
-  sessEnd: "End the session"
+  sessEnd: "End the session",
+
+  navResources: "Resources and stabilization",
+  navJournal: "Session journal",
+
+  channelsSection: "Channels and accessibility",
+  blsVolume: "Stimulus volume",
+  ambientVolumeLabel: "Ambient volume",
+  hapticLabel: "Vibration stimulation",
+  hapticDesc: "Alternating phone vibration as a tactile BLS channel",
+  hapticUnsupported: "Vibration is not supported on this device",
+  visualStim: "Visual stimulus",
+  visualStimDesc: "Turn off for an audio/tactile mode: low vision, motion sickness, visual conditions",
+  vestibular: "Motion-sickness guard",
+  vestibularDesc: "Caps speed and amplitude if you feel nausea or dizziness",
+
+  groundBeforeExit: "Ground yourself first",
+  groundBeforeExitSub: "Distress is still high. It is worth returning to a calm state before leaving.",
+  closeAnyway: "End anyway",
+  connLost: "Connection to the practitioner was lost. Stimulation stopped. Breathe steadily and ground yourself if needed.",
+
+  sigOk: "I'm ok",
+  sigPause: "Need a pause",
+  sigStop: "Stop",
+  sigBadge: "The practitioner can see your signal",
+  sigHeading: "Client signal",
+  sigNone: "No signals",
+  sigOkH: "Client: all good",
+  sigPauseH: "Client asks for a pause",
+  sigStopH: "Client asks to STOP",
+  sigClear: "Clear",
+
+  tpTitle: "Session conduct",
+  tpSub: "Phase-by-phase protocol. Practitioner only",
+  tpPhaseLabel: "Phase",
+  tpTarget: "Target (image or memory)",
+  tpNeg: "Negative cognition (NC)",
+  tpPos: "Positive cognition (PC)",
+  tpEmotions: "Emotions",
+  tpBody: "Body sensations, where",
+  tpSuds: "SUD (0-10)",
+  tpVoc: "VOC (1-7)",
+  tpVocInit: "Initial VOC",
+  tpStartSet: "Start a set",
+  tpStopSet: "Stop and ask",
+  tpNoticePrompt: "What do you notice now?",
+  tpLogObs: "Log observation",
+  tpObsPh: "Briefly: image, thought, sensation",
+  tpNextSet: "Next set",
+  tpNotes: "Practitioner notes (no personal data)",
+  tpNotesPh: "Clinical observations only, no client name",
+  tpSaveSession: "Save to journal",
+  tpSaved: "Saved to journal",
+  tpReset: "New session",
+  tpSudsTrend: "SUD trend",
+  tpSoloLock: "The full protocol with desensitization is available only in a session with a practitioner. Solo mode offers preparation, resource exercises and grounding.",
+  tpHostOnly: "Create a session (left panel) to run the protocol with a client"
 };

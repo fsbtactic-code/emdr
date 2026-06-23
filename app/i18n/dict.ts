@@ -171,6 +171,67 @@ export interface Dict {
   sessClientWaiting: string;
   sessClientHint: string;
   sessEnd: string;
+
+  // nav
+  navResources: string;
+  navJournal: string;
+
+  // audio volumes + channels + accessibility
+  channelsSection: string;
+  blsVolume: string;
+  ambientVolumeLabel: string;
+  hapticLabel: string;
+  hapticDesc: string;
+  hapticUnsupported: string;
+  visualStim: string;
+  visualStimDesc: string;
+  vestibular: string;
+  vestibularDesc: string;
+
+  // forced safe closure + connection loss
+  groundBeforeExit: string;
+  groundBeforeExitSub: string;
+  closeAnyway: string;
+  connLost: string;
+
+  // client -> host signals
+  sigOk: string;
+  sigPause: string;
+  sigStop: string;
+  sigBadge: string;
+  sigHeading: string;
+  sigNone: string;
+  sigOkH: string;
+  sigPauseH: string;
+  sigStopH: string;
+  sigClear: string;
+
+  // therapist clinical panel
+  tpTitle: string;
+  tpSub: string;
+  tpPhaseLabel: string;
+  tpTarget: string;
+  tpNeg: string;
+  tpPos: string;
+  tpEmotions: string;
+  tpBody: string;
+  tpSuds: string;
+  tpVoc: string;
+  tpVocInit: string;
+  tpStartSet: string;
+  tpStopSet: string;
+  tpNoticePrompt: string;
+  tpLogObs: string;
+  tpObsPh: string;
+  tpNextSet: string;
+  tpNotes: string;
+  tpNotesPh: string;
+  tpSaveSession: string;
+  tpSaved: string;
+  tpReset: string;
+  tpSudsTrend: string;
+  tpSoloLock: string;
+  tpHostOnly: string;
 }
 
 export const ru: Dict = {
@@ -436,5 +497,61 @@ export const ru: Dict = {
   sessClientBadge: "Сеанс ведет специалист",
   sessClientWaiting: "Ожидание ведущего. Расслабьтесь и дышите ровно.",
   sessClientHint: "Настройками управляет специалист. Вам ничего не нужно нажимать.",
-  sessEnd: "Завершить сессию"
+  sessEnd: "Завершить сессию",
+
+  navResources: "Ресурсы и стабилизация",
+  navJournal: "Журнал сессий",
+
+  channelsSection: "Каналы и доступность",
+  blsVolume: "Громкость стимула",
+  ambientVolumeLabel: "Громкость фона",
+  hapticLabel: "Вибро-стимуляция",
+  hapticDesc: "Попеременная вибрация телефона как тактильный канал БЛС",
+  hapticUnsupported: "Вибрация не поддерживается этим устройством",
+  visualStim: "Визуальный стимул",
+  visualStimDesc: "Выключите для аудио/тактильного режима: слабое зрение, укачивание, особенности зрения",
+  vestibular: "Защита от укачивания",
+  vestibularDesc: "Ограничивает скорость и размах при тошноте или головокружении",
+
+  groundBeforeExit: "Сначала заземлитесь",
+  groundBeforeExitSub: "Уровень дистресса еще высокий. Перед выходом стоит вернуться в спокойное состояние.",
+  closeAnyway: "Все равно завершить",
+  connLost: "Связь со специалистом прервалась. Стимуляция остановлена. Дышите ровно, при необходимости заземлитесь.",
+
+  sigOk: "Все хорошо",
+  sigPause: "Нужна пауза",
+  sigStop: "Стоп",
+  sigBadge: "Ваш сигнал виден специалисту",
+  sigHeading: "Сигнал клиента",
+  sigNone: "Сигналов нет",
+  sigOkH: "Клиент: все хорошо",
+  sigPauseH: "Клиент просит паузу",
+  sigStopH: "Клиент просит СТОП",
+  sigClear: "Сбросить",
+
+  tpTitle: "Ведение сессии",
+  tpSub: "Протокол по фазам. Только для специалиста",
+  tpPhaseLabel: "Фаза",
+  tpTarget: "Мишень (образ или воспоминание)",
+  tpNeg: "Негативное убеждение (NC)",
+  tpPos: "Позитивное убеждение (PC)",
+  tpEmotions: "Эмоции",
+  tpBody: "Телесные ощущения, где",
+  tpSuds: "SUD (0-10)",
+  tpVoc: "VOC (1-7)",
+  tpVocInit: "VOC начальный",
+  tpStartSet: "Запустить сет",
+  tpStopSet: "Остановить и спросить",
+  tpNoticePrompt: "Что ты сейчас замечаешь?",
+  tpLogObs: "Записать наблюдение",
+  tpObsPh: "Кратко: образ, мысль, ощущение",
+  tpNextSet: "Следующий сет",
+  tpNotes: "Заметки специалиста (без персональных данных)",
+  tpNotesPh: "Только клинические наблюдения, без имени клиента",
+  tpSaveSession: "Сохранить в журнал",
+  tpSaved: "Сохранено в журнал",
+  tpReset: "Новая сессия",
+  tpSudsTrend: "Динамика SUD",
+  tpSoloLock: "Полный протокол с десенсибилизацией доступен только в режиме сессии со специалистом. В одиночку доступны подготовка, ресурсные упражнения и заземление.",
+  tpHostOnly: "Создайте сессию (панель слева), чтобы вести протокол с клиентом"
 };

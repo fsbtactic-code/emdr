@@ -1,6 +1,6 @@
 import type { Dict } from "./dict";
 
-export const pt: Dict = {
+export const pt: Partial<Dict> = {
   start: "Iniciar",
   next: "Avançar",
   back: "Voltar",
