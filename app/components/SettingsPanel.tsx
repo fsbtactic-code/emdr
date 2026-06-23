@@ -12,7 +12,7 @@ import { useStore } from '../store/useStore';
 import { isHapticSupported } from '../hooks/useHapticBLS';
 import { useShareableState } from '../hooks/useShareableState';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useT } from '../i18n/useT';
 import { LOCALES, LOCALE_META } from '../i18n';
 
@@ -57,6 +57,10 @@ export const SettingsPanel = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>('calm');
   const { generateShareLink } = useShareableState();
   const [justCopied, setJustCopied] = useState(false);
+  // SSR-safe: navigator is unavailable on the server, so resolve haptic support
+  // only after mount to keep the first client render identical to the server one.
+  const [hapticOk, setHapticOk] = useState(false);
+  useEffect(() => { setHapticOk(isHapticSupported()); }, []);
 
   const handleShare = () => {
     const link = generateShareLink();
@@ -456,12 +460,12 @@ export const SettingsPanel = () => {
                   <div>
                     <Label color="text-violet-400/70">{t.hapticLabel}</Label>
                     <p className="text-white/25 text-[12px] mt-0.5">
-                      {isHapticSupported() ? t.hapticDesc : t.hapticUnsupported}
+                      {hapticOk ? t.hapticDesc : t.hapticUnsupported}
                     </p>
                   </div>
                   <Toggle
-                    enabled={hapticEnabled && isHapticSupported()}
-                    onChange={() => { if (isHapticSupported()) setHapticEnabled(!hapticEnabled); }}
+                    enabled={hapticEnabled && hapticOk}
+                    onChange={() => { if (hapticOk) setHapticEnabled(!hapticEnabled); }}
                     accent="bg-violet-500/70"
                   />
                 </div>

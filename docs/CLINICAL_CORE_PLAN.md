@@ -70,21 +70,36 @@ New state + setters available now:
 
 Status: DONE / WIP / TODO. Owner = who is doing it (orchestrator = main Claude).
 
+Overall status: ALL tasks below DONE. `npm run typecheck` and `npm run build` are green
+(commits f0250cd, 222debd, a29cb8c, da8a553 on feat/clinical-core). See "Follow-ups" below.
+
 | # | Area | Files (exclusive owner) | Status |
 |---|------|-------------------------|--------|
-| S | spine: i18n fallback + store + dict keys | i18n/*, store/useStore.ts, dict.ts, en.ts | DONE (commit f0250cd + store flag) |
-| A1 | Haptic BLS channel | `app/hooks/useHapticBLS.ts` (new) | TODO |
-| A2 | Resource/stabilization modules | `app/components/ResourceExercises.tsx` (new) | TODO |
-| A3 | Local session journal | `app/lib/journal.ts` + `app/components/SessionJournal.tsx` (new) | TODO |
-| A4 | Pre-session screening + consent gate | `app/components/PreSessionGate.tsx` (new) | TODO |
-| A5 | Crisis contacts data | `app/content/crisis.ts` (new) | TODO |
-| A6 | Therapist clinical panel (8 phases, SUDS/VOC, set loop) | `app/components/TherapistPanel.tsx` (new) | TODO |
-| A7 | No-pseudoscience contributor guardrails | `CONTRIBUTING.md` (new) | TODO |
-| A8 | Remote session: 2-way signal + room hardening + connection loss | `app/api/session/[id]/route.ts`, `SessionManager.tsx`, `SessionClientOverlay.tsx`, `SessionPanel.tsx` | TODO |
-| I1 | Integration: mount new panels + nav buttons | `app/page.tsx`, `app/components/FloatingNav.tsx` | TODO (orchestrator) |
-| I2 | Settings: volume sliders, channel/accessibility toggles, surface `trauma_body` | `app/components/SettingsPanel.tsx` | TODO (orchestrator) |
-| I3 | Engine: vestibular cap, `visualEnabled` gate, call `useHapticBLS` | `app/components/StimulationEngine.tsx` | TODO (orchestrator) |
-| I4 | Forced safe closure + grounding gate + crisis contacts in grounding | `app/components/Controls.tsx`, `GroundingOverlay.tsx` | TODO (orchestrator) |
+| S | spine: i18n fallback + store + dict keys | i18n/*, store/useStore.ts, dict.ts, en.ts | DONE |
+| A1 | Haptic BLS channel | `app/hooks/useHapticBLS.ts` (new) | DONE |
+| A2 | Resource/stabilization modules | `app/components/ResourceExercises.tsx` (new) | DONE |
+| A3 | Local session journal | `app/lib/journal.ts` + `app/components/SessionJournal.tsx` (new) | DONE |
+| A4 | Pre-session screening + consent gate | `app/components/PreSessionGate.tsx` (new) | DONE |
+| A5 | Crisis contacts data | `app/content/crisis.ts` (new) | DONE |
+| A6 | Therapist clinical panel (8 phases, SUDS/VOC, set loop) | `app/components/TherapistPanel.tsx` (new) | DONE |
+| A7 | No-pseudoscience contributor guardrails | `CONTRIBUTING.md` (new) | DONE |
+| A8 | Remote session: 2-way signal + room hardening + connection loss | `app/api/session/[id]/route.ts`, `SessionManager.tsx`, `SessionClientOverlay.tsx`, `SessionPanel.tsx` | DONE |
+| I1 | Integration: mount new panels + nav buttons | `app/page.tsx`, `app/components/FloatingNav.tsx` | DONE |
+| I2 | Settings: volume sliders, channel/accessibility toggles, surface `trauma_body` | `app/components/SettingsPanel.tsx` | DONE |
+| I3 | Engine: vestibular cap, `visualEnabled` gate, call `useHapticBLS` | `app/components/StimulationEngine.tsx` | DONE |
+| I4 | Forced safe closure + grounding gate + crisis contacts in grounding | `app/components/Controls.tsx`, `GroundingOverlay.tsx` | DONE |
+
+## Follow-ups (next agent / Codex can pick up)
+
+- Translations: new strings exist only in `ru` + `en`. es/it/de/fr/pt fall back to en. Translate the
+  new dict keys (channels, signals, closure, `tp*`, `nav*`) and the local string blocks inside
+  ResourceExercises/SessionJournal/PreSessionGate for full localization.
+- Persist `consentGiven` for the session lifetime only (currently resets on reload, which is acceptable
+  for a re-consent-each-session safety model). Do NOT persist across devices.
+- Wire automatic `saveSession` to the journal on Closure/session end (TherapistPanel has a manual
+  "Save to journal" button; auto-save on Closure phase would be the natural next step).
+- Visual QA pass across mobile breakpoints for the new side panels (TherapistPanel md:w-[480px]).
+- Consider a settings toggle to disable the start-time safety gate for returning practitioners.
 
 ## Import contracts (so integration matches)
 

@@ -10,6 +10,8 @@ const STORAGE_KEY = 'emdr_disclaimer_accepted_v2';
 export const Disclaimer = () => {
   const t = useT();
   const isClient = useStore((s) => s.isClient);
+  const setConsentGiven = useStore((s) => s.setConsentGiven);
+  const setDissociationScreenPassed = useStore((s) => s.setDissociationScreenPassed);
   const [show, setShow] = useState(false);
   const [step, setStep] = useState<1 | 2>(1);
   const [confirmed, setConfirmed] = useState(false);
@@ -22,6 +24,10 @@ export const Disclaimer = () => {
 
   const handleAccept = () => {
     localStorage.setItem(STORAGE_KEY, 'true');
+    // The disclaimer already carries the screening list + confirmation checkbox,
+    // so accepting it satisfies the session-start safety gate (no double screening).
+    setConsentGiven(true);
+    setDissociationScreenPassed(true);
     setShow(false);
   };
 
