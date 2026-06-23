@@ -93,7 +93,7 @@ export const GroundingOverlay = () => {
                 </div>
               </div>
 
-              <div className="w-full mt-6 rounded-2xl bg-rose-500/[0.04] p-3">
+              <div className="w-full mt-6 rounded-2xl bg-rose-500/[0.04] p-3 text-left">
                 {/* heading row */}
                 <div className="flex items-center gap-2 mb-3">
                   <LifeBuoy size={13} className="text-rose-400/80 shrink-0" />

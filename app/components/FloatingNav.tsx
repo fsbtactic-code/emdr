@@ -32,36 +32,12 @@ function NavTooltip({ label, visible }: { label: string; visible: boolean }) {
             style={{
               borderTop: '5px solid transparent',
               borderBottom: '5px solid transparent',
-              borderRight: '6px solid rgba(17,17,21,0.95)',
+              borderRight: '6px solid rgba(10,10,12,0.9)',
             }}
           />
           {/* Pill body: gradient surface, accent ring, soft indigo glow, shimmer sweep */}
-          <span
-            className="relative flex items-center gap-2 overflow-hidden rounded-xl px-3 py-1.5 text-[13px] font-bold text-white/90 whitespace-nowrap backdrop-blur-xl"
-            style={{
-              background: 'linear-gradient(180deg, rgba(28,28,34,0.7), rgba(12,12,16,0.72))',
-              boxShadow:
-                '0 0 0 1px rgba(255,255,255,0.08), 0 10px 30px -8px rgba(99,102,241,0.45), 0 4px 12px -4px rgba(0,0,0,0.6)',
-            }}
-          >
-            <motion.span
-              className="h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400"
-              animate={{ scale: [1, 1.5, 1], opacity: [0.6, 1, 0.6] }}
-              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ boxShadow: '0 0 8px rgba(129,140,248,0.9)' }}
-            />
-            <span className="relative z-10">{label}</span>
-            <motion.span
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0"
-              initial={{ x: '-150%' }}
-              animate={{ x: '150%' }}
-              transition={{ delay: 0.1, duration: 0.7, ease: 'easeOut' }}
-              style={{
-                background:
-                  'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.22) 50%, transparent 70%)',
-              }}
-            />
+          <span className="relative flex items-center rounded-xl px-3.5 py-2 text-[13px] font-semibold text-white/90 whitespace-nowrap bg-[#0a0a0c]/90 backdrop-blur-xl border border-white/[0.06] shadow-[0_8px_24px_-6px_rgba(0,0,0,0.7)]">
+            {label}
           </span>
         </motion.div>
       )}
