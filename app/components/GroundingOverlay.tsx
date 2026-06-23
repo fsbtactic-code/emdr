@@ -6,9 +6,11 @@ import { X, LifeBuoy } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { BOX_BREATH_SECONDS, BREATH_SCALE } from '../content';
 import { useT } from '../i18n/useT';
+import { getCrisisContacts } from '../content/crisis';
+import type { CrisisContact } from '../content/crisis';
 
 export const GroundingOverlay = () => {
-  const { isGroundingOpen, setIsGroundingOpen, setPlaying } = useStore();
+  const { isGroundingOpen, setIsGroundingOpen, setPlaying, lang } = useStore();
   const t = useT();
   const [breath, setBreath] = useState({ idx: 0, count: BOX_BREATH_SECONDS[0] });
 
@@ -89,9 +91,35 @@ export const GroundingOverlay = () => {
                 </div>
               </div>
 
+              <div className="w-full mt-6 rounded-2xl border border-rose-500/15 bg-rose-500/5 p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-rose-300/60 mb-3">
+                  {lang === 'ru' ? 'Кризисная помощь' : 'Crisis support'}
+                </p>
+                <div className="flex flex-col gap-2">
+                  {getCrisisContacts(lang).map((c: CrisisContact) => (
+                    <div key={c.name} className="flex flex-col gap-0.5">
+                      <span className="text-[12px] text-white/60 font-medium leading-tight">{c.name}</span>
+                      {c.phone && (
+                        <span className="text-[12px] text-rose-300/80 font-semibold tabular-nums">{c.phone}</span>
+                      )}
+                      {c.url && (
+                        <a
+                          href={c.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[11px] text-amber-400/70 hover:text-amber-300 underline underline-offset-2 break-all transition-colors"
+                        >
+                          {c.url}
+                        </a>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <button
                 onClick={() => setIsGroundingOpen(false)}
-                className="w-full mt-6 py-3.5 bg-white text-zinc-950 rounded-2xl font-semibold text-[14px] hover:bg-zinc-200 transition-all active:scale-[0.98]"
+                className="w-full mt-4 py-3.5 bg-white text-zinc-950 rounded-2xl font-semibold text-[14px] hover:bg-zinc-200 transition-all active:scale-[0.98]"
               >
                 {t.groundDone}
               </button>

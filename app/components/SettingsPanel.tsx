@@ -9,6 +9,7 @@ import {
   ShieldAlert, Moon, Orbit, Radio, VolumeX
 } from 'lucide-react';
 import { useStore } from '../store/useStore';
+import { isHapticSupported } from '../hooks/useHapticBLS';
 import { useShareableState } from '../hooks/useShareableState';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
@@ -44,7 +45,12 @@ export const SettingsPanel = () => {
     symbolLanguage, setSymbolLanguage, targetShape, setTargetShape,
     visualBackground, setVisualBackground, activePreset, applyPreset,
     safeMode, setSafeMode, amplitude, setAmplitude, lang, setLang,
-    audioEnabled, setAudioEnabled
+    audioEnabled, setAudioEnabled,
+    audioVolume, setAudioVolume,
+    ambientVolume, setAmbientVolume,
+    hapticEnabled, setHapticEnabled,
+    visualEnabled, setVisualEnabled,
+    vestibularSafe, setVestibularSafe
   } = useStore();
   const t = useT();
 
@@ -113,7 +119,7 @@ export const SettingsPanel = () => {
     { id: 'calm', title: t.catCalm, color: 'text-emerald-400', icon: ShieldAlert, presets: ['anxiety', 'panic'] },
     { id: 'resource', title: t.catResource, color: 'text-amber-400', icon: Sparkles, presets: ['resource', 'focus', 'sleep', 'grounding_528'] },
     { id: 'focus', title: t.catFocus, color: 'text-cyan-400', icon: Brain, presets: ['adhd_focus', 'adhd_impulse', 'adhd_calm', 'adhd_body'] },
-    { id: 'profiles', title: t.catProfiles, color: 'text-rose-400', icon: Zap, hint: t.profilesHint, presets: ['trauma_smooth', 'trauma_deep', 'trauma_saccadic', 'trauma_acute', 'trauma_flashback'] }
+    { id: 'profiles', title: t.catProfiles, color: 'text-rose-400', icon: Zap, hint: t.profilesHint, presets: ['trauma_smooth', 'trauma_deep', 'trauma_saccadic', 'trauma_acute', 'trauma_body', 'trauma_flashback'] }
   ];
 
   return (
@@ -399,6 +405,29 @@ export const SettingsPanel = () => {
                   </div>
                   <p className="text-white/25 text-[11px] mt-2 leading-relaxed">{t.ambientNote}</p>
                 </div>
+                <div className="flex flex-col gap-4">
+                  {[
+                    { label: t.blsVolume, val: audioVolume, set: setAudioVolume },
+                    { label: t.ambientVolumeLabel, val: ambientVolume, set: setAmbientVolume }
+                  ].map((item, i) => (
+                    <div key={i} className={`flex flex-col gap-2 ${!audioEnabled ? 'opacity-40 pointer-events-none' : ''}`}>
+                      <div className="flex justify-between items-center gap-3">
+                        <Label color="text-sky-400/70">{item.label}</Label>
+                        <Badge>{Math.round(item.val * 100)}%</Badge>
+                      </div>
+                      <input
+                        type="range"
+                        min={0}
+                        max={1}
+                        step={0.05}
+                        value={item.val}
+                        disabled={!audioEnabled}
+                        onChange={e => item.set(parseFloat(e.target.value))}
+                        className="w-full"
+                      />
+                    </div>
+                  ))}
+                </div>
                 <div>
                   <Label>{t.bgLabel}</Label>
                   <div className="grid grid-cols-3 gap-1.5 mt-2.5">
@@ -417,6 +446,38 @@ export const SettingsPanel = () => {
                       );
                     })}
                   </div>
+                </div>
+              </div>
+
+              {}
+              <div className="px-5 py-3 border-t border-white/5 flex flex-col gap-4">
+                <Label color="text-indigo-400/70">{t.channelsSection}</Label>
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <Label color="text-violet-400/70">{t.hapticLabel}</Label>
+                    <p className="text-white/25 text-[12px] mt-0.5">
+                      {isHapticSupported() ? t.hapticDesc : t.hapticUnsupported}
+                    </p>
+                  </div>
+                  <Toggle
+                    enabled={hapticEnabled && isHapticSupported()}
+                    onChange={() => { if (isHapticSupported()) setHapticEnabled(!hapticEnabled); }}
+                    accent="bg-violet-500/70"
+                  />
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <Label color="text-amber-400/70">{t.visualStim}</Label>
+                    <p className="text-white/25 text-[12px] mt-0.5">{t.visualStimDesc}</p>
+                  </div>
+                  <Toggle enabled={visualEnabled} onChange={() => setVisualEnabled(!visualEnabled)} accent="bg-amber-500/70" />
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <Label color="text-teal-400/70">{t.vestibular}</Label>
+                    <p className="text-white/25 text-[12px] mt-0.5">{t.vestibularDesc}</p>
+                  </div>
+                  <Toggle enabled={vestibularSafe} onChange={() => setVestibularSafe(!vestibularSafe)} accent="bg-teal-500/70" />
                 </div>
               </div>
 

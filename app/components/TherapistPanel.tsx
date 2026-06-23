@@ -105,8 +105,7 @@ export function TherapistPanel() {
   const observations = useStore((s) => s.observations);
   const addObservation = useStore((s) => s.addObservation);
   const therapistNotes = useStore((s) => s.therapistNotes);
-  // The store exposes therapistNotes as state but no dedicated setter, so write via setState (no other file touched).
-  const setTherapistNotes = (v: string) => useStore.setState({ therapistNotes: v });
+  const setTherapistNotes = useStore((s) => s.setTherapistNotes);
   const resetClinical = useStore((s) => s.resetClinical);
 
   const sessionStartedAt = useStore((s) => s.sessionStartedAt);

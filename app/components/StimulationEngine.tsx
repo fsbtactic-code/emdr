@@ -4,6 +4,7 @@ import { useStore } from '../store/useStore';
 import { motion } from 'framer-motion';
 import { useBilateralAudio } from '../hooks/useBilateralAudio';
 import { useAmbientAudio } from '../hooks/useAmbientAudio';
+import { useHapticBLS } from '../hooks/useHapticBLS';
 import { useEffect, useState } from 'react';
 
 const getCharacters = (lang: string) => {
@@ -56,17 +57,21 @@ const AnimatedBackground = ({ type }: { type: string }) => {
 };
 
 export const StimulationEngine = () => {
-  const { speed, color, size, pattern, isPlaying, randomness, amplitude, cyclesPerSet, setPlaying, incrementSets, isSaccadic, showSymbols, symbolLanguage, targetShape, isSettingsOpen, visualBackground, safeMode, isClient } = useStore();
+  const { speed, color, size, pattern, isPlaying, randomness, amplitude, cyclesPerSet, setPlaying, incrementSets, isSaccadic, showSymbols, symbolLanguage, targetShape, isSettingsOpen, visualBackground, safeMode, isClient, vestibularSafe, visualEnabled } = useStore();
   const [symbol, setSymbol] = useState('');
 
-  const effSpeed = safeMode ? Math.min(speed, 1.5) : speed;
+  const effSpeed = (safeMode || vestibularSafe) ? Math.min(speed, 1.5) : speed;
   const effSaccadic = safeMode ? false : isSaccadic;
   const effRandomness = safeMode ? 0 : randomness;
   const STROBE_PATTERNS = ['bars', 'pulse', 'zigzag', 'dots'];
   const effPattern = safeMode && STROBE_PATTERNS.includes(pattern) ? 'horizontal' : pattern;
 
+  // vestibular guard: cap amplitude to 70 when vestibularSafe is active
+  const effAmplitude = vestibularSafe ? Math.min(amplitude, 70) : amplitude;
+
   useBilateralAudio();
   useAmbientAudio();
+  useHapticBLS();
 
   useEffect(() => {
     if (!isPlaying || isClient) return;
@@ -101,7 +106,7 @@ export const StimulationEngine = () => {
 
   const easing = effSaccadic ? "circInOut" : "linear";
 
-  const amp = Math.max(20, Math.min(100, amplitude)) / 100;
+  const amp = Math.max(20, Math.min(100, effAmplitude)) / 100;
   const X = `${(45 * amp).toFixed(1)}vw`;
   const NX = `-${(45 * amp).toFixed(1)}vw`;
   const Y = `${(35 * amp).toFixed(1)}vh`;
@@ -127,6 +132,7 @@ export const StimulationEngine = () => {
   return (
     <div className="absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden pointer-events-none z-0">
       <AnimatedBackground type={visualBackground} />
+      {visualEnabled && (
       <div className="w-full flex items-center justify-center">
         <motion.div
           key={`${effPattern}-${effSaccadic}-${isPlaying}`}
@@ -217,6 +223,7 @@ export const StimulationEngine = () => {
 
         </motion.div>
       </div>
+      )}
     </div>
   );
 };

@@ -160,6 +160,7 @@ export interface SessionState {
   setPosCognition: (v: string) => void;
   setEmotions: (v: string) => void;
   setBodyLocation: (v: string) => void;
+  setTherapistNotes: (v: string) => void;
   logSuds: (value: number) => void;
   addObservation: (obs: SetObservation) => void;
   resetClinical: () => void;
@@ -315,6 +316,7 @@ export const useStore = create<RootState>((set) => ({
   setPosCognition: (posCognition) => set({ posCognition }),
   setEmotions: (emotions) => set({ emotions }),
   setBodyLocation: (bodyLocation) => set({ bodyLocation }),
+  setTherapistNotes: (therapistNotes) => set({ therapistNotes }),
   logSuds: (value) => set((s) => ({ suds: value, sudsLog: [...s.sudsLog, { t: Date.now(), phase: s.currentPhase, value }] })),
   addObservation: (obs) => set((s) => ({ observations: [...s.observations, obs] })),
   resetClinical: () => set({

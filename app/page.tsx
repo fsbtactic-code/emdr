@@ -13,6 +13,10 @@ import { LanguagePicker } from './components/LanguagePicker';
 import { SessionManager } from './components/SessionManager';
 import { SessionPanel } from './components/SessionPanel';
 import { SessionClientOverlay } from './components/SessionClientOverlay';
+import { TherapistPanel } from './components/TherapistPanel';
+import { ResourceExercises } from './components/ResourceExercises';
+import { SessionJournal } from './components/SessionJournal';
+import { PreSessionGate } from './components/PreSessionGate';
 import { useStore } from './store/useStore';
 import { useShareableState } from './hooks/useShareableState';
 import { useState, useEffect } from 'react';
@@ -84,12 +88,16 @@ export default function SessionPage() {
       <FloatingNav />
       <SettingsPanel />
       <SessionPanel />
+      <TherapistPanel />
+      <ResourceExercises />
+      <SessionJournal />
       <Controls />
       <FeedbackPanel />
       <EmdrGuide />
       <InstallPrompt />
       <Disclaimer />
       <GroundingOverlay />
+      <PreSessionGate />
       <LanguagePicker />
       <SessionManager />
 

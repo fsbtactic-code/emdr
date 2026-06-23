@@ -5,7 +5,10 @@ import { Play, Square, LifeBuoy } from 'lucide-react';
 import { useT } from '../i18n/useT';
 
 export const Controls = () => {
-  const { isPlaying, togglePlaying, setPlaying, setsCompleted, isSettingsOpen, setIsSettingsOpen, setIsGroundingOpen } = useStore();
+  const {
+    isPlaying, togglePlaying, setPlaying, setsCompleted, isSettingsOpen, setIsSettingsOpen,
+    setIsGroundingOpen, suds, consentGiven, setIsGateOpen, sessionStartedAt, setSessionStartedAt
+  } = useStore();
   const t = useT();
 
   if (isPlaying) {
@@ -13,7 +16,12 @@ export const Controls = () => {
       <div className="fixed bottom-8 inset-x-0 z-40 flex flex-col items-center gap-4 px-4 pointer-events-none">
         <div className="flex items-center justify-center gap-2.5 pointer-events-auto">
           <button
-            onClick={() => setPlaying(false)}
+            onClick={() => {
+              setPlaying(false);
+              if (suds !== null && suds >= 4) {
+                setIsGroundingOpen(true);
+              }
+            }}
             className="px-4 sm:px-5 py-2.5 flex items-center gap-2 rounded-2xl bg-white/5 hover:bg-white/10 active:scale-95 transition-all text-white/40 hover:text-white/90 text-xs font-medium backdrop-blur-md border border-white/5 shadow-lg whitespace-nowrap shrink-0"
           >
             <Square size={12} fill="currentColor" /> {t.finish}
@@ -41,6 +49,12 @@ export const Controls = () => {
       <div className="flex flex-col items-center">
         <button
           onClick={() => {
+            // Safety gate: require the screening + consent before any session start.
+            if (!consentGiven) {
+              setIsGateOpen(true);
+              return;
+            }
+            if (sessionStartedAt === null) setSessionStartedAt(Date.now());
             togglePlaying();
             setIsSettingsOpen(false);
           }}

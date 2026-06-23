@@ -1,7 +1,7 @@
 'use client';
 
 import { useStore } from '../store/useStore';
-import { Settings2, MessageSquareHeart, HelpCircle, LifeBuoy, Users, Github } from 'lucide-react';
+import { Settings2, MessageSquareHeart, HelpCircle, LifeBuoy, Users, Github, Heart, ClipboardList, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useT } from '../i18n/useT';
 
@@ -11,6 +11,9 @@ export const FloatingNav = () => {
     isFeedbackOpen, setIsFeedbackOpen,
     isGuideOpen, setIsGuideOpen,
     isSessionOpen, setIsSessionOpen,
+    isResourcesOpen, setIsResourcesOpen,
+    isClinicalOpen, setIsClinicalOpen,
+    isJournalOpen, setIsJournalOpen,
     setIsGroundingOpen,
     isPlaying
   } = useStore();
@@ -21,6 +24,9 @@ export const FloatingNav = () => {
     setIsFeedbackOpen(false);
     setIsGuideOpen(false);
     setIsSessionOpen(false);
+    setIsResourcesOpen(false);
+    setIsClinicalOpen(false);
+    setIsJournalOpen(false);
   };
 
   const navItems = [
@@ -44,6 +50,27 @@ export const FloatingNav = () => {
       active: isSessionOpen,
       title: t.sessHost,
       onClick: () => { const v = !isSessionOpen; closeAll(); setIsSessionOpen(v); }
+    },
+    {
+      id: 'clinical',
+      icon: ClipboardList,
+      active: isClinicalOpen,
+      title: t.tpTitle,
+      onClick: () => { const v = !isClinicalOpen; closeAll(); setIsClinicalOpen(v); }
+    },
+    {
+      id: 'resources',
+      icon: Heart,
+      active: isResourcesOpen,
+      title: t.navResources,
+      onClick: () => { const v = !isResourcesOpen; closeAll(); setIsResourcesOpen(v); }
+    },
+    {
+      id: 'journal',
+      icon: BookOpen,
+      active: isJournalOpen,
+      title: t.navJournal,
+      onClick: () => { const v = !isJournalOpen; closeAll(); setIsJournalOpen(v); }
     },
     {
       id: 'feedback',
