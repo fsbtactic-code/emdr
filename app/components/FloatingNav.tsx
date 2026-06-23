@@ -6,32 +6,62 @@ import { Settings2, MessageSquareHeart, HelpCircle, LifeBuoy, Users, Github, Hea
 import { motion, AnimatePresence } from 'framer-motion';
 import { useT } from '../i18n/useT';
 
-// Animated tooltip that appears to the right of the nav rail button
+// Tooltip that springs out to the right of a nav rail button: a 3D hinge-open
+// with overshoot, a popping caret, an accent glow, a pulsing dot and a one-shot
+// shimmer sweep across the pill.
 function NavTooltip({ label, visible }: { label: string; visible: boolean }) {
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
           role="tooltip"
-          initial={{ opacity: 0, x: -6, scale: 0.92 }}
-          animate={{ opacity: 1, x: 0, scale: 1 }}
-          exit={{ opacity: 0, x: -4, scale: 0.94 }}
-          transition={{ type: 'spring', stiffness: 420, damping: 28, mass: 0.6 }}
+          initial={{ opacity: 0, x: -14, scale: 0.7, rotateY: -45 }}
+          animate={{ opacity: 1, x: 0, scale: 1, rotateY: 0 }}
+          exit={{ opacity: 0, x: -8, scale: 0.85, rotateY: -22, transition: { duration: 0.14, ease: 'easeIn' } }}
+          transition={{ type: 'spring', stiffness: 520, damping: 17, mass: 0.7 }}
+          style={{ transformPerspective: 700, transformOrigin: 'left center' }}
           className="pointer-events-none absolute left-full top-1/2 z-50 ml-3 -translate-y-1/2"
         >
-          {/* Left-pointing caret */}
-          <span
+          {/* Caret that pops in just after the pill */}
+          <motion.span
             aria-hidden="true"
-            className="absolute -left-[5px] top-1/2 -translate-y-1/2 h-0 w-0"
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            transition={{ delay: 0.06, type: 'spring', stiffness: 600, damping: 20 }}
+            className="absolute -left-[5px] top-1/2 -translate-y-1/2 h-0 w-0 origin-right"
             style={{
               borderTop: '5px solid transparent',
               borderBottom: '5px solid transparent',
-              borderRight: '5px solid rgba(10,10,12,0.92)',
+              borderRight: '6px solid rgba(17,17,21,0.95)',
             }}
           />
-          {/* Pill body */}
-          <span className="relative flex items-center rounded-xl bg-[#0a0a0c]/90 px-3 py-1.5 text-[13px] font-medium text-white shadow-[0_8px_24px_-4px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.06)] backdrop-blur-xl whitespace-nowrap">
-            {label}
+          {/* Pill body: gradient surface, accent ring, soft indigo glow, shimmer sweep */}
+          <span
+            className="relative flex items-center gap-2 overflow-hidden rounded-xl px-3 py-1.5 text-[13px] font-medium text-white whitespace-nowrap backdrop-blur-xl"
+            style={{
+              background: 'linear-gradient(180deg, rgba(28,28,34,0.95), rgba(12,12,16,0.95))',
+              boxShadow:
+                '0 0 0 1px rgba(255,255,255,0.08), 0 10px 30px -8px rgba(99,102,241,0.5), 0 4px 12px -4px rgba(0,0,0,0.7)',
+            }}
+          >
+            <motion.span
+              className="h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400"
+              animate={{ scale: [1, 1.5, 1], opacity: [0.6, 1, 0.6] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+              style={{ boxShadow: '0 0 8px rgba(129,140,248,0.9)' }}
+            />
+            <span className="relative z-10">{label}</span>
+            <motion.span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0"
+              initial={{ x: '-150%' }}
+              animate={{ x: '150%' }}
+              transition={{ delay: 0.1, duration: 0.7, ease: 'easeOut' }}
+              style={{
+                background:
+                  'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.22) 50%, transparent 70%)',
+              }}
+            />
           </span>
         </motion.div>
       )}
