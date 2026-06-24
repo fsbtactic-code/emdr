@@ -10,7 +10,10 @@ import { getCrisisContacts } from '../content/crisis';
 import type { CrisisContact } from '../content/crisis';
 
 export const GroundingOverlay = () => {
-  const { isGroundingOpen, setIsGroundingOpen, setPlaying, lang } = useStore();
+  const { isGroundingOpen, setIsGroundingOpen, setPlaying, lang, appMode, isClient } = useStore();
+  // In a practitioner-led session the clinician handles crisis, so the app does not
+  // surface hotlines on either the specialist or the client side. Self-help users do.
+  const hideCrisis = appMode === 'specialist' || isClient;
   const t = useT();
   const [breath, setBreath] = useState({ idx: 0, count: BOX_BREATH_SECONDS[0] });
 
@@ -41,8 +44,33 @@ export const GroundingOverlay = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={() => setIsGroundingOpen(false)}
-          className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-zinc-950/90 backdrop-blur-2xl"
+          className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-zinc-950/92 backdrop-blur-2xl overflow-hidden"
         >
+          {/* Calming background that breathes in sync with the box-breathing timer:
+              expands and brightens on inhale/hold, contracts and dims on exhale/hold. */}
+          <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+            <motion.div
+              className="rounded-full"
+              style={{
+                width: '72vw', height: '72vw', maxWidth: 780, maxHeight: 780,
+                background: 'radial-gradient(circle, rgba(16,185,129,0.22), rgba(20,184,166,0.09) 45%, transparent 70%)',
+                filter: 'blur(50px)',
+              }}
+              animate={{ scale: breath.idx <= 1 ? 1.2 : 0.8, opacity: breath.idx <= 1 ? 0.65 : 0.22 }}
+              transition={{ duration: BOX_BREATH_SECONDS[breath.idx], ease: 'easeInOut' }}
+            />
+            <motion.div
+              className="absolute rounded-full"
+              style={{
+                width: '40vw', height: '40vw', maxWidth: 440, maxHeight: 440,
+                background: 'radial-gradient(circle, rgba(34,211,238,0.16), transparent 65%)',
+                filter: 'blur(60px)',
+              }}
+              animate={{ scale: breath.idx <= 1 ? 1.3 : 0.75, opacity: breath.idx <= 1 ? 0.5 : 0.18 }}
+              transition={{ duration: BOX_BREATH_SECONDS[breath.idx], ease: 'easeInOut' }}
+            />
+          </div>
+
           <motion.div
             initial={{ scale: 0.96, y: 16, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -93,6 +121,7 @@ export const GroundingOverlay = () => {
                 </div>
               </div>
 
+              {!hideCrisis && (
               <div className="w-full mt-6 rounded-2xl bg-rose-500/[0.04] p-3 text-left">
                 {/* heading row */}
                 <div className="flex items-center gap-2 mb-3">
@@ -160,6 +189,7 @@ export const GroundingOverlay = () => {
                   })}
                 </div>
               </div>
+              )}
 
               <button
                 onClick={() => setIsGroundingOpen(false)}

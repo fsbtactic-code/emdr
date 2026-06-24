@@ -216,47 +216,66 @@ function BreathCircle({ color }: { color: string }) {
   );
 }
 
-/** Alternating left/right highlight for Butterfly Hug pacing (~1 Hz) */
+/** Butterfly Hug pacing: a butterfly whose wings bloom with color alternately
+ *  (left, then right) in a slow, smooth rhythm to pace the alternating self-taps. */
 function ButterflyHugAnim() {
-  const [side, setSide] = useState<'left' | 'right'>('left');
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setSide((s) => (s === 'left' ? 'right' : 'left'));
-    }, 950);
-    return () => clearInterval(id);
-  }, []);
+  const D = 2.6; // full left+right cycle, calm pace (~1.3s per side)
+  const tr = (times: number[]) => ({ duration: D, times, repeat: Infinity, ease: 'easeInOut' as const });
 
   return (
-    <div className="flex items-center justify-center gap-8 my-4">
-      {(['left', 'right'] as const).map((s) => (
-        <motion.div
-          key={s}
-          animate={{
-            scale: side === s ? 1.25 : 1,
-            opacity: side === s ? 1 : 0.3,
-          }}
-          transition={{ duration: 0.18, ease: 'easeOut' }}
-          className="flex flex-col items-center gap-1.5"
+    <div className="flex items-center justify-center my-5">
+      <motion.svg
+        viewBox="0 0 220 170"
+        className="w-44 h-36"
+        animate={{ y: [0, -5, 0], rotate: [-1.5, 1.5, -1.5] }}
+        transition={{ duration: D, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <defs>
+          <radialGradient id="bwing" cx="50%" cy="45%" r="68%">
+            <stop offset="0%" stopColor="#c4b5fd" />
+            <stop offset="55%" stopColor="#a78bfa" />
+            <stop offset="100%" stopColor="#7c5cff" />
+          </radialGradient>
+        </defs>
+
+        {/* wing outlines - always visible, color fills in on the active side */}
+        <g fill="none" stroke="rgba(196,181,253,0.4)" strokeWidth={1.5}>
+          <ellipse cx={76} cy={60} rx={37} ry={29} />
+          <ellipse cx={85} cy={108} rx={28} ry={24} />
+          <ellipse cx={144} cy={60} rx={37} ry={29} />
+          <ellipse cx={135} cy={108} rx={28} ry={24} />
+        </g>
+
+        {/* left wings fill (blooms first) */}
+        <motion.g
+          fill="url(#bwing)"
+          style={{ transformBox: 'fill-box', transformOrigin: '92% 50%' }}
+          animate={{ opacity: [0.1, 1, 0.12, 0.1], scale: [1, 1.06, 1, 1] }}
+          transition={tr([0, 0.28, 0.5, 1])}
         >
-          <div
-            className="w-12 h-12 rounded-full border-2 flex items-center justify-center"
-            style={{
-              borderColor: side === s ? '#a78bfa' : 'rgba(255,255,255,0.12)',
-              backgroundColor: side === s ? 'rgba(167,139,250,0.18)' : 'rgba(255,255,255,0.03)',
-            }}
-          >
-            <span className="text-[11px] font-semibold text-white/70 uppercase tracking-wide">
-              {s === 'left' ? 'L' : 'R'}
-            </span>
-          </div>
-          <motion.div
-            className="w-2 h-2 rounded-full"
-            animate={{ backgroundColor: side === s ? '#a78bfa' : 'rgba(255,255,255,0.15)' }}
-            transition={{ duration: 0.15 }}
-          />
-        </motion.div>
-      ))}
+          <ellipse cx={76} cy={60} rx={37} ry={29} />
+          <ellipse cx={85} cy={108} rx={28} ry={24} />
+        </motion.g>
+
+        {/* right wings fill (blooms second) */}
+        <motion.g
+          fill="url(#bwing)"
+          style={{ transformBox: 'fill-box', transformOrigin: '8% 50%' }}
+          animate={{ opacity: [0.1, 0.12, 1, 0.1], scale: [1, 1, 1.06, 1] }}
+          transition={tr([0, 0.5, 0.78, 1])}
+        >
+          <ellipse cx={144} cy={60} rx={37} ry={29} />
+          <ellipse cx={135} cy={108} rx={28} ry={24} />
+        </motion.g>
+
+        {/* body + head + antennae */}
+        <ellipse cx={110} cy={86} rx={5} ry={38} fill="#ddd6fe" />
+        <circle cx={110} cy={50} r={6} fill="#ddd6fe" />
+        <path d="M110 46 C 104 32, 97 28, 90 26" fill="none" stroke="#c4b5fd" strokeWidth={1.5} strokeLinecap="round" />
+        <path d="M110 46 C 116 32, 123 28, 130 26" fill="none" stroke="#c4b5fd" strokeWidth={1.5} strokeLinecap="round" />
+        <circle cx={90} cy={26} r={2.5} fill="#c4b5fd" />
+        <circle cx={130} cy={26} r={2.5} fill="#c4b5fd" />
+      </motion.svg>
     </div>
   );
 }
@@ -353,7 +372,7 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
   if (isLightStream) {
     return (
       <div className="flex flex-col h-full relative">
-        {/* Header */}
+        {/* Header (top padding clears the corner back/close buttons so they do not overlap the icon) */}
         <div className="flex items-center gap-3 mb-5">
           <div
             className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
@@ -573,7 +592,8 @@ export function ResourceExercises() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={handleClose}
-          className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-zinc-950/90 backdrop-blur-2xl"
+          className={`fixed inset-0 z-[120] flex items-center justify-center p-4 backdrop-blur-2xl ${isLightStream ? '' : 'bg-zinc-950/90'}`}
+          style={isLightStream ? { background: 'radial-gradient(circle at 50% 32%, rgba(255,243,224,0.93), rgba(254,215,170,0.9) 55%, rgba(255,228,230,0.92))' } : undefined}
         >
           <motion.div
             initial={{ scale: 0.96, y: 16, opacity: 0 }}
@@ -584,7 +604,7 @@ export function ResourceExercises() {
             className="w-full max-w-md rounded-[28px] p-6 shadow-2xl relative overflow-hidden max-h-[92vh] flex flex-col"
             style={
               isLightStream
-                ? { background: 'linear-gradient(135deg, #fffbeb 0%, #fed7aa 45%, #ffe4e6 100%)', border: 'none' }
+                ? { background: 'linear-gradient(135deg, #fffbeb 0%, #fed7aa 45%, #ffe4e6 100%)', border: '1px solid rgba(180,83,9,0.14)' }
                 : { backgroundColor: '#0d0d0f', border: '1px solid rgba(255,255,255,0.06)' }
             }
           >
@@ -596,40 +616,38 @@ export function ResourceExercises() {
             {/* Warm animated glows - light stream only */}
             {isLightStream && <WarmGlowLayer />}
 
-            {/* Close button */}
-            <button
-              onClick={handleClose}
-              aria-label="Close"
-              className={`absolute top-3 right-3 p-2 flex items-center justify-center rounded-full transition-all z-20 ${
-                isLightStream
-                  ? 'bg-amber-900/10 hover:bg-amber-900/20 text-amber-900/50 hover:text-amber-950'
-                  : 'bg-white/5 hover:bg-white/10 text-white/40 hover:text-white'
-              }`}
-            >
-              <X size={18} />
-            </button>
-
-            {/* Back button when exercise is open */}
-            <AnimatePresence>
-              {activeId && (
-                <motion.button
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -8 }}
-                  onClick={() => setActiveId(null)}
-                  aria-label="Back to list"
-                  className={`absolute top-3 left-3 p-2 flex items-center justify-center rounded-full transition-all z-20 ${
+            <div className="relative z-10 flex flex-col flex-1 min-h-0">
+              {/* Top controls: aligned to the card content padding, never overlap content.
+                  Back (when inside an exercise) on the left, close on the right. */}
+              <div className="flex items-center justify-between mb-4 shrink-0 h-9">
+                {activeId ? (
+                  <button
+                    onClick={() => setActiveId(null)}
+                    aria-label="Back to list"
+                    className={`flex items-center gap-1 pl-2 pr-3 h-9 rounded-lg text-[13px] font-medium transition-all ${
+                      isLightStream
+                        ? 'text-amber-900/60 hover:text-amber-950 hover:bg-amber-900/10'
+                        : 'text-white/50 hover:text-white hover:bg-white/[0.06]'
+                    }`}
+                  >
+                    <ChevronLeft size={16} /> {s.back}
+                  </button>
+                ) : (
+                  <span />
+                )}
+                <button
+                  onClick={handleClose}
+                  aria-label="Close"
+                  className={`w-9 h-9 flex items-center justify-center rounded-full transition-all ${
                     isLightStream
-                      ? 'bg-amber-900/10 hover:bg-amber-900/20 text-amber-900/50 hover:text-amber-950'
-                      : 'bg-white/5 hover:bg-white/10 text-white/40 hover:text-white'
+                      ? 'text-amber-900/50 hover:text-amber-950 hover:bg-amber-900/10'
+                      : 'text-white/40 hover:text-white hover:bg-white/[0.08]'
                   }`}
                 >
-                  <ChevronLeft size={18} />
-                </motion.button>
-              )}
-            </AnimatePresence>
+                  <X size={18} />
+                </button>
+              </div>
 
-            <div className="relative z-10 flex flex-col flex-1 min-h-0">
               {/* Header */}
               <AnimatePresence mode="wait">
                 {!activeId && (
@@ -638,7 +656,7 @@ export function ResourceExercises() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="mb-5 pr-8"
+                    className="mb-5"
                   >
                     <div className="flex items-center gap-2 text-indigo-300/80 text-[11px] font-bold uppercase tracking-[0.15em] mb-1">
                       <Shield size={12} />
