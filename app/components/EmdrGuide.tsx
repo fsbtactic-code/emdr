@@ -19,10 +19,6 @@ const Para = ({ text }: { text: string }) => (
   <div className="text-[13px] text-white/60 leading-[1.7] whitespace-pre-line">{text}</div>
 );
 
-/**
- * Evidence level badge classes from DS ACCENTS palette.
- * strong=emerald, moderate=cyan, emerging=amber, insufficient=rose.
- */
 const evidenceLevelClasses: Record<EvidenceLevel, { fill: string; text: string; border: string }> = {
   strong:       { fill: 'bg-emerald-500/15', text: 'text-emerald-200', border: 'border-emerald-500/20' },
   moderate:     { fill: 'bg-cyan-500/15',    text: 'text-cyan-200',    border: 'border-cyan-500/20'    },

@@ -263,5 +263,283 @@ Die Klänge und "Frequenzen" hier (einschließlich 528 Hz und binauraler Beats) 
   sessClientBadge: "Die Sitzung leitet eine Fachperson",
   sessClientWaiting: "Warten auf die leitende Person. Entspannen Sie sich und atmen Sie gleichmäßig.",
   sessClientHint: "Die Einstellungen steuert die Fachperson. Sie müssen nichts drücken.",
-  sessEnd: "Sitzung beenden"
+  sessEnd: "Sitzung beenden",
+
+  navResources: "Ressourcen und Stabilisierung",
+  navJournal: "Sitzungsjournal",
+
+  channelsSection: "Kanäle und Barrierefreiheit",
+  blsVolume: "Lautstärke des Reizes",
+  ambientVolumeLabel: "Lautstärke des Hintergrunds",
+  hapticLabel: "Vibrationsstimulation",
+  hapticDesc: "Wechselnde Vibration des Telefons als taktiler BLS-Kanal",
+  hapticUnsupported: "Vibration wird von diesem Gerät nicht unterstützt",
+  visualStim: "Visueller Reiz",
+  visualStimDesc: "Ausschalten für einen Audio-/taktilen Modus: Sehschwäche, Reisekrankheit, Sehbesonderheiten",
+  vestibular: "Schutz vor Reisekrankheit",
+  vestibularDesc: "Begrenzt Geschwindigkeit und Amplitude bei Übelkeit oder Schwindel",
+
+  groundBeforeExit: "Erden Sie sich zuerst",
+  groundBeforeExitSub: "Der Distress ist noch hoch. Vor dem Verlassen lohnt es sich, in einen ruhigen Zustand zurückzukehren.",
+  closeAnyway: "Trotzdem beenden",
+  connLost: "Die Verbindung zur Fachperson wurde unterbrochen. Die Stimulation wurde gestoppt. Atmen Sie gleichmäßig und erden Sie sich bei Bedarf.",
+
+  sigOk: "Alles in Ordnung",
+  sigPause: "Brauche eine Pause",
+  sigStop: "Stopp",
+  sigBadge: "Ihr Signal ist für die Fachperson sichtbar",
+  sigHeading: "Signal des Klienten",
+  sigNone: "Keine Signale",
+  sigOkH: "Klient: alles in Ordnung",
+  sigPauseH: "Klient bittet um eine Pause",
+  sigStopH: "Klient bittet um STOPP",
+  sigClear: "Zurücksetzen",
+
+  tpTitle: "Sitzungsführung",
+  tpSub: "Protokoll nach Phasen. Nur für Fachpersonen",
+  tpPhaseLabel: "Phase",
+  tpTarget: "Ziel (Bild oder Erinnerung)",
+  tpNeg: "Negative Überzeugung (NC)",
+  tpPos: "Positive Überzeugung (PC)",
+  tpEmotions: "Emotionen",
+  tpBody: "Körperempfindungen, wo",
+  tpSuds: "SUD (0-10)",
+  tpVoc: "VOC (1-7)",
+  tpVocInit: "VOC anfangs",
+  tpStartSet: "Set starten",
+  tpStopSet: "Stoppen und fragen",
+  tpNoticePrompt: "Was nimmst du gerade wahr?",
+  tpLogObs: "Beobachtung notieren",
+  tpObsPh: "Kurz: Bild, Gedanke, Empfindung",
+  tpNextSet: "Nächstes Set",
+  tpNotes: "Notizen der Fachperson (ohne personenbezogene Daten)",
+  tpNotesPh: "Nur klinische Beobachtungen, ohne Name des Klienten",
+  tpSaveSession: "Im Journal speichern",
+  tpSaved: "Im Journal gespeichert",
+  tpReset: "Neue Sitzung",
+  tpSudsTrend: "Verlauf des SUD",
+  tpSoloLock: "Das vollständige Protokoll mit Desensibilisierung ist nur im Modus der Sitzung mit einer Fachperson verfügbar. Allein stehen Vorbereitung, Ressourcenübungen und Erdung zur Verfügung.",
+  tpHostOnly: "Erstellen Sie eine Sitzung (Panel links), um das Protokoll mit einem Klienten zu führen",
+
+  modeChooseTitle: "Wie werden Sie arbeiten?",
+  modeChooseSub: "Der Modus lässt sich jederzeit im Seitenmenü wechseln",
+  modeSpecialist: "Für Fachpersonen",
+  modeSpecialistDesc: "Ich führe eine Sitzung mit einem Klienten: Ich erstelle einen Raum, sende den Link und führe das Phasenprotokoll mit Messungen von SUD und VOC.",
+  modeSelfHelp: "Für Selbsthilfe",
+  modeSelfHelpDesc: "Für mich selbst: Stabilisierung, Ressourcenübungen, Erdung und Entspannung. Ohne eigenständige Traumaverarbeitung.",
+  modeSwitch: "Modus wechseln",
+  modeContinue: "Fortfahren",
+  specIntroTitle: "Wie man eine Sitzung führt",
+  specStep1: "Öffnen Sie das Panel Sitzung mit einer Fachperson und tippen Sie auf Sitzung erstellen.",
+  specStep2: "Kopieren Sie den Link und senden Sie ihn dem Klienten. Sobald er sich verbindet, erscheint der Status Klient verbunden.",
+  specStep3: "Öffnen Sie Sitzungsführung: Das Phasenprotokoll mit Messungen von SUD und VOC wird freigeschaltet, sobald Sie die leitende Person geworden sind.",
+  specStartBtn: "Sitzung erstellen",
+  selfIntroTitle: "Womit beginnen",
+  selfIntro1: "Beginnen Sie mit Ressourcen und Stabilisierung: sicherer Ort, Container, Atmung.",
+  selfIntro2: "Die Schaltfläche Stopp und Erdung ist jederzeit verfügbar.",
+  selfIntro3: "Dies ist ein Selbsthilfewerkzeug. Die Traumaverarbeitung leitet eine Fachperson, nicht eine App.",
+  selfStartBtn: "Ressourcen öffnen",
+
+  navOnboarding: "Einführung",
+  tpQuick: "Schnelleinstellungen",
+  tpLocalMute: "Ton nur bei mir",
+  tpLocalMuteHint: "Den Ton auf Ihrem Gerät stummschalten. Beim Klienten wird der Ton weiterhin abgespielt.",
+
+  cueTitle: "Dem Klienten zeigen",
+  cueHint: "Zeigt eine ruhige Übung auf dem Bildschirm des Klienten über der Stimulation an.",
+  cueButterfly: "Schmetterlingsumarmung",
+  cueBreathing: "Atmung",
+  cueGrounding: "Erdung",
+  cueClear: "Entfernen",
+  crisisHeading: "Krisenhilfe",
+
+  close: "Schließen",
+  stepLabel: "Schritt",
+  ofLabel: "von",
+
+  aboutNav: "Über das Projekt",
+  aboutTitle: "EMDR-Trainer ist ein freies Projekt",
+  aboutDesc: "Kostenlos nutzbar. Der Code ist offen, Sie können den Dienst auf Ihrem eigenen Server betreiben.",
+  aboutGithub: "Auf GitHub öffnen",
+  aboutDonate: "Das Projekt unterstützen",
+  aboutContact: "Den Autor kontaktieren",
+
+  cueLightstream: "Lichtstrom",
+  cueContent: {
+    butterfly: {
+      title: "Schmetterlingsumarmung",
+      steps: [
+        "Setzen Sie sich bequem hin. Kreuzen Sie die Arme vor der Brust, die Handflächen auf den Schultern.",
+        "Schließen Sie die Augen oder senken Sie sanft den Blick. Ein ruhiger Atemzug.",
+        "Klopfen Sie langsam abwechselnd auf die Schultern: links, dann rechts.",
+        "Atmen Sie gleichmäßig und ruhig. Halten Sie einen Rhythmus von etwa einmal pro Sekunde.",
+        "Machen Sie 20-30 abwechselnde Klopfbewegungen in ruhigem Tempo.",
+        "Halten Sie inne. Senken Sie die Arme und atmen Sie tief ein."
+      ]
+    },
+    breathing: {
+      title: "Quadratische Atmung",
+      steps: [
+        "Setzen Sie sich bequem hin, entspannen Sie die Schultern. Folgen Sie dem Kreis auf dem Bildschirm.",
+        "Atmen Sie mit dem Kreis: einatmen beim Größerwerden, ausatmen beim Kleinerwerden.",
+        "Halten Sie einen gleichmäßigen Rhythmus: 4 einatmen, 4 halten, 4 ausatmen, 4 halten."
+      ]
+    },
+    grounding: {
+      title: "Erdung 5-4-3-2-1",
+      steps: [
+        "Benennen Sie für sich 5 Dinge, die Sie um sich herum sehen.",
+        "Benennen Sie 4 Dinge, die Sie berühren können.",
+        "Benennen Sie 3 Geräusche, die Sie hören.",
+        "Benennen Sie 2 Gerüche, die Sie wahrnehmen.",
+        "Benennen Sie 1 Geschmack, den Sie wahrnehmen. Atmen Sie ruhig ein."
+      ]
+    },
+    lightstream: {
+      title: "Lichtstrom",
+      steps: [
+        "Machen Sie es sich bequem und schließen Sie die Augen. Drei langsame, ruhige Atemzüge.",
+        "Stellen Sie sich ein warmes, sanftes Licht vor - in einer Farbe, die sich heilsam und ruhig anfühlt.",
+        "Lassen Sie das Licht durch den Scheitel eintreten. Spüren Sie eine sanfte Wärme.",
+        "Das Licht bewegt sich langsam nach unten: Stirn, Gesicht, Hals, Schultern. Wo es vorbeizieht, löst sich Anspannung.",
+        "Das Licht fließt durch Brust, Bauch, Rücken. Mit jedem Ausatmen etwas mehr Entspannung.",
+        "Nun zieht das Licht durch Hüften, Knie, Waden - hinunter zu den Füßen.",
+        "Das Licht erreicht die Füße und fließt in die Erde, trägt alles Überflüssige fort. Der Körper ist leicht und ruhig."
+      ]
+    }
+  },
+
+  sjBadge: "Sitzungsjournal",
+  sjTitle: "Sitzungsverlauf",
+  sjSubtitle: "Aufzeichnungen werden nur auf diesem Gerät gespeichert",
+  sjEmpty: "Noch keine gespeicherten Sitzungen.",
+  sjDuration: "Dauer",
+  sjMode: "Modus",
+  sjModeSolo: "allein",
+  sjModeHost: "Fachperson",
+  sjModeClient: "Klient",
+  sjPhase: "Phase",
+  sjSuds: "SUD",
+  sjSudsTo: "auf",
+  sjObservations: "Beobachtungen",
+  sjClient: "Klientencode",
+  sjDeleteOne: "Löschen",
+  sjClearAll: "Alles löschen",
+  sjClearConfirm: "Alle Journaleinträge unwiderruflich löschen?",
+  sjDownloadJson: "JSON herunterladen",
+  sjDownloadCsv: "CSV herunterladen",
+  sjPrivacyTitle: "Datenschutz",
+  sjPrivacyBody: "Die Daten werden nur auf diesem Gerät gespeichert und pseudonymisiert (ohne Namen, nur Code). Sie sind die verantwortliche Stelle für diese Daten. Holen Sie vor der Aufzeichnung die Einwilligung des Klienten ein.",
+
+  gateBadge: "Bevor Sie beginnen",
+  gateTitle: "Kurze Überprüfung",
+  gateSub: "Dauert weniger als eine Minute. Hilft sicherzustellen, dass das Werkzeug gerade für Sie geeignet ist.",
+  gateScreenTitle: "Markieren Sie, was gerade jetzt zutrifft",
+  gateScreenIntro: 'Standardmäßig sind alle Punkte "nein". Markieren Sie jeden, der gerade auf Sie zutrifft.',
+  gateScreenItems: [
+    "Gefühl der Unwirklichkeit oder Abkopplung von sich selbst und der Umgebung",
+    "Akute Gedanken, sich selbst zu schaden, oder Suizidgedanken",
+    "Psychose oder Manie gerade jetzt",
+    "Schwere dissoziative Störung (Diagnose)",
+    "Substanzen, die die Fähigkeit zur Selbstregulation beeinträchtigen"
+  ],
+  gateStopTitle: "Jetzt ist es besser, sich an eine Fachperson zu wenden",
+  gateStopBody: "Einer oder mehrere Punkte weisen darauf hin, dass eigenständige Arbeit mit dualer Aufmerksamkeit gerade nicht sicher ist. Das ist keine Kritik, nur ein Signal: Es braucht professionelle Unterstützung.",
+  gateStopHint: "Öffnen Sie den Ressourcenbereich, um Krisenhilfe und Kontakte zu Fachpersonen zu finden.",
+  gateOpenResources: "Unterstützungsressourcen öffnen",
+  gateConsentTitle: "Verständnis und Einwilligung",
+  gateConsentItems: [
+    "Ich verstehe, dass dies ein Selbsthilfewerkzeug ist, keine Therapie und kein Ersatz für eine Fachperson.",
+    "Ich kann die Sitzung jederzeit stoppen und nutze Erdung / 5-4-3-2-1, wenn ich Unbehagen verspüre.",
+    "Für die vollständige Arbeit mit dem Trauma sollte eine geschulte Fachperson dabei sein - ich nutze das Werkzeug zur Erdung und Entspannung."
+  ],
+  gateAccept: "Starten",
+
+  obSkip: "Überspringen",
+  obDone: "Fertig",
+  obSpecialist: [
+    { title: "Modus für Fachpersonen", body: "Eine kurze Tour durch die Oberfläche. Sie führen den Klienten, die App liefert die bilaterale Stimulation." },
+    { title: "Sitzung mit einem Klienten", body: "Erstellen Sie einen Raum und senden Sie den Link an den Klienten. Sobald er sich verbindet, spiegelt sein Bildschirm Ihre Stimulation ohne Einstellungen." },
+    { title: "Sitzungsführung", body: "Das Protokoll nach 8 Phasen, Messungen von SUD und VOC, Starten von Sets. Hier gibt es auch Schnelleinstellungen unterwegs und das Anzeigen von Übungen beim Klienten: Schmetterling, Atmung, Erdung. Und eine Schaltfläche, um den Ton nur bei sich selbst stummzuschalten." },
+    { title: "Sitzungseinstellungen", body: "Bewegungsmuster, Geschwindigkeit, Amplitude, Reizton und Hintergrund. Sie können ein Preset zusammenstellen und einen Link teilen." },
+    { title: "Stopp und Erdung", body: "Immer griffbereit. Stoppt die Stimulation und hilft, ins Hier und Jetzt zurückzukehren. Hier finden sich auch die Krisenkontakte." },
+    { title: "Sitzungsjournal", body: "Lokaler Verlauf: Einstellungen, Sets, Verlauf des SUD. Wird nur auf Ihrem Gerät gespeichert, ohne Namen." },
+    { title: "Modus wechseln", body: "Jederzeit zwischen dem Modus für Fachpersonen und dem Selbsthilfemodus umschalten." },
+    { title: "Fertig", body: "Beginnen Sie mit dem Erstellen einer Sitzung. Diese Einführung lässt sich über die Einführungsschaltfläche im Menü neu starten." }
+  ],
+  obSelfhelp: [
+    { title: "Selbsthilfemodus", body: "Ein kurzer Überblick, was wo ist. Dies ist ein Werkzeug zur Stabilisierung und Entspannung, kein Ersatz für eine Therapie." },
+    { title: "Ressourcen und Stabilisierung", body: "Sicherer Ort, Container, Lichtstrom, Schmetterlingsumarmung, Atmung. Sicher, eigenständig zu üben." },
+    { title: "Einstellungen", body: "Bewegungsmuster, Geschwindigkeit, Amplitude, Ton und Hintergrund nach eigenem Geschmack." },
+    { title: "Stopp und Erdung", body: "Stoppt die Stimulation jederzeit und hilft Ihnen, sich mit der Technik 5-4-3-2-1 und der Atmung zu beruhigen." },
+    { title: "Fertig", body: "Die Traumaverarbeitung leitet eine Fachperson, nicht eine App. Diese Einführung lässt sich über das Menü neu starten." }
+  ],
+
+  drawerVisual: "Visuell",
+  drawerSound: "Ton",
+  drawerChannels: "Kanäle",
+  drawerTiming: "Timing",
+
+  previewPaused: "Pause",
+  previewVisualOff: "Visuell aus",
+
+  resNote: "Stabilisierung",
+  resTitle: "Ressourcenübungen",
+  resSubtitle: "Stabilisierung und Erdung - EMDR-Phase 2",
+  resDisclaimer: "Diese Übungen dienen der Stabilisierung und Erdung, nicht der Traumaverarbeitung. Sicher auch ohne Therapeutin oder Therapeuten.",
+  resBackToList: "Zurück zur Liste",
+  resExercises: {
+    safe_place: {
+      name: "Sicherer / ruhiger Ort",
+      tagline: "Geführte Vorstellung eines friedvollen Ortes",
+      steps: [
+        "Machen Sie es sich bequem. Schließen Sie die Augen oder senken Sie sanft den Blick. Drei langsame, tiefe Atemzüge.",
+        "Stellen Sie sich einen Ort vor, an dem Sie sich ruhig und sicher fühlen. Er kann real oder ganz erdacht sein.",
+        "Sehen Sie sich an diesem Ort um. Was sehen Sie? Achten Sie auf Farben, Licht, Formen.",
+        "Hören Sie hin. Welche Geräusche gibt es - oder ist es still?",
+        "Spüren Sie die Luft auf Ihrer Haut. Die Temperatur, vielleicht einen Duft. Fühlen Sie den Boden oder die Fläche unter sich.",
+        "Lassen Sie sich ganz darauf ein, dort zu sein. Spüren Sie, wie Ihr Körper sich entspannt. Merken Sie sich dieses Gefühl.",
+        "Geben Sie diesem Ort einen Namen - ein Wort oder Bild, zu dem Sie jederzeit zurückkehren können. Öffnen Sie langsam die Augen."
+      ]
+    },
+    container: {
+      name: "Container",
+      tagline: "Belastendes Material gedanklich beiseitelegen",
+      steps: [
+        "Sitzen Sie bequem. Ein paar ruhige Atemzüge. Erinnern Sie sich: Gerade jetzt sind Sie sicher.",
+        "Stellen Sie sich einen stabilen Behälter vor - einen Tresor, eine Truhe, eine Kiste. Etwas Festes mit sicherem Deckel oder Schloss.",
+        "Betrachten Sie ihn: das Material, die Größe, das Schloss oder den Riegel. Vergewissern Sie sich, dass er stabil genug wirkt.",
+        "Benennen Sie, was Sie belastet - nur ein Wort oder Bild. Tauchen Sie nicht in Einzelheiten ein.",
+        "Stellen Sie sich vor, wie Sie es in den Behälter legen. Schließen Sie den Deckel. Verriegeln Sie ihn. Der Behälter ist sicher.",
+        "Stellen Sie den Behälter in Ihrer Vorstellung an einen sicheren Ort - auf ein Regal, in einen Tresorraum. Er bleibt dort.",
+        "Atmen Sie durch. Sie können später zu diesem Material zurückkehren, wenn Sie bereit sind - und mit Unterstützung."
+      ]
+    },
+    light_stream: {
+      name: "Lichtstrom",
+      tagline: "Warmes Licht, das durch den Körper zieht",
+      steps: [
+        "Sitzen oder liegen Sie bequem. Schließen Sie die Augen. Drei langsame Atemzüge.",
+        "Stellen Sie sich ein warmes, sanftes Licht vor - in einer Farbe, die sich für Sie heilsam und ruhig anfühlt.",
+        "Lassen Sie dieses Licht durch den Scheitel eintreten. Spüren Sie eine sanfte Wärme.",
+        "Langsam zieht das Licht nach unten: Stirn, Gesicht, Hals. Wo das Licht vorbeizieht, löst sich Anspannung.",
+        "Das Licht fließt durch Schultern, Arme, Brust. Mit jedem Ausatmen etwas mehr Entspannung.",
+        "Nun zieht das Licht durch Bauch, unteren Rücken, Hüften, Knie, Waden.",
+        "Das Licht erreicht die Füße und fließt in die Erde, trägt alles fort, was Sie nicht mehr brauchen."
+      ]
+    },
+    butterfly_hug: {
+      name: "Schmetterlingsumarmung",
+      tagline: "Abwechselndes Selbstklopfen zur Selbstberuhigung",
+      steps: [
+        "Sitzen Sie aufrecht. Kreuzen Sie die Arme vor der Brust: rechte Hand auf der linken Schulter, linke Hand auf der rechten Schulter.",
+        "Schließen Sie die Augen oder senken Sie sanft den Blick. Ein tiefer Atemzug.",
+        "Folgen Sie der Animation unten. Beginnen Sie langsam und abwechselnd zu klopfen: zuerst die rechte Hand, dann die linke.",
+        "Halten Sie ein langsames Tempo - etwa einmal pro Sekunde. Atmen Sie gleichmäßig und ruhig.",
+        "Denken Sie an etwas Neutrales oder leicht Angenehmes, während Sie klopfen.",
+        "Machen Sie 20-30 abwechselnde Klopfbewegungen. Halten Sie dann inne. Atmen Sie tief ein.",
+        "Senken Sie die Arme. Wie fühlen Sie sich? Achten Sie auf Veränderungen in Ihrem Körper oder Ihrer Stimmung."
+      ]
+    }
+  }
 };

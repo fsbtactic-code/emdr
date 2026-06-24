@@ -1,24 +1,11 @@
 'use client';
 
-/**
- * Button - primary interactive primitive for the EMDR trainer.
- *
- * Variants: primary | secondary | ghost | danger | success | accent
- * Sizes: sm | md | lg
- * Optional leading/trailing icon, loading state with spinner,
- * disabled, active:scale feedback, focus-visible ring keyed to variant accent.
- */
-
 import * as React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import { cn } from './cn';
 import { RADIUS } from './tokens';
 import { SPRING_SNAPPY, reduceTransition } from './motion';
-
-/* ------------------------------------------------------------------ */
-/* Types                                                                */
-/* ------------------------------------------------------------------ */
 
 export type ButtonVariant =
   | 'primary'
@@ -34,17 +21,11 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
-  /** Icon rendered before the label. */
   iconLeft?: React.ReactNode;
-  /** Icon rendered after the label. */
   iconRight?: React.ReactNode;
   /** Replaces content with a spinner and disables interaction. */
   loading?: boolean;
 }
-
-/* ------------------------------------------------------------------ */
-/* Class maps                                                           */
-/* ------------------------------------------------------------------ */
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary: cn(
@@ -91,10 +72,6 @@ const iconSizeClasses: Record<ButtonSize, string> = {
   lg: 'size-[18px]',
 };
 
-/* ------------------------------------------------------------------ */
-/* Component                                                           */
-/* ------------------------------------------------------------------ */
-
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
     {
@@ -121,16 +98,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         whileTap={isDisabled ? undefined : { scale: 0.98, transition }}
         disabled={isDisabled}
         className={cn(
-          /* base layout */
           'relative inline-flex items-center justify-center select-none',
           'outline-none cursor-pointer',
           RADIUS.md,
-          /* consistent transition for hover/focus */
           'transition-colors duration-150',
-          /* variant and size */
           variantClasses[variant],
           sizeClasses[size],
-          /* disabled / loading */
           isDisabled && 'opacity-40 cursor-not-allowed pointer-events-none',
           className,
         )}
@@ -138,7 +111,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         aria-busy={loading}
         {...(rest as React.ComponentPropsWithoutRef<typeof motion.button>)}
       >
-        {/* Loading spinner replaces icons when loading */}
         {loading ? (
           <Loader2
             className={cn(iconSizeClasses[size], 'animate-spin shrink-0')}
@@ -153,7 +125,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           )
         )}
 
-        {/* Label - visually hidden when loading with no children fallback */}
+        {/* hide label while the spinner is shown, keep it in layout */}
         {children && (
           <span className={cn('truncate', loading && 'opacity-0 absolute')}>
             {children}

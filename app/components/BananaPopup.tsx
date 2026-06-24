@@ -4,8 +4,10 @@ import { Github, Heart, Send, X } from 'lucide-react';
 import { OverlayShell } from './ui/OverlayShell';
 import { IconButton } from './ui/IconButton';
 import { COLORS } from './ui/tokens';
+import { useT } from '../i18n/useT';
 
 export function BananaPopup({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const t = useT();
   return (
     <OverlayShell
       open={open}
@@ -13,10 +15,10 @@ export function BananaPopup({ open, onClose }: { open: boolean; onClose: () => v
       maxWidth="max-w-md"
       z="modal"
       glow="primary"
-      ariaLabel="EMDR-trenazer svobodnyy proekt"
+      ariaLabel={t.aboutNav}
     >
       <IconButton
-        aria-label="Zakryt"
+        aria-label={t.close}
         variant="ghost"
         size="sm"
         onClick={onClose}
@@ -30,10 +32,10 @@ export function BananaPopup({ open, onClose }: { open: boolean; onClose: () => v
 
         <div className="text-center">
           <h2 className="text-[20px] font-bold text-white tracking-tight">
-            EMDR-trenazer - svobodnyy proekt
+            {t.aboutTitle}
           </h2>
           <p className={`${COLORS.text.muted} text-[13px] mt-2 leading-relaxed`}>
-            Polzuytes besplatno. Kod otkryt - mozhno razvernut servis na svoem servere.
+            {t.aboutDesc}
           </p>
         </div>
 
@@ -45,7 +47,7 @@ export function BananaPopup({ open, onClose }: { open: boolean; onClose: () => v
             className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.08] text-white text-[14px] font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-1 focus-visible:ring-offset-zinc-950"
           >
             <Github size={17} />
-            Otkryt na GitHub
+            {t.aboutGithub}
           </a>
 
           <a
@@ -55,7 +57,7 @@ export function BananaPopup({ open, onClose }: { open: boolean; onClose: () => v
             className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-200 text-[14px] font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-1 focus-visible:ring-offset-zinc-950"
           >
             <Heart size={17} />
-            Podderzhat proekt
+            {t.aboutDonate}
           </a>
 
           <a
@@ -65,7 +67,7 @@ export function BananaPopup({ open, onClose }: { open: boolean; onClose: () => v
             className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.08] text-white text-[14px] font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-1 focus-visible:ring-offset-zinc-950"
           >
             <Send size={17} />
-            Svyazatsya s avtorom
+            {t.aboutContact}
           </a>
         </div>
       </div>

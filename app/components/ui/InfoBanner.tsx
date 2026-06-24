@@ -4,24 +4,14 @@ import { ACCENTS, RADIUS, TYPE } from './tokens';
 import type { AccentName } from './tokens';
 
 export interface InfoBannerProps {
-  /** Accent palette key: primary | success | danger | warn | calm | info | white */
   accent: AccentName;
-  /** Optional leading icon slot. Rendered at 16px baseline; pass any ReactNode. */
+  /** leading icon, rendered at 16px baseline */
   icon?: ReactNode;
   children: ReactNode;
   className?: string;
 }
 
-/**
- * InfoBanner - tonal info strip.
- *
- * Tonal fill + tinted border from the chosen ACCENTS key. Used for
- * disclaimers, privacy notices, connection-lost banners, and hints
- * wherever a light-weight contextual message is needed.
- *
- * All opacity values come from ACCENTS to keep surfaces consistent.
- * No arbitrary hex, no raw /10 /12 /15 scattered around call sites.
- */
+// tonal info strip for disclaimers, privacy notices and hints.
 export function InfoBanner({ accent, icon, children, className }: InfoBannerProps) {
   const a = ACCENTS[accent];
 

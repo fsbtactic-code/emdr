@@ -481,5 +481,65 @@ The sounds and "frequencies" here (including 528 Hz and binaural beats) are rela
   drawerTiming: "Timing",
 
   previewPaused: "paused",
-  previewVisualOff: "visual off"
+  previewVisualOff: "visual off",
+
+  resNote: "Stabilization",
+  resTitle: "Resource Exercises",
+  resSubtitle: "Stabilization and grounding - EMDR phase 2",
+  resDisclaimer: "These exercises are stabilization and grounding, not trauma reprocessing. Safe without a therapist.",
+  resBackToList: "Back to list",
+  resExercises: {
+    safe_place: {
+      name: "Safe / Calm Place",
+      tagline: "Guided visualization of a peaceful space",
+      steps: [
+        "Get comfortable. Close your eyes or soften your gaze downward. Take three slow, deep breaths.",
+        "Imagine a place where you feel calm and safe. It can be real or completely imagined.",
+        "Look around in that place. What do you see? Notice colors, light, shapes.",
+        "Listen. What sounds are there - or is it quiet?",
+        "Notice the air on your skin. Temperature, maybe a scent. Feel the ground or surface beneath you.",
+        "Let yourself be fully present there. Feel your body relax. Remember this feeling.",
+        "Give this place a name - a word or image you can return to any time. Slowly open your eyes."
+      ]
+    },
+    container: {
+      name: "Container",
+      tagline: "Mentally set aside disturbing material",
+      steps: [
+        "Sit comfortably. Take a few calm breaths. Remind yourself: you are safe right now.",
+        "Imagine a strong container - a safe, a chest, a box. Something solid with a secure lid or lock.",
+        "Examine it: the material, size, the lock or latch. Make sure it feels sturdy enough.",
+        "Name what is bothering you - just one word or image. Do not dive into details.",
+        "Picture placing it inside the container. Close the lid. Lock it. The container is secure.",
+        "Set the container somewhere safe in your imagination - on a shelf, in a vault. It will stay there.",
+        "Take a breath. You can return to this material later when you are ready - and with support."
+      ]
+    },
+    light_stream: {
+      name: "Light Stream",
+      tagline: "Warm light moving through the body",
+      steps: [
+        "Sit or lie comfortably. Close your eyes. Three slow breaths.",
+        "Imagine a warm, gentle light - any color that feels healing and calm to you.",
+        "Let this light enter through the top of your head. Feel a gentle warmth.",
+        "Slowly the light moves down: forehead, face, neck. Where the light passes, tension dissolves.",
+        "Light flows through shoulders, arms, chest. Each exhale - a little more relaxation.",
+        "Now the light moves through the belly, lower back, hips, knees, calves.",
+        "The light reaches your feet and flows into the earth, carrying away anything you no longer need."
+      ]
+    },
+    butterfly_hug: {
+      name: "Butterfly Hug",
+      tagline: "Alternating self-tapping for self-soothing",
+      steps: [
+        "Sit upright. Cross your arms over your chest: right hand on left shoulder, left hand on right shoulder.",
+        "Close your eyes or soften your gaze downward. Take one deep breath.",
+        "Follow the animation below. Start tapping slowly and alternately: first right hand, then left.",
+        "Continue at a slow pace - about once per second. Breathe steadily and calmly.",
+        "Think of something neutral or mildly pleasant while you tap.",
+        "Do 20-30 alternating taps. Then stop. Take a deep breath.",
+        "Lower your arms. How do you feel? Notice any changes in your body or mood."
+      ]
+    }
+  }
 };

@@ -1,20 +1,8 @@
 'use client';
 
-/**
- * PhaseRail - vertical step/phase navigator for the EMDR session console.
- *
- * A continuous spine runs through the centre of every node; the portion up to
- * the current phase is tinted to read as progress. Node states:
- *   empty    - not visited yet (faint hollow ring)
- *   has-data - started but not complete (ring with a muted core)
- *   current  - active phase (accent fill, soft glow, row highlight)
- *   done     - completed (emerald check)
- *
- * Clicking a phase calls onJump (the practitioner can move non-linearly).
- *
- * Usage:
- *   <PhaseRail phases={phases} currentIndex={idx} onJump={setIdx} />
- */
+// vertical phase navigator for the EMDR session console. A continuous spine
+// runs through every node; the part up to the current phase is tinted as
+// progress. onJump lets the practitioner move non-linearly.
 
 import { motion, useReducedMotion } from 'framer-motion';
 import { Check } from 'lucide-react';
@@ -22,32 +10,23 @@ import { cn } from './cn';
 import { ACCENTS, TYPE, Z } from './tokens';
 import { reduceVariants, SPRING } from './motion';
 
-/* ------------------------------------------------------------------ */
-
 export type PhaseStatus = 'empty' | 'has-data' | 'current' | 'done';
 
 export interface PhaseItem {
-  /** Display name of the phase. */
   name: string;
-  /** Optional short label (defaults to index + 1). */
+  /** defaults to index + 1 */
   label?: string;
-  /** Status of this phase. */
   status: PhaseStatus;
 }
 
 export interface PhaseRailProps {
   phases: PhaseItem[];
-  /** Index of the currently active phase (0-based). */
+  /** 0-based index of the active phase */
   currentIndex: number;
-  /** Called when the user clicks a phase step. */
   onJump: (index: number) => void;
-  /** Accent used for the current phase. Default: 'primary'. */
   accent?: keyof typeof ACCENTS;
-  /** Extra class on the root element. */
   className?: string;
 }
-
-/* ------------------------------------------------------------------ */
 
 function PhaseDot({ status, accentHex }: { status: PhaseStatus; accentHex: string }) {
   if (status === 'done') {
@@ -81,7 +60,7 @@ function PhaseDot({ status, accentHex }: { status: PhaseStatus; accentHex: strin
       </span>
     );
   }
-  // empty
+  // empty: faint hollow ring
   return (
     <span
       aria-hidden
@@ -90,14 +69,10 @@ function PhaseDot({ status, accentHex }: { status: PhaseStatus; accentHex: strin
   );
 }
 
-/* ------------------------------------------------------------------ */
-
 const itemVariant = {
   hidden: { opacity: 0, x: -6 },
   visible: { opacity: 1, x: 0, transition: SPRING },
 };
-
-/* ------------------------------------------------------------------ */
 
 export function PhaseRail({
   phases,

@@ -1,14 +1,5 @@
 'use client';
 
-/**
- * Design system showcase - a calm, clinical-wellness gallery of every UI
- * primitive in app/components/ui. Dark theme, soft springs, one dominant
- * accent per section. Route: /design-system.
- *
- * Everything below is a live example wired to local useState so the
- * interactive primitives behave exactly as they do in the product.
- */
-
 import * as React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
@@ -63,10 +54,6 @@ import { Tooltip } from '../components/ui/Tooltip';
 import { Spinner } from '../components/ui/Spinner';
 import { EmptyState, EmptyStateCard } from '../components/ui/EmptyState';
 
-/* ================================================================== *
- * Layout helpers - section frame, label-tagged example wells.
- * ================================================================== */
-
 function Section({
   id,
   eyebrow,
@@ -103,7 +90,6 @@ function Section({
   );
 }
 
-/** A labelled well that frames a single live example. */
 function Demo({
   label,
   children,
@@ -129,10 +115,6 @@ function Demo({
     </div>
   );
 }
-
-/* ================================================================== *
- * Shared example data
- * ================================================================== */
 
 const PALETTE: { name: string; role: string; accent: AccentName }[] = [
   { name: 'Primary', role: 'CTA, фокус, основное действие', accent: 'primary' },
@@ -172,14 +154,9 @@ const TABS: TabItem[] = [
   { id: 'settings', label: 'Настройки', icon: <Settings size={13} strokeWidth={1.8} /> },
 ];
 
-/* ================================================================== *
- * Page
- * ================================================================== */
-
 export default function DesignSystemPage() {
   const reduced = useReducedMotion();
 
-  // Interactive state
   const [speed, setSpeed] = React.useState(45);
   const [size, setSize] = React.useState(28);
   const [sound, setSound] = React.useState(true);
@@ -204,7 +181,6 @@ export default function DesignSystemPage() {
 
   return (
     <main className="h-[100dvh] overflow-y-auto bg-[#09090b] text-white/90 antialiased">
-      {/* subtle top glow */}
       <div
         aria-hidden
         className="pointer-events-none fixed inset-x-0 top-0 h-[420px]"
@@ -215,9 +191,6 @@ export default function DesignSystemPage() {
       />
 
       <div className="relative mx-auto max-w-5xl px-6 py-20 md:px-10">
-        {/* ---------------------------------------------------------- *
-         * Header
-         * ---------------------------------------------------------- */}
         <motion.header
           initial="hidden"
           animate="visible"
@@ -251,9 +224,6 @@ export default function DesignSystemPage() {
         </motion.header>
 
         <div className="flex flex-col gap-24">
-          {/* -------------------------------------------------------- *
-           * Palette
-           * -------------------------------------------------------- */}
           <Section
             id="palette"
             eyebrow="Основа"
@@ -311,9 +281,6 @@ export default function DesignSystemPage() {
             </div>
           </Section>
 
-          {/* -------------------------------------------------------- *
-           * Typography
-           * -------------------------------------------------------- */}
           <Section
             id="typography"
             eyebrow="Основа"
@@ -355,9 +322,6 @@ export default function DesignSystemPage() {
             </Panel>
           </Section>
 
-          {/* -------------------------------------------------------- *
-           * Radius and shadow
-           * -------------------------------------------------------- */}
           <Section
             id="radius"
             eyebrow="Основа"
@@ -400,9 +364,6 @@ export default function DesignSystemPage() {
             </div>
           </Section>
 
-          {/* -------------------------------------------------------- *
-           * Buttons
-           * -------------------------------------------------------- */}
           <Section
             id="button"
             eyebrow="Действия"
@@ -483,9 +444,6 @@ export default function DesignSystemPage() {
             </div>
           </Section>
 
-          {/* -------------------------------------------------------- *
-           * Surfaces
-           * -------------------------------------------------------- */}
           <Section
             id="surface"
             eyebrow="Поверхности"
@@ -537,9 +495,6 @@ export default function DesignSystemPage() {
             </div>
           </Section>
 
-          {/* -------------------------------------------------------- *
-           * Overlays
-           * -------------------------------------------------------- */}
           <Section
             id="overlay"
             eyebrow="Слои"
@@ -595,9 +550,6 @@ export default function DesignSystemPage() {
             </Drawer>
           </Section>
 
-          {/* -------------------------------------------------------- *
-           * Inputs
-           * -------------------------------------------------------- */}
           <Section
             id="inputs"
             eyebrow="Ввод"
@@ -673,9 +625,6 @@ export default function DesignSystemPage() {
             </div>
           </Section>
 
-          {/* -------------------------------------------------------- *
-           * Segmented / Chip / Tabs
-           * -------------------------------------------------------- */}
           <Section
             id="segmented"
             eyebrow="Выбор"
@@ -738,9 +687,6 @@ export default function DesignSystemPage() {
             </div>
           </Section>
 
-          {/* -------------------------------------------------------- *
-           * Labels and feedback markers
-           * -------------------------------------------------------- */}
           <Section
             id="labels"
             eyebrow="Маркеры"
@@ -798,9 +744,6 @@ export default function DesignSystemPage() {
             </div>
           </Section>
 
-          {/* -------------------------------------------------------- *
-           * Clinical primitives
-           * -------------------------------------------------------- */}
           <Section
             id="clinical"
             eyebrow="Клиника"
@@ -845,9 +788,6 @@ export default function DesignSystemPage() {
             </div>
           </Section>
 
-          {/* -------------------------------------------------------- *
-           * Feedback
-           * -------------------------------------------------------- */}
           <Section
             id="feedback"
             eyebrow="Обратная связь"
@@ -914,7 +854,6 @@ export default function DesignSystemPage() {
           </Section>
         </div>
 
-        {/* footer */}
         <footer className="mt-24 border-t border-white/[0.06] pt-8">
           <p className={cn(TYPE.caption, 'text-white/30')}>
             EMDR Trainer, дизайн-система. Спокойно, чисто, по делу.

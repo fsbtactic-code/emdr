@@ -4,7 +4,8 @@ import { useStore } from '../store/useStore';
 import { motion } from 'framer-motion';
 import { Wind, Anchor, Leaf, Sun, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { CUE_CONTENT, cueStepCount, clampCueStep, type CueTechnique } from '../content/cues';
+import { cueStepCount, clampCueStep, type CueTechnique } from '../content/cues';
+import { useT } from '../i18n/useT';
 import { ACCENTS, TYPE } from './ui/tokens';
 
 const shapeClass = (shape: string) => {
@@ -20,13 +21,9 @@ const CUE_META: Record<
   CueTechnique,
   { Icon: typeof Wind; tint: string; ring: string }
 > = {
-  // calm = violet
   butterfly: { Icon: Wind, tint: ACCENTS.calm.text, ring: ACCENTS.calm.fill },
-  // info = cyan
   breathing: { Icon: Anchor, tint: ACCENTS.info.text, ring: ACCENTS.info.fill },
-  // success = emerald
   grounding: { Icon: Leaf, tint: ACCENTS.success.text, ring: ACCENTS.success.fill },
-  // warn = amber
   lightstream: { Icon: Sun, tint: ACCENTS.warn.text, ring: ACCENTS.warn.fill },
 };
 
@@ -42,7 +39,7 @@ export function MiniStimPreview() {
   const visualEnabled = useStore((s) => s.visualEnabled);
   const clientCue = useStore((s) => s.clientCue);
   const cueStep = useStore((s) => s.cueStep);
-  const lang = useStore((s) => s.lang);
+  const t = useT();
 
   const boxRef = useRef<HTMLDivElement>(null);
   const [box, setBox] = useState({ w: 360, h: 200 });
@@ -215,11 +212,11 @@ export function MiniStimPreview() {
   const cueMeta = tech ? CUE_META[tech] : null;
   const stepIdx = tech ? clampCueStep(tech, cueStep) : 0;
   const stepTotal = tech ? cueStepCount(tech) : 0;
-  const cueName = tech ? (lang === 'ru' ? CUE_CONTENT[tech].titleRu : CUE_CONTENT[tech].titleEn) : '';
-  const pausedLabel = lang === 'ru' ? 'пауза' : 'paused';
-  const noVisualLabel = lang === 'ru' ? 'визуал выключен' : 'visual off';
+  const cueName = tech ? t.cueContent[tech].title : '';
+  const pausedLabel = t.previewPaused;
+  const noVisualLabel = t.previewVisualOff;
 
-  // EXACTLY ONE mode: cue technique, else moving stimulation, else static/paused target.
+  // one mode at a time: cue technique, else moving stimulation, else static/paused target
   return (
     <div ref={boxRef} className="relative w-full aspect-video rounded-2xl overflow-hidden bg-zinc-950">
       <div className="absolute inset-0 pointer-events-none">
@@ -238,7 +235,7 @@ export function MiniStimPreview() {
           </div>
           <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2">
             <span className={`${TYPE.label} tabular-nums ${cueMeta.tint}`}>
-              {(lang === 'ru' ? 'Шаг' : 'Step')} {stepIdx + 1}/{stepTotal}
+              {t.stepLabel} {stepIdx + 1}/{stepTotal}
             </span>
           </div>
         </>

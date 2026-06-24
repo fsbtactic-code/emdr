@@ -1,34 +1,22 @@
 'use client';
 
-/**
- * Field - labelled input / textarea wrapper primitive.
- *
- * Provides consistent label, hint, error layout and a focus style
- * that uses an accent fill tint rather than a bright white ring.
- * Supports forwarded refs so forms can manage focus programmatically.
- */
-
 import React, { forwardRef, useId } from 'react';
 import { cn } from './cn';
 import { TYPE, COLORS, RADIUS, type AccentName } from './tokens';
 
-/* ------------------------------------------------------------------ */
-
 type FieldElement = HTMLInputElement | HTMLTextAreaElement;
 
 interface FieldBaseProps {
-  /** Visible label rendered above the input. */
   label?: string;
-  /** Helper text below the input. Hidden when error is present. */
+  /** helper text below the input; hidden when error is present */
   hint?: string;
-  /** Validation error. When truthy, hint is suppressed and error is shown. */
+  /** when truthy, hint is suppressed and the error is shown instead */
   error?: string;
-  /** Accent colour for focus ring. Defaults to 'primary'. */
   accent?: AccentName;
   className?: string;
 }
 
-/* Discriminated union so `as` determines which ref / prop types are used. */
+/* discriminated union so `as` picks which ref / prop types apply */
 export type FieldProps =
   | (FieldBaseProps &
       React.InputHTMLAttributes<HTMLInputElement> & {
@@ -39,9 +27,6 @@ export type FieldProps =
         as: 'textarea';
       });
 
-/* ------------------------------------------------------------------ */
-
-/* Focus ring colour per accent. Tailwind arbitrary values. */
 const FOCUS_RING: Partial<Record<AccentName, string>> = {
   primary: 'focus:ring-indigo-500/30 focus:border-indigo-500/30',
   success:  'focus:ring-emerald-500/25 focus:border-emerald-500/30',
@@ -52,7 +37,6 @@ const FOCUS_RING: Partial<Record<AccentName, string>> = {
   white:    'focus:ring-white/15 focus:border-white/20',
 };
 
-/* Shared className for both input and textarea. */
 function inputCn(accent: AccentName, hasError: boolean, extraCn?: string): string {
   const ring = FOCUS_RING[accent] ?? FOCUS_RING.primary!;
   return cn(
@@ -71,12 +55,6 @@ function inputCn(accent: AccentName, hasError: boolean, extraCn?: string): strin
   );
 }
 
-/* ------------------------------------------------------------------ */
-
-/**
- * ForwardRef component - renders either an <input> or <textarea>
- * depending on the `as` prop (default: 'input').
- */
 export const Field = forwardRef<FieldElement, FieldProps>(
   function Field(props, ref) {
     const {
@@ -108,14 +86,12 @@ export const Field = forwardRef<FieldElement, FieldProps>(
 
     return (
       <div className={cn('flex flex-col gap-1.5', className)}>
-        {/* Label */}
         {label && (
           <label htmlFor={inputId} className={TYPE.label}>
             {label}
           </label>
         )}
 
-        {/* Control */}
         {asTag === 'textarea' ? (
           <textarea
             ref={ref as React.Ref<HTMLTextAreaElement>}
@@ -132,7 +108,6 @@ export const Field = forwardRef<FieldElement, FieldProps>(
           />
         )}
 
-        {/* Error or hint */}
         {hasError ? (
           <p id={errId} role="alert" className="text-[12px] text-rose-300/80 leading-snug">
             {error}

@@ -1,34 +1,19 @@
 'use client';
 
-/**
- * Spinner - soft animated loading indicator.
- * Uses a CSS-driven arc ring with a tinted color. Respects reduced-motion
- * via a pulsing opacity fallback instead of spinning.
- */
+// CSS-driven arc ring; under reduced-motion it pulses opacity instead of spinning.
 
 import React from 'react';
 import { cn } from './cn';
 import { ACCENTS, RADIUS, type AccentName } from './tokens';
 
-/* ------------------------------------------------------------------ */
-
 export type SpinnerSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 export interface SpinnerProps {
-  /** Visual size of the spinner. Default: 'md'. */
   size?: SpinnerSize;
-  /**
-   * Accent color used for the active arc.
-   * Defaults to 'primary' (indigo).
-   */
   accent?: AccentName;
-  /** Additional class applied to the wrapper span. */
   className?: string;
-  /** Accessible label for screen readers. Default: 'Loading'. */
   label?: string;
 }
-
-/* ------------------------------------------------------------------ */
 
 const SIZE_MAP: Record<SpinnerSize, { px: number; stroke: number }> = {
   xs: { px: 14, stroke: 1.5 },
@@ -38,7 +23,6 @@ const SIZE_MAP: Record<SpinnerSize, { px: number; stroke: number }> = {
   xl: { px: 44, stroke: 2.5 },
 };
 
-/** Accent hex for the arc color. */
 const ACCENT_HEX: Record<AccentName, string> = {
   primary: ACCENTS.primary.hex,
   success: ACCENTS.success.hex,
@@ -48,8 +32,6 @@ const ACCENT_HEX: Record<AccentName, string> = {
   info: ACCENTS.info.hex,
   white: ACCENTS.white.hex,
 };
-
-/* ------------------------------------------------------------------ */
 
 export const Spinner = React.forwardRef<HTMLSpanElement, SpinnerProps>(
   function Spinner(
@@ -71,7 +53,6 @@ export const Spinner = React.forwardRef<HTMLSpanElement, SpinnerProps>(
         className={cn('inline-flex items-center justify-center', RADIUS.full, className)}
         style={{ width: px, height: px }}
       >
-        {/* Inline keyframes - scoped per size via a unique animation name. */}
         <style>{`
           @keyframes emdr-spin {
             to { transform: rotate(360deg); }

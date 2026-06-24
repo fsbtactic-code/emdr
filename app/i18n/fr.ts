@@ -263,5 +263,283 @@ Les sons et les "fréquences" proposés ici (y compris le 528 Hz et les battemen
   sessClientBadge: "La séance est menée par un spécialiste",
   sessClientWaiting: "En attente de l'animateur. Détendez-vous et respirez calmement.",
   sessClientHint: "Les réglages sont contrôlés par le spécialiste. Vous n'avez rien à appuyer.",
-  sessEnd: "Terminer la séance"
+  sessEnd: "Terminer la séance",
+
+  navResources: "Ressources et stabilisation",
+  navJournal: "Journal des séances",
+
+  channelsSection: "Canaux et accessibilité",
+  blsVolume: "Volume du stimulus",
+  ambientVolumeLabel: "Volume de l'ambiance",
+  hapticLabel: "Stimulation par vibration",
+  hapticDesc: "Vibration alternée du téléphone comme canal tactile de SBL",
+  hapticUnsupported: "La vibration n'est pas prise en charge par cet appareil",
+  visualStim: "Stimulus visuel",
+  visualStimDesc: "Désactivez-le pour un mode audio/tactile : basse vision, mal des transports, particularités visuelles",
+  vestibular: "Protection contre le mal des transports",
+  vestibularDesc: "Limite la vitesse et l'amplitude en cas de nausée ou de vertige",
+
+  groundBeforeExit: "Ancrez-vous d'abord",
+  groundBeforeExitSub: "Le niveau de détresse est encore élevé. Mieux vaut revenir à un état calme avant de quitter.",
+  closeAnyway: "Terminer quand même",
+  connLost: "La connexion avec le spécialiste a été interrompue. Stimulation arrêtée. Respirez calmement et ancrez-vous si nécessaire.",
+
+  sigOk: "Tout va bien",
+  sigPause: "Besoin d'une pause",
+  sigStop: "Stop",
+  sigBadge: "Votre signal est visible par le spécialiste",
+  sigHeading: "Signal du client",
+  sigNone: "Aucun signal",
+  sigOkH: "Client : tout va bien",
+  sigPauseH: "Le client demande une pause",
+  sigStopH: "Le client demande STOP",
+  sigClear: "Effacer",
+
+  tpTitle: "Conduite de la séance",
+  tpSub: "Protocole phase par phase. Réservé au spécialiste",
+  tpPhaseLabel: "Phase",
+  tpTarget: "Cible (image ou souvenir)",
+  tpNeg: "Croyance négative (NC)",
+  tpPos: "Croyance positive (PC)",
+  tpEmotions: "Émotions",
+  tpBody: "Sensations corporelles, où",
+  tpSuds: "SUD (0-10)",
+  tpVoc: "VOC (1-7)",
+  tpVocInit: "VOC initial",
+  tpStartSet: "Lancer une série",
+  tpStopSet: "Arrêter et demander",
+  tpNoticePrompt: "Que remarquez-vous maintenant ?",
+  tpLogObs: "Noter l'observation",
+  tpObsPh: "Brièvement : image, pensée, sensation",
+  tpNextSet: "Série suivante",
+  tpNotes: "Notes du spécialiste (sans données personnelles)",
+  tpNotesPh: "Observations cliniques uniquement, sans le nom du client",
+  tpSaveSession: "Enregistrer dans le journal",
+  tpSaved: "Enregistré dans le journal",
+  tpReset: "Nouvelle séance",
+  tpSudsTrend: "Évolution du SUD",
+  tpSoloLock: "Le protocole complet avec désensibilisation n'est disponible que lors d'une séance avec un spécialiste. En solo, vous disposez de la préparation, des exercices de ressource et de l'ancrage.",
+  tpHostOnly: "Créez une séance (panneau de gauche) pour mener le protocole avec un client",
+
+  modeChooseTitle: "Comment allez-vous travailler ?",
+  modeChooseSub: "Vous pouvez changer de mode à tout moment depuis le menu latéral",
+  modeSpecialist: "Pour un spécialiste",
+  modeSpecialistDesc: "Je mène une séance avec un client : je crée une salle, j'envoie le lien, je déroule le protocole par phases avec les mesures SUD et VOC.",
+  modeSelfHelp: "Pour l'auto-assistance",
+  modeSelfHelpDesc: "Pour soi-même : stabilisation, exercices de ressource, ancrage et détente. Sans retraitement autonome du trauma.",
+  modeSwitch: "Changer de mode",
+  modeContinue: "Continuer",
+  specIntroTitle: "Comment mener une séance",
+  specStep1: "Ouvrez le panneau Séance avec un spécialiste et appuyez sur Créer une séance.",
+  specStep2: "Copiez le lien et envoyez-le à votre client. Lorsqu'il se connecte, le statut affiche Client connecté.",
+  specStep3: "Ouvrez Conduite de la séance : le protocole par phases avec les mesures SUD et VOC se débloque une fois que vous êtes l'animateur.",
+  specStartBtn: "Créer une séance",
+  selfIntroTitle: "Par où commencer",
+  selfIntro1: "Commencez par les ressources et la stabilisation : lieu sûr, contenant, respiration.",
+  selfIntro2: "Le bouton Stop et ancrage est disponible à tout moment.",
+  selfIntro3: "C'est un outil d'auto-assistance. Le retraitement du trauma est mené par un spécialiste, et non par une application.",
+  selfStartBtn: "Ouvrir les ressources",
+
+  navOnboarding: "Initiation",
+  tpQuick: "Réglages rapides",
+  tpLocalMute: "Couper le son chez moi seulement",
+  tpLocalMuteHint: "Couper le son sur votre appareil. Le client continue d'entendre le son.",
+
+  cueTitle: "Montrer au client",
+  cueHint: "Affiche un exercice apaisant sur l'écran du client par-dessus la stimulation.",
+  cueButterfly: "Câlin du papillon",
+  cueBreathing: "Respiration",
+  cueGrounding: "Ancrage",
+  cueClear: "Retirer",
+  crisisHeading: "Aide en cas de crise",
+
+  close: "Fermer",
+  stepLabel: "Étape",
+  ofLabel: "sur",
+
+  aboutNav: "À propos",
+  aboutTitle: "L'entraîneur EMDR est un projet libre",
+  aboutDesc: "Utilisez-le gratuitement. Le code est ouvert, vous pouvez héberger le service sur votre propre serveur.",
+  aboutGithub: "Ouvrir sur GitHub",
+  aboutDonate: "Soutenir le projet",
+  aboutContact: "Contacter l'auteur",
+
+  cueLightstream: "Flux de lumière",
+  cueContent: {
+    butterfly: {
+      title: "Câlin du papillon",
+      steps: [
+        "Asseyez-vous confortablement. Croisez les bras sur la poitrine, les paumes sur les épaules.",
+        "Fermez les yeux ou baissez doucement le regard. Une respiration calme.",
+        "Tapotez lentement vos épaules, l'une après l'autre : gauche, puis droite.",
+        "Respirez régulièrement et calmement. Gardez un rythme d'environ un tapotement par seconde.",
+        "Faites 20-30 tapotements alternés à un rythme calme.",
+        "Arrêtez-vous. Baissez les bras et prenez une grande inspiration."
+      ]
+    },
+    breathing: {
+      title: "Respiration carrée",
+      steps: [
+        "Asseyez-vous confortablement, relâchez les épaules. Suivez le cercle à l'écran.",
+        "Respirez avec le cercle : inspirez quand il grandit, expirez quand il rétrécit.",
+        "Gardez un rythme régulier : inspiration 4, rétention 4, expiration 4, rétention 4."
+      ]
+    },
+    grounding: {
+      title: "Ancrage 5-4-3-2-1",
+      steps: [
+        "Nommez en vous-même 5 choses que vous voyez autour de vous.",
+        "Nommez 4 choses que vous pouvez toucher.",
+        "Nommez 3 sons que vous entendez.",
+        "Nommez 2 odeurs que vous percevez.",
+        "Nommez 1 goût que vous ressentez. Prenez une respiration calme."
+      ]
+    },
+    lightstream: {
+      title: "Flux de lumière",
+      steps: [
+        "Installez-vous confortablement et fermez les yeux. Trois respirations lentes et calmes.",
+        "Imaginez une lumière chaude et douce - de la couleur qui vous semble apaisante et réparatrice.",
+        "Laissez cette lumière entrer par le sommet de votre tête. Ressentez une douce chaleur.",
+        "La lumière descend lentement : front, visage, cou, épaules. Là où elle passe, la tension se dissout.",
+        "La lumière traverse la poitrine, le ventre, le dos. Chaque expiration apporte un peu plus de détente.",
+        "Maintenant la lumière passe par les hanches, les genoux, les mollets - vers le bas, jusqu'aux pieds.",
+        "La lumière atteint vos pieds et s'écoule dans la terre, emportant tout ce dont vous n'avez plus besoin. Le corps est calme et léger."
+      ]
+    }
+  },
+
+  sjBadge: "Journal des séances",
+  sjTitle: "Historique des séances",
+  sjSubtitle: "Les enregistrements ne sont conservés que sur cet appareil",
+  sjEmpty: "Aucune séance enregistrée pour l'instant.",
+  sjDuration: "Durée",
+  sjMode: "Mode",
+  sjModeSolo: "solo",
+  sjModeHost: "spécialiste",
+  sjModeClient: "client",
+  sjPhase: "Phase",
+  sjSuds: "SUD",
+  sjSudsTo: "à",
+  sjObservations: "observations",
+  sjClient: "Code client",
+  sjDeleteOne: "Supprimer",
+  sjClearAll: "Tout effacer",
+  sjClearConfirm: "Supprimer définitivement tous les enregistrements du journal ?",
+  sjDownloadJson: "Télécharger JSON",
+  sjDownloadCsv: "Télécharger CSV",
+  sjPrivacyTitle: "Confidentialité",
+  sjPrivacyBody: "Les données ne sont conservées que sur cet appareil et sont pseudonymisées (sans noms, code uniquement). Vous êtes le responsable du traitement de ces données. Obtenez le consentement avant tout enregistrement.",
+
+  gateBadge: "Avant de commencer",
+  gateTitle: "Vérification rapide",
+  gateSub: "Moins d'une minute. Aide à confirmer que l'outil vous convient en ce moment.",
+  gateScreenTitle: "Cochez tout ce qui est vrai en ce moment",
+  gateScreenIntro: 'Par défaut, tous les points sont sur "non". Cochez ceux qui s\'appliquent à vous à cet instant.',
+  gateScreenItems: [
+    "Sensation d'irréalité ou de détachement de soi ou de son environnement",
+    "Pensées aiguës d'automutilation ou de suicide",
+    "Psychose ou manie en ce moment",
+    "Trouble dissociatif grave connu (diagnostiqué)",
+    "Sous l'effet de substances qui altèrent l'autorégulation"
+  ],
+  gateStopTitle: "Voir un spécialiste serait la bonne étape suivante",
+  gateStopBody: "Un ou plusieurs points indiquent qu'un travail autonome d'attention double n'est pas sûr en ce moment. Ce n'est pas un jugement - juste un signal qu'un soutien professionnel serait utile.",
+  gateStopHint: "Ouvrez le panneau des ressources pour trouver des lignes d'écoute et des contacts de spécialistes.",
+  gateOpenResources: "Ouvrir les ressources de soutien",
+  gateConsentTitle: "Compréhension et consentement",
+  gateConsentItems: [
+    "Je comprends que c'est un outil d'auto-assistance, et non une thérapie ni un substitut à un spécialiste.",
+    "Je peux arrêter à tout moment et j'utiliserai l'ancrage / le 5-4-3-2-1 si je me sens en détresse.",
+    "Pour un véritable retraitement du trauma, un spécialiste formé doit être présent - j'utilise ceci pour l'ancrage et la détente."
+  ],
+  gateAccept: "Commencer",
+
+  obSkip: "Passer",
+  obDone: "Terminé",
+  obSpecialist: [
+    { title: "Mode spécialiste", body: "Un tour rapide de l'interface. Vous guidez le client, l'application fournit la stimulation bilatérale." },
+    { title: "Séance avec un client", body: "Créez une salle et envoyez le lien à votre client. Lorsqu'il se connecte, son écran reflète votre stimulation, sans aucun réglage." },
+    { title: "Conduite de la séance", body: "Le protocole en 8 phases, les mesures SUD et VOC, le lancement des séries. Réglages rapides à la volée, exercices envoyés au client (papillon, respiration, ancrage), et son coupé chez vous seulement." },
+    { title: "Réglages de la séance", body: "Motif de mouvement, vitesse, amplitude, son du stimulus et fond. Composez un preset et partagez un lien." },
+    { title: "Stop et ancrage", body: "Toujours disponible. Arrête la stimulation et aide à revenir ici et maintenant. Les contacts d'urgence sont aussi ici." },
+    { title: "Journal des séances", body: "Historique local : réglages, séries, évolution du SUD. Conservé uniquement sur votre appareil, sans noms." },
+    { title: "Changer de mode", body: "Basculez entre le mode spécialiste et le mode auto-assistance à tout moment." },
+    { title: "C'est prêt", body: "Commencez par créer une séance. Vous pouvez rejouer ce tour depuis le bouton d'initiation dans le menu." }
+  ],
+  obSelfhelp: [
+    { title: "Mode auto-assistance", body: "Un aperçu rapide de ce qui se trouve où. C'est un outil de stabilisation et de détente, pas un substitut à la thérapie." },
+    { title: "Ressources et stabilisation", body: "Lieu sûr, contenant, flux de lumière, câlin du papillon, respiration. Sûr à pratiquer seul." },
+    { title: "Réglages", body: "Motif de mouvement, vitesse, amplitude, son et fond selon vos goûts." },
+    { title: "Stop et ancrage", body: "Arrête la stimulation à tout moment et vous aide à vous apaiser avec le 5-4-3-2-1 et la respiration." },
+    { title: "C'est prêt", body: "Le retraitement du trauma est mené par un spécialiste, pas par une application. Rejouez ce tour depuis le menu." }
+  ],
+
+  drawerVisual: "Visuel",
+  drawerSound: "Son",
+  drawerChannels: "Canaux",
+  drawerTiming: "Cadence",
+
+  previewPaused: "en pause",
+  previewVisualOff: "visuel désactivé",
+
+  resNote: "Stabilisation",
+  resTitle: "Exercices de ressource",
+  resSubtitle: "Stabilisation et ancrage - EMDR phase 2",
+  resDisclaimer: "Ces exercices relèvent de la stabilisation et de l'ancrage, et non du retraitement du trauma. Ils sont sûrs à pratiquer sans thérapeute.",
+  resBackToList: "Retour à la liste",
+  resExercises: {
+    safe_place: {
+      name: "Lieu sûr / apaisant",
+      tagline: "Visualisation guidée d'un espace paisible",
+      steps: [
+        "Installez-vous confortablement. Fermez les yeux ou baissez doucement le regard. Prenez trois respirations lentes et profondes.",
+        "Imaginez un endroit où vous vous sentez calme et en sécurité. Il peut être réel ou totalement imaginaire.",
+        "Regardez autour de vous dans cet endroit. Que voyez-vous ? Remarquez les couleurs, la lumière, les formes.",
+        "Écoutez. Quels sons y a-t-il, ou bien le silence règne-t-il ?",
+        "Sentez l'air sur votre peau. La température, peut-être une odeur. Sentez le sol ou la surface sous vous.",
+        "Laissez-vous pleinement présent dans cet endroit. Sentez votre corps se détendre. Mémorisez cette sensation.",
+        "Donnez un nom à cet endroit : un mot ou une image vers lesquels revenir à tout moment. Ouvrez lentement les yeux."
+      ]
+    },
+    container: {
+      name: "Contenant",
+      tagline: "Mettre mentalement de côté ce qui dérange",
+      steps: [
+        "Asseyez-vous confortablement. Prenez quelques respirations calmes. Rappelez-vous : vous êtes en sécurité en ce moment.",
+        "Imaginez un contenant solide : un coffre-fort, une malle, une boîte. Quelque chose de robuste avec un couvercle ou une serrure sûre.",
+        "Examinez-le : la matière, la taille, la serrure ou le loquet. Assurez-vous qu'il paraît assez solide.",
+        "Nommez ce qui vous dérange : juste un mot ou une image. Ne plongez pas dans les détails.",
+        "Imaginez que vous le placez à l'intérieur du contenant. Fermez le couvercle. Verrouillez-le. Le contenant est bien fermé.",
+        "Posez le contenant dans un endroit sûr de votre imagination : sur une étagère, dans un coffre. Il y restera.",
+        "Prenez une respiration. Vous pourrez revenir à ce contenu plus tard, lorsque vous serez prêt, et avec un soutien."
+      ]
+    },
+    light_stream: {
+      name: "Flux de lumière",
+      tagline: "Une lumière chaude qui parcourt le corps",
+      steps: [
+        "Asseyez-vous ou allongez-vous confortablement. Fermez les yeux. Trois respirations lentes.",
+        "Imaginez une lumière chaude et douce : la couleur qui vous semble apaisante et réparatrice.",
+        "Laissez cette lumière entrer par le sommet de votre tête. Ressentez une douce chaleur.",
+        "Lentement, la lumière descend : front, visage, cou. Là où elle passe, la tension se dissout.",
+        "La lumière traverse les épaules, les bras, la poitrine. Chaque expiration apporte un peu plus de détente.",
+        "Maintenant la lumière parcourt le ventre, le bas du dos, les hanches, les genoux, les mollets.",
+        "La lumière atteint vos pieds et s'écoule dans la terre, emportant tout ce dont vous n'avez plus besoin."
+      ]
+    },
+    butterfly_hug: {
+      name: "Câlin du papillon",
+      tagline: "Tapotements alternés pour s'apaiser soi-même",
+      steps: [
+        "Tenez-vous droit. Croisez les bras sur la poitrine : main droite sur l'épaule gauche, main gauche sur l'épaule droite.",
+        "Fermez les yeux ou baissez doucement le regard. Prenez une grande inspiration.",
+        "Suivez l'animation ci-dessous. Commencez à tapoter lentement et en alternance : d'abord la main droite, puis la gauche.",
+        "Continuez à un rythme lent, environ un tapotement par seconde. Respirez de façon régulière et calme.",
+        "Pensez à quelque chose de neutre ou de légèrement agréable pendant que vous tapotez.",
+        "Faites 20-30 tapotements alternés. Puis arrêtez-vous. Prenez une grande inspiration.",
+        "Baissez les bras. Comment vous sentez-vous ? Remarquez les changements dans votre corps ou votre humeur."
+      ]
+    }
+  }
 };

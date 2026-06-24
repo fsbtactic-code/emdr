@@ -49,7 +49,7 @@ export default function SessionPage() {
     try {
       const savedMode = localStorage.getItem('emdr_mode');
       if (savedMode === 'specialist' || savedMode === 'selfhelp') setAppMode(savedMode);
-      // hydrate which onboardings were already seen (cookie-like, localStorage)
+      // restore which onboardings were already seen
       if (localStorage.getItem('emdr_ob_specialist')) markOnboardingSeen('specialist');
       if (localStorage.getItem('emdr_ob_selfhelp')) markOnboardingSeen('selfhelp');
     } catch {}

@@ -1,25 +1,10 @@
 'use client';
 
-/**
- * IconButton - square or circular icon-only button for the EMDR trainer.
- *
- * Single icon, no visible label (aria-label required for accessibility).
- * Sizes: sm | md | lg
- * Variants: default | ghost | primary | danger | success | accent
- * Shape: square (rounded-xl) or round (rounded-full)
- * Pair with a tooltip library: aria-label surfaces in native title and
- * to assistive technology out of the box.
- */
-
 import * as React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { cn } from './cn';
 import { RADIUS } from './tokens';
 import { SPRING_SNAPPY, reduceTransition } from './motion';
-
-/* ------------------------------------------------------------------ */
-/* Types                                                                */
-/* ------------------------------------------------------------------ */
 
 export type IconButtonVariant =
   | 'default'
@@ -35,20 +20,14 @@ export type IconButtonShape = 'square' | 'round';
 
 export interface IconButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /** Accessible label - required, surfaces as native title and aria-label. */
+  /** required: also used as the native title */
   'aria-label': string;
   variant?: IconButtonVariant;
   size?: IconButtonSize;
   shape?: IconButtonShape;
-  /** Active / selected state: applies accent fill treatment. */
   active?: boolean;
-  /** Icon element to render (e.g. <Play strokeWidth={1.5} />). */
   children: React.ReactNode;
 }
-
-/* ------------------------------------------------------------------ */
-/* Class maps                                                           */
-/* ------------------------------------------------------------------ */
 
 const variantClasses: Record<IconButtonVariant, string> = {
   default: cn(
@@ -83,7 +62,7 @@ const variantClasses: Record<IconButtonVariant, string> = {
   ),
 };
 
-/** Active overlay: accent fill treatment instead of a white ring. */
+// active state uses an accent fill, not a white ring
 const activeClasses: Record<IconButtonVariant, string> = {
   default: 'bg-white/[0.08] text-white/90 border-white/12',
   ghost: 'bg-white/[0.06] text-white/90 border-white/[0.06]',
@@ -109,10 +88,6 @@ const shapeClasses: Record<IconButtonShape, string> = {
   square: RADIUS.md,
   round: RADIUS.full,
 };
-
-/* ------------------------------------------------------------------ */
-/* Component                                                           */
-/* ------------------------------------------------------------------ */
 
 export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
   function IconButton(
@@ -141,19 +116,13 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         title={ariaLabel}
         aria-pressed={active}
         className={cn(
-          /* base */
           'relative inline-flex items-center justify-center shrink-0',
           'outline-none cursor-pointer select-none',
           'transition-colors duration-150',
-          /* shape */
           shapeClasses[shape],
-          /* size */
           sizeClasses[size],
-          /* variant */
           variantClasses[variant],
-          /* active override */
           active && activeClasses[variant],
-          /* disabled */
           disabled && 'opacity-40 cursor-not-allowed pointer-events-none',
           className,
         )}

@@ -1,35 +1,20 @@
 'use client';
 
-/**
- * Toggle - a labelled on/off switch for EMDR settings panels.
- *
- * Mirrors the toggle style used in SettingsPanel: accent-filled track
- * when on, a white pill thumb, optional description slot, reduced-motion
- * support, and keyboard accessibility.
- */
-
 import { useReducedMotion, motion } from 'framer-motion';
 import { cn } from './cn';
 import { ACCENTS, TYPE, COLORS, RADIUS, type AccentName } from './tokens';
 import { SPRING_SNAPPY, reduceTransition } from './motion';
 
-/* ------------------------------------------------------------------ */
-
 export interface ToggleProps {
-  /** Toggle switch label. */
   label: string;
-  /** Whether the toggle is on. */
   checked: boolean;
   onChange: (checked: boolean) => void;
-  /** Optional secondary description rendered below the label. */
   description?: string;
-  /** Accent colour for the active (on) state. Defaults to 'primary'. */
   accent?: AccentName;
   disabled?: boolean;
   className?: string;
 }
 
-/* Accent -> tailwind fill class for the track. */
 const TRACK_FILL: Partial<Record<AccentName, string>> = {
   primary: 'bg-indigo-500/80',
   success:  'bg-emerald-500/80',
@@ -39,8 +24,6 @@ const TRACK_FILL: Partial<Record<AccentName, string>> = {
   info:     'bg-cyan-500/80',
   white:    'bg-white/80',
 };
-
-/* ------------------------------------------------------------------ */
 
 export function Toggle({
   label,
@@ -68,7 +51,6 @@ export function Toggle({
         className,
       )}
     >
-      {/* Label + description */}
       <div className="flex flex-col gap-0.5 min-w-0">
         <label
           htmlFor={switchId}
@@ -83,7 +65,6 @@ export function Toggle({
         )}
       </div>
 
-      {/* Switch */}
       <button
         id={switchId}
         type="button"
@@ -106,7 +87,6 @@ export function Toggle({
           'cursor-pointer',
         )}
       >
-        {/* Thumb */}
         <motion.span
           className={cn(
             'absolute top-0.5 left-0.5',

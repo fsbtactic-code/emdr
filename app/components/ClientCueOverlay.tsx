@@ -3,18 +3,14 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../store/useStore';
-import { CUE_CONTENT, cueStepCount, clampCueStep, type CueTechnique } from '../content/cues';
+import { cueStepCount, clampCueStep, type CueTechnique } from '../content/cues';
+import { useT } from '../i18n/useT';
 import { SectionLabel } from './ui/SectionLabel';
 
 const BOX_SECONDS = [4, 4, 4, 4];
 const BOX_SCALE = [1.0, 1.0, 0.62, 0.62];
 
-const BREATH_PHASES: Record<'ru' | 'en', [string, string, string, string]> = {
-  ru: ['Вдох', 'Задержка', 'Выдох', 'Задержка'],
-  en: ['Inhale', 'Hold', 'Exhale', 'Hold'],
-};
-
-function BreathingCircle({ phases }: { phases: [string, string, string, string] }) {
+function BreathingCircle({ phases }: { phases: string[] }) {
   const [phase, setPhase] = useState(0);
 
   useEffect(() => {
@@ -24,13 +20,11 @@ function BreathingCircle({ phases }: { phases: [string, string, string, string] 
 
   return (
     <div className="relative w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center">
-      {/* bg-emerald-500/15 = ACCENTS.success.fill */}
       <motion.div
         className="absolute w-40 h-40 sm:w-44 sm:h-44 rounded-full bg-emerald-500/15"
         animate={{ scale: BOX_SCALE[phase], opacity: [0.7, 0.95, 0.7] }}
         transition={{ duration: BOX_SECONDS[phase], ease: 'easeInOut' }}
       />
-      {/* bg-cyan-500/15 = ACCENTS.info.fill approximation for the glow layer */}
       <motion.div
         className="absolute w-40 h-40 sm:w-44 sm:h-44 rounded-full bg-cyan-500/15 blur-2xl"
         animate={{ scale: BOX_SCALE[phase] }}
@@ -63,9 +57,7 @@ function ButterflyGuide() {
             transition={{ duration: 0.9, ease: 'easeInOut' }}
             className="relative flex items-center justify-center"
           >
-            {/* bg-violet-500/15 = ACCENTS.calm.fill */}
             <div className="absolute w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-violet-500/15 blur-2xl" />
-            {/* bg-indigo-500/15 = ACCENTS.primary.fill, bg-violet-500/15 inner */}
             <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-indigo-500/15 flex items-center justify-center">
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-violet-500/15" />
             </div>
@@ -107,27 +99,25 @@ function LightStreamGlow() {
   );
 }
 
-// Animation paired with each technique; identical regardless of step so the
-// calming motion stays continuous while the specialist advances the prompt.
+// animation does not change with step so the motion stays continuous as the specialist advances the prompt
 function CueAnimation({ tech }: { tech: CueTechnique }) {
-  const lang = useStore((s) => s.lang) === 'ru' ? 'ru' : 'en';
+  const t = useT();
   if (tech === 'butterfly') return <ButterflyGuide />;
   if (tech === 'lightstream') return <LightStreamGlow />;
-  return <BreathingCircle phases={BREATH_PHASES[lang]} />;
+  return <BreathingCircle phases={t.breathPhases} />;
 }
 
 export function ClientCueOverlay() {
+  const t = useT();
   const clientCue = useStore((state) => state.clientCue);
   const cueStep = useStore((state) => state.cueStep);
-  const lang = useStore((state) => state.lang);
-  const isRu = lang === 'ru';
 
   const tech = clientCue !== 'none' ? (clientCue as CueTechnique) : null;
-  const content = tech ? CUE_CONTENT[tech] : null;
-  const stepIdx = tech ? clampCueStep(tech, cueStep) : 0;
+  const content = tech ? t.cueContent[tech] : null;
   const stepTotal = tech ? cueStepCount(tech) : 0;
-  const title = content ? (isRu ? content.titleRu : content.titleEn) : '';
-  const stepText = content ? (isRu ? content.steps[stepIdx].ru : content.steps[stepIdx].en) : '';
+  const stepIdx = tech ? Math.min(clampCueStep(tech, cueStep), content!.steps.length - 1) : 0;
+  const title = content ? content.title : '';
+  const stepText = content ? content.steps[stepIdx] : '';
 
   return (
     <AnimatePresence>
@@ -149,7 +139,7 @@ export function ClientCueOverlay() {
           <div className="relative z-10 flex flex-col items-center text-center gap-8 max-w-md w-full">
             <div className="flex flex-col items-center gap-2">
               <SectionLabel className="tabular-nums">
-                {(isRu ? 'Шаг' : 'Step')} {stepIdx + 1} / {stepTotal}
+                {t.stepLabel} {stepIdx + 1} / {stepTotal}
               </SectionLabel>
               <h2 className="text-white text-[22px] sm:text-[26px] font-medium tracking-tight">{title}</h2>
             </div>

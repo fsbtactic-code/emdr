@@ -1,18 +1,6 @@
 'use client';
 
-/**
- * Drawer - side-sliding panel.
- *
- * - slides in from left or right
- * - backdrop: bg-zinc-950/60 + backdrop-blur-sm, click closes
- * - spring entrance (x-axis), AnimatePresence
- * - Esc closes
- * - z from Z.drawer token (sits above panels, below overlay/modal)
- * - role=dialog, aria-modal, aria-labelledby
- * - configurable width (tailwind string)
- * - inner scroll on body content
- * - reduced-motion aware
- */
+// side-sliding panel: Esc and backdrop click close, sits above panels and below the modal
 
 import { forwardRef, useEffect, useRef, type ReactNode } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
@@ -21,31 +9,20 @@ import { cn } from './cn';
 import { SHADOW, TYPE, Z } from './tokens';
 import { SPRING } from './motion';
 
-/* ------------------------------------------------------------------ */
-
 export type DrawerSide = 'left' | 'right';
 
 export interface DrawerProps {
-  /** Controls visibility. */
   open: boolean;
-  /** Called on backdrop click, X press, or Esc. */
   onClose: () => void;
-  /** Which edge the drawer slides from. @default 'right' */
+  /** edge the drawer slides from, defaults to 'right' */
   side?: DrawerSide;
-  /**
-   * Tailwind width class for the drawer panel.
-   * @default 'w-80'
-   */
+  /** tailwind width class, defaults to 'w-80' */
   width?: string;
-  /** Title shown in the drawer header. */
   title?: string;
-  /** Main scrollable content. */
   children: ReactNode;
-  /** Optional sticky footer slot (actions). */
   footer?: ReactNode;
-  /** Additional className on the drawer panel. */
   className?: string;
-  /** aria-label when title is not provided. */
+  /** used when no title is provided */
   ariaLabel?: string;
 }
 
@@ -67,7 +44,6 @@ export function Drawer({
 
   const xOffset = side === 'right' ? '100%' : '-100%';
 
-  // Use reduced-motion-aware values
   const hiddenState = reduced
     ? { opacity: 0 }
     : { opacity: 0, x: xOffset };
@@ -119,7 +95,6 @@ export function Drawer({
     <AnimatePresence>
       {open && (
         <>
-          {/* Backdrop */}
           <motion.div
             key="drawer-backdrop"
             initial={{ opacity: 0 }}
@@ -135,7 +110,6 @@ export function Drawer({
             aria-hidden="true"
           />
 
-          {/* Drawer panel */}
           <motion.aside
             key="drawer-panel"
             role="dialog"
@@ -159,7 +133,6 @@ export function Drawer({
             )}
             style={{ zIndex: Z.drawer }}
           >
-            {/* Header */}
             <div className="flex items-center gap-3 px-5 pt-5 pb-4 border-b border-white/[0.06] shrink-0">
               {side === 'left' && (
                 <CloseButton ref={closeRef} onClose={onClose} />
@@ -181,12 +154,10 @@ export function Drawer({
               )}
             </div>
 
-            {/* Scrollable body */}
             <div className="flex-1 overflow-y-auto min-h-0 px-5 py-4">
               {children}
             </div>
 
-            {/* Footer (optional) */}
             {footer && (
               <div className="px-5 pb-5 pt-3 border-t border-white/[0.06] shrink-0">
                 {footer}
@@ -199,10 +170,7 @@ export function Drawer({
   );
 }
 
-/* ------------------------------------------------------------------ *
- * Internal: close button with forwardRef for focus management
- * ------------------------------------------------------------------ */
-
+// forwardRef so the drawer can move focus here on open
 interface CloseButtonProps {
   onClose: () => void;
 }

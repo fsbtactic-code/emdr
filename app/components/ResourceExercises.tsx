@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Shield, Sun, Box, Wind, Sparkles } from 'lucide-react';
 import { useStore } from '../store/useStore';
+import { useT } from '../i18n/useT';
 import { Button } from './ui/Button';
 import { IconButton } from './ui/IconButton';
 import { InfoBanner } from './ui/InfoBanner';
@@ -11,7 +12,12 @@ import { SectionLabel } from './ui/SectionLabel';
 import { AccentIconBadge } from './ui/AccentIconBadge';
 import { COLORS } from './ui/tokens';
 
-type Locale = string;
+interface ExerciseDef {
+  id: string;
+  name: string;
+  tagline: string;
+  steps: string[];
+}
 
 interface ExStrings {
   title: string;
@@ -23,156 +29,6 @@ interface ExStrings {
   finish: string;
   stepOf: (cur: number, total: number) => string;
   exercises: ExerciseDef[];
-}
-
-interface ExerciseDef {
-  id: string;
-  name: string;
-  tagline: string;
-  steps: string[];
-}
-
-const strings: Record<string, ExStrings> = {
-  ru: {
-    title: 'Ресурсные упражнения',
-    subtitle: 'Стабилизация и заземление - фаза 2 EMDR',
-    disclaimer: 'Эти упражнения - стабилизация и заземление, не переработка травмы. Безопасны без терапевта.',
-    note: 'Стабилизация',
-    back: 'Назад',
-    next: 'Далее',
-    finish: 'Завершить',
-    stepOf: (cur, total) => `Шаг ${cur} из ${total}`,
-    exercises: [
-      {
-        id: 'safe_place',
-        name: 'Безопасное место',
-        tagline: 'Визуализация спокойного пространства',
-        steps: [
-          'Устройтесь удобно. Закройте глаза или направьте взгляд вниз. Сделайте три медленных вдоха и выдоха.',
-          'Представьте место, где вам спокойно и безопасно. Это может быть реальное или воображаемое место.',
-          'Оглянитесь в этом месте. Что вы видите вокруг? Замечайте цвета, свет, очертания.',
-          'Прислушайтесь. Какие звуки есть в этом месте? Или, может быть, там тихо?',
-          'Почувствуйте воздух на коже. Температуру, возможно запах. Ощутите землю или поверхность под ногами.',
-          'Позвольте себе полностью находиться здесь. Почувствуйте, как тело расслабляется. Запомните это ощущение.',
-          'Дайте этому месту название - слово или образ, к которому вы сможете вернуться в любой момент. Медленно откройте глаза.',
-        ],
-      },
-      {
-        id: 'container',
-        name: 'Контейнер',
-        tagline: 'Временно убрать тревожный материал',
-        steps: [
-          'Сядьте удобно. Сделайте несколько спокойных вдохов. Напомните себе: вы в безопасности прямо сейчас.',
-          'Представьте надежный контейнер. Это может быть сейф, сундук, ящик - любой прочный закрытый сосуд.',
-          'Рассмотрите его: материал, размер, замок или крышка. Убедитесь, что он достаточно крепкий.',
-          'Назовите то, что сейчас вас беспокоит - одним словом или образом. Не погружайтесь в детали.',
-          'Представьте, как вы помещаете это в контейнер. Закройте крышку. Заприте замок. Контейнер надежен.',
-          'Поставьте контейнер в безопасное место в вашем воображении - на полку, в хранилище. Он никуда не денется.',
-          'Сделайте вдох. Вы можете вернуться к этому материалу позже, когда будете готовы - и с поддержкой.',
-        ],
-      },
-      {
-        id: 'light_stream',
-        name: 'Поток света',
-        tagline: 'Теплый свет через тело',
-        steps: [
-          'Сядьте или лягте удобно. Закройте глаза. Три медленных дыхания.',
-          'Представьте теплый, мягкий свет - любого цвета, который ощущается как целительный и спокойный.',
-          'Пусть этот свет входит через макушку головы. Ощутите мягкое тепло.',
-          'Медленно свет движется вниз: лоб, лицо, шея. Там, где свет проходит - напряжение растворяется.',
-          'Свет течет через плечи, руки, грудь. Каждый выдох - чуть больше расслабления.',
-          'Теперь свет проходит через живот, поясницу, бедра, колени, голени.',
-          'Свет достигает ступней и уходит в землю, унося с собой все лишнее. Тело светлое и спокойное.',
-        ],
-      },
-      {
-        id: 'butterfly_hug',
-        name: 'Объятие бабочки',
-        tagline: 'Попеременное постукивание для самоуспокоения',
-        steps: [
-          'Сядьте прямо. Скрестите руки на груди: правая рука на левом плече, левая - на правом.',
-          'Закройте глаза или слегка опустите взгляд. Сделайте один глубокий вдох.',
-          'Следите за анимацией ниже. Начните медленно постукивать попеременно: сначала правой рукой, потом левой.',
-          'Продолжайте в медленном ритме - примерно раз в секунду. Дышите ровно и спокойно.',
-          'Думайте о чем-то нейтральном или немного приятном, пока выполняете постукивание.',
-          'Сделайте 20-30 попеременных постукиваний. Затем остановитесь. Сделайте глубокий вдох.',
-          'Опустите руки. Как вы себя чувствуете? Замечайте любые изменения в теле или настроении.',
-        ],
-      },
-    ],
-  },
-  en: {
-    title: 'Resource Exercises',
-    subtitle: 'Stabilization and grounding - EMDR phase 2',
-    disclaimer: 'These exercises are stabilization and grounding, not trauma reprocessing. Safe without a therapist.',
-    note: 'Stabilization',
-    back: 'Back',
-    next: 'Next',
-    finish: 'Finish',
-    stepOf: (cur, total) => `Step ${cur} of ${total}`,
-    exercises: [
-      {
-        id: 'safe_place',
-        name: 'Safe / Calm Place',
-        tagline: 'Guided visualization of a peaceful space',
-        steps: [
-          'Get comfortable. Close your eyes or soften your gaze downward. Take three slow, deep breaths.',
-          'Imagine a place where you feel calm and safe. It can be real or completely imagined.',
-          'Look around in that place. What do you see? Notice colors, light, shapes.',
-          'Listen. What sounds are there - or is it quiet?',
-          'Notice the air on your skin. Temperature, maybe a scent. Feel the ground or surface beneath you.',
-          'Let yourself be fully present there. Feel your body relax. Remember this feeling.',
-          'Give this place a name - a word or image you can return to any time. Slowly open your eyes.',
-        ],
-      },
-      {
-        id: 'container',
-        name: 'Container',
-        tagline: 'Mentally set aside disturbing material',
-        steps: [
-          'Sit comfortably. Take a few calm breaths. Remind yourself: you are safe right now.',
-          'Imagine a strong container - a safe, a chest, a box. Something solid with a secure lid or lock.',
-          'Examine it: the material, size, the lock or latch. Make sure it feels sturdy enough.',
-          'Name what is bothering you - just one word or image. Do not dive into details.',
-          'Picture placing it inside the container. Close the lid. Lock it. The container is secure.',
-          'Set the container somewhere safe in your imagination - on a shelf, in a vault. It will stay there.',
-          'Take a breath. You can return to this material later when you are ready - and with support.',
-        ],
-      },
-      {
-        id: 'light_stream',
-        name: 'Light Stream',
-        tagline: 'Warm light moving through the body',
-        steps: [
-          'Sit or lie comfortably. Close your eyes. Three slow breaths.',
-          'Imagine a warm, gentle light - any color that feels healing and calm to you.',
-          'Let this light enter through the top of your head. Feel a gentle warmth.',
-          'Slowly the light moves down: forehead, face, neck. Where the light passes, tension dissolves.',
-          'Light flows through shoulders, arms, chest. Each exhale - a little more relaxation.',
-          'Now the light moves through the belly, lower back, hips, knees, calves.',
-          'The light reaches your feet and flows into the earth, carrying away anything you no longer need.',
-        ],
-      },
-      {
-        id: 'butterfly_hug',
-        name: 'Butterfly Hug',
-        tagline: 'Alternating self-tapping for self-soothing',
-        steps: [
-          'Sit upright. Cross your arms over your chest: right hand on left shoulder, left hand on right shoulder.',
-          'Close your eyes or soften your gaze downward. Take one deep breath.',
-          'Follow the animation below. Start tapping slowly and alternately: first right hand, then left.',
-          'Continue at a slow pace - about once per second. Breathe steadily and calmly.',
-          'Think of something neutral or mildly pleasant while you tap.',
-          'Do 20-30 alternating taps. Then stop. Take a deep breath.',
-          'Lower your arms. How do you feel? Notice any changes in your body or mood.',
-        ],
-      },
-    ],
-  },
-};
-
-function getStrings(lang: Locale): ExStrings {
-  return strings[lang] ?? strings['ru'];
 }
 
 function BreathCircle({ color }: { color: string }) {
@@ -365,7 +221,7 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
           </div>
         </div>
 
-        {/* warm-mode disclaimer: amber-600/20 is the in-palette border for this light-theme variant */}
+        {/* light-theme variant: amber-600/20 is the in-palette border here */}
         <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-500/[0.12] border border-amber-600/20 mb-5">
           <Shield size={12} className="text-amber-700/80 shrink-0" />
           <span className="text-[11px] text-amber-900/70 leading-tight">{s.disclaimer}</span>
@@ -407,7 +263,7 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
           </AnimatePresence>
         </div>
 
-        {/* warm-mode footer: amber-800/15 is the warm-theme divider */}
+        {/* light-theme divider */}
         <div className="flex gap-3 mt-6 pt-4 border-t border-amber-800/15">
           <button
             onClick={goBack}
@@ -523,15 +379,27 @@ const CARDS: ExerciseCard[] = [
   { id: 'butterfly_hug',accent: '#a78bfa', hex: '#a78bfa', icon: <Wind     size={16} style={{ color: '#a78bfa' }} /> },
 ];
 
+const EXERCISE_IDS = ['safe_place', 'container', 'light_stream', 'butterfly_hug'] as const;
+
 export function ResourceExercises() {
   const isResourcesOpen = useStore((s) => s.isResourcesOpen);
   const setIsResourcesOpen = useStore((s) => s.setIsResourcesOpen);
   const setPlaying = useStore((s) => s.setPlaying);
-  const lang = useStore((s) => s.lang);
+  const t = useT();
 
   const [activeId, setActiveId] = useState<string | null>(null);
 
-  const s = getStrings(lang);
+  const s: ExStrings = {
+    title: t.resTitle,
+    subtitle: t.resSubtitle,
+    disclaimer: t.resDisclaimer,
+    note: t.resNote,
+    back: t.back,
+    next: t.next,
+    finish: t.finish,
+    stepOf: (cur, total) => `${t.stepLabel} ${cur} ${t.ofLabel} ${total}`,
+    exercises: EXERCISE_IDS.map((id) => ({ id, ...t.resExercises[id] })),
+  };
 
   useEffect(() => {
     if (isResourcesOpen) {
@@ -587,7 +455,7 @@ export function ResourceExercises() {
                     size="sm"
                     iconLeft={<ChevronLeft size={16} />}
                     onClick={() => setActiveId(null)}
-                    aria-label="Back to list"
+                    aria-label={t.resBackToList}
                     className={isLightStream ? 'text-amber-900/60 hover:text-amber-950 hover:bg-amber-900/10 border-transparent' : ''}
                   >
                     {s.back}
@@ -599,7 +467,7 @@ export function ResourceExercises() {
                   variant="ghost"
                   size="md"
                   shape="round"
-                  aria-label="Close"
+                  aria-label={t.close}
                   onClick={handleClose}
                   className={isLightStream ? 'text-amber-900/50 hover:text-amber-950 hover:bg-amber-900/10 border-transparent' : ''}
                 >

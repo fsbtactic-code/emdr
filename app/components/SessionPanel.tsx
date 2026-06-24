@@ -76,7 +76,7 @@ export const SessionPanel = () => {
               </div>
             </div>
             <IconButton
-              aria-label={lang === 'en' ? 'Close' : 'Zakryt'}
+              aria-label={t.close}
               variant="ghost"
               size="md"
               onClick={() => setIsSessionOpen(false)}

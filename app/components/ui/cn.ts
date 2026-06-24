@@ -1,12 +1,5 @@
-/**
- * cn - tiny className joiner.
- *
- * Joins truthy class fragments with a single space. No dependencies
- * (no clsx / cva in this project). Falsy values (false / null / undefined)
- * are dropped so conditional classes read cleanly:
- *
- *   cn('px-3', active && 'bg-white/10', disabled ? 'opacity-40' : null)
- */
+// joins truthy class fragments with a single space, dropping falsy values.
+// no clsx / cva dependency in this project.
 export function cn(...classes: Array<string | false | null | undefined>): string {
   let out = '';
   for (const c of classes) {

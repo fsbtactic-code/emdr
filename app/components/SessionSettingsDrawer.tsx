@@ -43,7 +43,6 @@ const SHAPES: { id: TargetShape; icon: typeof Gauge }[] = [
   { id: 'butterfly', icon: Wand2 },
 ];
 
-// Glow values derived from SHADOW.glow tokens
 const COLOR_SWATCHES = [
   { value: '#06b6d4', shadow: SHADOW.glow.cyan },
   { value: '#10b981', shadow: SHADOW.glow.emerald },
@@ -76,7 +75,6 @@ const BACKGROUNDS: { id: VisualBackground; icon: typeof Gauge; accent: 'white' |
 
 export function SessionSettingsDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const t = useT();
-  const lang = useStore((s) => s.lang);
 
   const speed          = useStore((s) => s.speed);
   const setSpeed       = useStore((s) => s.setSpeed);
@@ -116,16 +114,15 @@ export function SessionSettingsDrawer({ open, onClose }: { open: boolean; onClos
   useEffect(() => { setHapticOk(isHapticSupported()); }, []);
 
   const tabItems = [
-    { id: 'visual',   label: lang === 'ru' ? 'Визуал'  : 'Visual',   icon: <Gauge   size={14} className="shrink-0" /> },
-    { id: 'sound',    label: lang === 'ru' ? 'Звук'    : 'Sound',    icon: <Volume2 size={14} className="shrink-0" /> },
-    { id: 'channels', label: lang === 'ru' ? 'Каналы'  : 'Channels', icon: <Radio   size={14} className="shrink-0" /> },
+    { id: 'visual',   label: t.drawerVisual,   icon: <Gauge   size={14} className="shrink-0" /> },
+    { id: 'sound',    label: t.drawerSound,    icon: <Volume2 size={14} className="shrink-0" /> },
+    { id: 'channels', label: t.drawerChannels, icon: <Radio   size={14} className="shrink-0" /> },
   ];
 
   return (
     <AnimatePresence>
       {open && (
         <>
-          {/* backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -134,7 +131,6 @@ export function SessionSettingsDrawer({ open, onClose }: { open: boolean; onClos
             className="fixed inset-0 bg-zinc-950/85"
             style={{ zIndex: 60 }}
           />
-          {/* drawer */}
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
@@ -143,7 +139,6 @@ export function SessionSettingsDrawer({ open, onClose }: { open: boolean; onClos
             className="fixed right-0 top-0 h-full w-[420px] max-w-full bg-[#0d0d10] border-l border-white/[0.06] shadow-[-20px_0_60px_-10px_rgba(0,0,0,0.8)] flex flex-col"
             style={{ zIndex: 61 }}
           >
-            {/* header */}
             <div className="shrink-0 px-5 pt-5 pb-3 border-b border-white/5">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-medium tracking-tight text-white">{t.settingsTitle}</h2>
@@ -154,7 +149,6 @@ export function SessionSettingsDrawer({ open, onClose }: { open: boolean; onClos
                   <X size={18} />
                 </button>
               </div>
-              {/* tab switcher using DS Tabs fill variant */}
               <div className="mt-4">
                 <Tabs
                   tabs={tabItems}
@@ -167,10 +161,8 @@ export function SessionSettingsDrawer({ open, onClose }: { open: boolean; onClos
             </div>
 
             <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar">
-              {/* ---- VISUAL TAB ---- */}
               {tab === 'visual' && (
                 <div className="px-5 py-6 flex flex-col divide-y divide-white/[0.06]">
-                  {/* patterns */}
                   <div className="flex flex-col gap-3 pb-6">
                     <SectionLabel accent="info" icon={Gauge}>{t.patternLabel}</SectionLabel>
                     <div className="grid grid-cols-3 gap-1.5">
@@ -188,7 +180,6 @@ export function SessionSettingsDrawer({ open, onClose }: { open: boolean; onClos
                     </div>
                   </div>
 
-                  {/* shapes */}
                   <div className="flex flex-col gap-3 py-6">
                     <SectionLabel accent="primary" icon={Circle}>{t.shapeLabel}</SectionLabel>
                     <div className="grid grid-cols-4 gap-1.5">
@@ -206,7 +197,6 @@ export function SessionSettingsDrawer({ open, onClose }: { open: boolean; onClos
                     </div>
                   </div>
 
-                  {/* color swatches */}
                   <div className="flex flex-col gap-3 py-6">
                     <SectionLabel>{t.colorLabel}</SectionLabel>
                     <div className="flex gap-3 flex-wrap">
@@ -228,16 +218,14 @@ export function SessionSettingsDrawer({ open, onClose }: { open: boolean; onClos
                     </div>
                   </div>
 
-                  {/* timing sliders */}
                   <div className="flex flex-col gap-5 py-6">
-                    <SectionLabel accent="info" icon={Gauge}>{lang === 'ru' ? 'Тайминг' : 'Timing'}</SectionLabel>
+                    <SectionLabel accent="info" icon={Gauge}>{t.drawerTiming}</SectionLabel>
                     <Slider label={t.speedLabel}    value={speed}       min={0.5} max={3}   step={0.1} unit={t.hzUnit}    accent="info" onChange={setSpeed} />
                     <Slider label={t.amplitudeLabel} value={amplitude}  min={40}  max={100} step={1}   unit="%"          accent="info" description={t.amplitudeHint} onChange={(v) => setAmplitude(Math.round(v))} />
                     <Slider label={t.seriesLabel}   value={cyclesPerSet} min={10} max={60}  step={2}   unit={t.cyclesUnit} accent="info" onChange={(v) => setCyclesPerSet(Math.round(v))} />
                     <Slider label={t.sizeLabel}     value={size}         min={20} max={150} step={1}   unit={t.pxUnit}   accent="info" onChange={(v) => setSize(Math.round(v))} />
                   </div>
 
-                  {/* backgrounds */}
                   <div className="flex flex-col gap-2.5 pt-6">
                     <SectionLabel accent="primary" icon={Sparkles}>{t.bgLabel}</SectionLabel>
                     <div className="grid grid-cols-3 gap-1.5">
@@ -257,10 +245,8 @@ export function SessionSettingsDrawer({ open, onClose }: { open: boolean; onClos
                 </div>
               )}
 
-              {/* ---- SOUND TAB ---- */}
               {tab === 'sound' && (
                 <div className="px-5 py-6 flex flex-col divide-y divide-white/[0.06]">
-                  {/* stim sound formats */}
                   <div className="flex flex-col gap-2.5 pb-6">
                     <SectionLabel accent="info" icon={Volume2}>{t.stimSound}</SectionLabel>
                     <div className="grid grid-cols-3 gap-1.5">
@@ -284,7 +270,6 @@ export function SessionSettingsDrawer({ open, onClose }: { open: boolean; onClos
                     </div>
                   </div>
 
-                  {/* ambient sounds */}
                   <div className="flex flex-col gap-2.5 py-6">
                     <SectionLabel accent="info" icon={Music}>{t.ambientLabel}</SectionLabel>
                     <div className="grid grid-cols-4 gap-1.5">
@@ -303,7 +288,6 @@ export function SessionSettingsDrawer({ open, onClose }: { open: boolean; onClos
                     <p className="text-white/25 text-[11px] leading-relaxed">{t.ambientNote}</p>
                   </div>
 
-                  {/* volume sliders */}
                   <div className={cn('flex flex-col gap-5 py-6', !audioEnabled && 'opacity-40 pointer-events-none')}>
                     <Slider
                       label={t.blsVolume}
@@ -325,7 +309,6 @@ export function SessionSettingsDrawer({ open, onClose }: { open: boolean; onClos
                     />
                   </div>
 
-                  {/* mute toggle */}
                   <div className="flex items-center justify-between gap-3 pt-6">
                     <div className="flex items-start gap-2.5 min-w-0">
                       <VolumeX size={15} className={cn('shrink-0 mt-0.5', !audioEnabled ? 'text-cyan-400/80' : 'text-white/45')} />
@@ -347,12 +330,10 @@ export function SessionSettingsDrawer({ open, onClose }: { open: boolean; onClos
                 </div>
               )}
 
-              {/* ---- CHANNELS TAB ---- */}
               {tab === 'channels' && (
                 <div className="px-5 py-6 flex flex-col gap-4">
                   <SectionLabel accent="primary" icon={Radio}>{t.channelsSection}</SectionLabel>
 
-                  {/* haptic */}
                   <div className="flex items-center justify-between gap-3">
                     <div className="min-w-0">
                       <span className="text-[11px] uppercase tracking-[0.14em] font-semibold text-violet-400/70">{t.hapticLabel}</span>
@@ -370,7 +351,6 @@ export function SessionSettingsDrawer({ open, onClose }: { open: boolean; onClos
                     </button>
                   </div>
 
-                  {/* visual stim */}
                   <div className="flex items-center justify-between gap-3">
                     <div className="min-w-0">
                       <span className="text-[11px] uppercase tracking-[0.14em] font-semibold text-amber-400/70">{t.visualStim}</span>
@@ -387,7 +367,6 @@ export function SessionSettingsDrawer({ open, onClose }: { open: boolean; onClos
                     </button>
                   </div>
 
-                  {/* vestibular */}
                   <div className="flex items-center justify-between gap-3">
                     <div className="min-w-0">
                       <span className="text-[11px] uppercase tracking-[0.14em] font-semibold text-cyan-400/70">{t.vestibular}</span>

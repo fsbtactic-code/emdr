@@ -1,16 +1,7 @@
 'use client';
 
-/**
- * Chip / Pill - compact tag or toggle pill.
- *
- * Variants:
- *   neutral  - default quiet surface, used for read-only tags
- *   accent   - tinted with the given AccentName (selectable / active states)
- *
- * When selectable=true the chip behaves as a toggle button (role="checkbox").
- * When onClick is provided without selectable it behaves as a plain button.
- * Without either, it is a presentational span (role="status" for screen readers).
- */
+// selectable=true makes it a toggle (role="checkbox"); onClick alone is a
+// plain button; with neither it renders as a presentational span.
 
 import * as React from 'react';
 import { useReducedMotion, motion } from 'framer-motion';
@@ -19,29 +10,22 @@ import { cn } from './cn';
 import { COLORS, ACCENTS, RADIUS, type AccentName } from './tokens';
 import { SPRING_SNAPPY, reduceTransition } from './motion';
 
-/* ------------------------------------------------------------------ */
-
 export type ChipVariant = 'neutral' | 'accent';
 
 export interface ChipProps {
   label: string;
-  /** Icon element rendered before the label. Use Lucide icons, size 12-14. */
+  /** Lucide icon, size 12-14, rendered before the label. */
   icon?: React.ReactNode;
   variant?: ChipVariant;
-  /** Accent key - effective when variant='accent'. Default 'primary'. */
+  /** Effective only when variant='accent'. */
   accent?: AccentName;
-  /** Whether this chip acts as a toggle. */
   selectable?: boolean;
   selected?: boolean;
-  /** Renders a remove (X) button. onRemove fires on click. */
   onRemove?: () => void;
-  /** Click handler (or toggle handler if selectable). */
   onClick?: () => void;
   disabled?: boolean;
   className?: string;
 }
-
-/* ------------------------------------------------------------------ */
 
 const variantBase: Record<ChipVariant, string> = {
   neutral: cn(COLORS.surface.raised, 'border border-white/[0.06]', COLORS.text.secondary),
@@ -52,8 +36,6 @@ const selectedStyles = (accent: AccentName): string => {
   const a = ACCENTS[accent];
   return cn(a.fill, 'border', a.border, a.text);
 };
-
-/* ------------------------------------------------------------------ */
 
 export function Chip({
   label,
@@ -77,15 +59,11 @@ export function Chip({
     RADIUS.full,
     'transition-colors duration-150',
     'select-none',
-    /* Base variant styles. */
     isSelected ? selectedStyles(accent) : variantBase[variant],
-    /* Hover on unselected neutral chips. */
     isInteractive && !isSelected && !disabled && 'hover:bg-white/[0.06] hover:text-white/75',
-    /* Hover on accent-selected chips. */
     isInteractive && isSelected && !disabled && ACCENTS[accent].hover,
     disabled && 'opacity-40 cursor-not-allowed',
     isInteractive && !disabled && 'cursor-pointer',
-    /* Focus ring - accent tinted, not white ring. */
     isInteractive && 'focus-visible:outline-none focus-visible:ring-1',
     className,
   );
@@ -120,7 +98,6 @@ export function Chip({
     </>
   );
 
-  /* Presentational (no interactivity). */
   if (!isInteractive && !onRemove) {
     return (
       <span role="status" className={baseClass}>

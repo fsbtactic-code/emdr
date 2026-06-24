@@ -1,23 +1,7 @@
 'use client';
 
-/**
- * OverlayShell - glass modal shell for custom overlays.
- *
- * Covers the gap between DS Modal (blur-sm / rounded-2xl / header-bar)
- * and bespoke modals that need blur-2xl, rounded-[28px] and an ambient
- * glow blob (GroundingOverlay, ModeChooser, BananaPopup, SessionJournal,
- * LanguagePicker).
- *
- * Features:
- * - backdrop: fixed inset-0 backdrop-blur-2xl bg-zinc-950/85, click closes
- * - panel: bg-[#0d0d10] border-white/[0.06] rounded-[28px] p-7 SHADOW.panel
- * - optional ambient glow blob top-right, color keyed from ACCENTS
- * - spring entrance via cardPop variants, AnimatePresence
- * - Esc close, focus-trap (first focusable on open), body-scroll-lock
- * - z-index from Z token, default Z.modal
- * - role=dialog, aria-modal, aria-label
- * - reduced-motion aware
- */
+// glass modal shell for overlays that need blur-2xl, rounded-[28px] and an
+// optional ambient glow blob. Handles Esc close, focus-trap and scroll-lock.
 
 import {
   useEffect,
@@ -32,39 +16,18 @@ import { ACCENTS, SHADOW, Z } from './tokens';
 import { cardPop, reduceVariants, EASE_FLUID } from './motion';
 import type { AccentName } from './tokens';
 
-/* ------------------------------------------------------------------ */
-
 export interface OverlayShellProps {
-  /** Controls visibility. */
   open: boolean;
-  /** Called when backdrop is clicked or Esc is pressed. */
   onClose: () => void;
-  /**
-   * Max-width tailwind class.
-   * @default 'max-w-md'
-   */
   maxWidth?: string;
-  /**
-   * Z-index layer from the Z token.
-   * @default 'modal'
-   */
   z?: keyof typeof Z;
-  /**
-   * Ambient glow blob color.
-   * Pass an AccentName to show a tinted blob, false/undefined to omit it.
-   */
+  /** pass an AccentName for a tinted glow blob, false/undefined to omit it */
   glow?: AccentName | false;
-  /** aria-label for the dialog (required when no visible heading is rendered). */
+  /** required when no visible heading is rendered */
   ariaLabel: string;
-  /** Dialog body. */
   children: ReactNode;
-  /** Additional className on the panel element. */
   className?: string;
 }
-
-/* ------------------------------------------------------------------ *
- * Focus-trap helpers
- * ------------------------------------------------------------------ */
 
 const FOCUSABLE =
   'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
@@ -72,8 +35,6 @@ const FOCUSABLE =
 function getFocusable(root: HTMLElement): HTMLElement[] {
   return Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE));
 }
-
-/* ------------------------------------------------------------------ */
 
 export function OverlayShell({
   open,
@@ -90,7 +51,7 @@ export function OverlayShell({
   const panelRef = useRef<HTMLDivElement>(null);
   const zIndex = Z[zKey];
 
-  /* ---- Esc close ---- */
+  // esc close
   useEffect(() => {
     if (!open) return;
     const handler = (e: globalThis.KeyboardEvent) => {
@@ -100,7 +61,7 @@ export function OverlayShell({
     return () => document.removeEventListener('keydown', handler);
   }, [open, onClose]);
 
-  /* ---- Focus-trap: initial focus ---- */
+  // focus first focusable element on open
   useEffect(() => {
     if (!open) return;
     const id = setTimeout(() => {
@@ -112,7 +73,7 @@ export function OverlayShell({
     return () => clearTimeout(id);
   }, [open]);
 
-  /* ---- Focus-trap: cycle on Tab ---- */
+  // keep Tab focus cycling inside the panel
   const handleKeyDown = useCallback(
     (e: ReactKeyboardEvent<HTMLDivElement>) => {
       if (e.key !== 'Tab') return;
@@ -137,7 +98,7 @@ export function OverlayShell({
     [],
   );
 
-  /* ---- Body-scroll lock ---- */
+  // lock body scroll while open
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -147,14 +108,12 @@ export function OverlayShell({
     };
   }, [open]);
 
-  /* ---- Glow blob color ---- */
   const glowHex = glow ? ACCENTS[glow].hex : null;
 
   return (
     <AnimatePresence>
       {open && (
         <>
-          {/* Backdrop */}
           <motion.div
             key="overlay-shell-backdrop"
             initial={{ opacity: 0 }}
@@ -167,12 +126,10 @@ export function OverlayShell({
             onClick={onClose}
           />
 
-          {/* Centering container */}
           <div
             className="fixed inset-0 flex items-center justify-center px-4 pointer-events-none"
             style={{ zIndex }}
           >
-            {/* Dialog panel */}
             <motion.div
               key="overlay-shell-panel"
               ref={panelRef}
@@ -197,7 +154,6 @@ export function OverlayShell({
               )}
               style={{ backgroundColor: '#0d0d10' }}
             >
-              {/* Ambient glow blob */}
               {glowHex && (
                 <span
                   aria-hidden="true"
@@ -210,7 +166,6 @@ export function OverlayShell({
                 />
               )}
 
-              {/* Content */}
               {children}
             </motion.div>
           </div>

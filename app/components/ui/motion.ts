@@ -1,49 +1,34 @@
-/**
- * framer-motion presets for the EMDR trainer.
- *
- * Calm, restrained motion. Soft springs for entrances, gentle
- * fade + rise for content. No infinite flicker. Always honour
- * prefers-reduced-motion via the useReducedMotion hook and the
- * reduceVariants helper below.
- */
+// framer-motion presets, paired with prefers-reduced-motion via the
+// reduceVariants / reduceTransition helpers below.
 import type { Transition, Variants } from 'framer-motion';
 
-/* ------------------------------------------------------------------ *
- * Springs
- * ------------------------------------------------------------------ */
-
-/** Soft default spring. Calm settle, used for panels / cards. */
+// default spring for panels / cards
 export const SPRING: Transition = {
   type: 'spring',
   stiffness: 320,
   damping: 30,
 };
 
-/** Snappier spring for small controls (toggles, chips). */
+// snappier spring for small controls (toggles, chips)
 export const SPRING_SNAPPY: Transition = {
   type: 'spring',
   stiffness: 480,
   damping: 26,
 };
 
-/** Tween fallback matching globals.css --ease-fluid. */
+// tween fallback matching globals.css --ease-fluid
 export const EASE_FLUID: Transition = {
   duration: 0.4,
   ease: [0.22, 1, 0.36, 1],
 };
 
-/* ------------------------------------------------------------------ *
- * Variants
- * ------------------------------------------------------------------ */
-
-/** Fade in while rising a few px. Pairs with SPRING. */
 export const fadeRise: Variants = {
   hidden: { opacity: 0, y: 8 },
   visible: { opacity: 1, y: 0, transition: SPRING },
   exit: { opacity: 0, y: 8, transition: EASE_FLUID },
 };
 
-/** Modal card pop: scale + rise. Mirrors GroundingOverlay card. */
+// mirrors the GroundingOverlay card
 export const cardPop: Variants = {
   hidden: { opacity: 0, scale: 0.96, y: 16 },
   visible: {
@@ -55,7 +40,6 @@ export const cardPop: Variants = {
   exit: { opacity: 0, scale: 0.96, y: 16, transition: EASE_FLUID },
 };
 
-/** Container that staggers its children's entrance. */
 export const staggerContainer: Variants = {
   hidden: {},
   visible: {
@@ -63,18 +47,8 @@ export const staggerContainer: Variants = {
   },
 };
 
-/* ------------------------------------------------------------------ *
- * Reduced-motion helper
- * ------------------------------------------------------------------ */
-
-/**
- * Collapse a variants set to opacity-only when the user prefers reduced
- * motion. Strips y / scale offsets so nothing slides or zooms, keeping a
- * plain fade. Pass the result of useReducedMotion() as `reduced`.
- *
- *   const reduced = useReducedMotion();
- *   <motion.div variants={reduceVariants(fadeRise, reduced)} ... />
- */
+// strip y / x / scale offsets so reduced-motion gets a plain fade.
+// pass the result of useReducedMotion() as `reduced`.
 export function reduceVariants(variants: Variants, reduced: boolean | null): Variants {
   if (!reduced) return variants;
   const flatten = (v: Variants[string]): Variants[string] => {
@@ -89,10 +63,7 @@ export function reduceVariants(variants: Variants, reduced: boolean | null): Var
   } as Variants;
 }
 
-/**
- * Pick a transition that respects reduced motion: an instant-ish fade
- * when reduced, the given spring otherwise.
- */
+// near-instant fade when reduced, otherwise the given transition
 export function reduceTransition(transition: Transition, reduced: boolean | null): Transition {
   return reduced ? { duration: 0.15, ease: 'linear' } : transition;
 }

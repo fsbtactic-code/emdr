@@ -1,15 +1,7 @@
 'use client';
 
-/**
- * Badge
- *
- * Status indicator with a small dot + text label.
- * Variants map to semantic accent roles so the color carries meaning
- * (e.g. success = "Клиент подключен", danger = "Сессия остановлена").
- *
- * Optionally animated: the dot pulses gently when `pulse` is true,
- * respecting prefers-reduced-motion.
- */
+// status dot + label; variants map to semantic accent roles so the color
+// carries meaning (success = connected, danger = stopped, etc.)
 
 import { useReducedMotion, motion } from 'framer-motion';
 import { cn } from './cn';
@@ -54,16 +46,10 @@ const VARIANT_CLASSES: Record<
 };
 
 export interface BadgeProps {
-  /** Semantic color variant. */
   variant?: BadgeVariant;
-  /** Label text. */
   children: React.ReactNode;
-  /**
-   * When true the status dot animates with a soft pulse.
-   * Automatically disabled when prefers-reduced-motion is set.
-   */
+  /** Pulses the status dot; disabled under prefers-reduced-motion. */
   pulse?: boolean;
-  /** Additional className fragments. */
   className?: string;
 }
 
@@ -88,7 +74,6 @@ export function Badge({
         className,
       )}
     >
-      {/* Status dot */}
       <span className="relative flex h-1.5 w-1.5 shrink-0">
         {shouldAnimate && (
           <motion.span

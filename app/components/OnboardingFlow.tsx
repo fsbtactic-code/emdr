@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, GraduationCap, Check } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import type { AppMode } from '../store/useStore';
+import { useT } from '../i18n/useT';
 import { Button } from './ui/Button';
 import { ProgressDots } from './ui/ProgressDots';
 import { AccentIconBadge } from './ui/AccentIconBadge';
@@ -12,51 +13,23 @@ import { COLORS, Z } from './ui/tokens';
 
 type TourStep = { target?: string; title: string; body: string };
 
-function getSteps(mode: AppMode, lang: string): TourStep[] {
-  const ru: Record<AppMode, TourStep[]> = {
-    specialist: [
-      { title: 'Режим специалиста', body: 'Коротко проведу по интерфейсу. Вы ведете клиента, приложение дает билатеральную стимуляцию.' },
-      { target: 'session', title: 'Сессия со специалистом', body: 'Создайте комнату и отправьте ссылку клиенту. Когда он подключится, его экран зеркалит вашу стимуляцию без настроек.' },
-      { target: 'clinical', title: 'Ведение сессии', body: 'Протокол по 8 фазам, замеры SUD и VOC, запуск сетов. Здесь же быстрые настройки на лету и показ механик клиенту: бабочка, дыхание, заземление. И кнопка заглушить звук только у себя.' },
-      { target: 'settings', title: 'Настройки сессии', body: 'Паттерн движения, скорость, размах, звук стимула и фон. Можно собрать пресет и поделиться ссылкой.' },
-      { target: 'grounding', title: 'Стоп и заземление', body: 'Всегда под рукой. Останавливает стимуляцию и помогает вернуться в здесь и сейчас. Тут же кризисные контакты.' },
-      { target: 'journal', title: 'Журнал сессий', body: 'Локальная история: настройки, сеты, динамика SUD. Хранится только на вашем устройстве, без имен.' },
-      { target: 'switch', title: 'Сменить режим', body: 'Переключиться между режимами специалиста и самопомощи в любой момент.' },
-      { title: 'Готово', body: 'Начните с создания сессии. Это обучение можно перезапустить кнопкой обучения в меню.' },
-    ],
-    selfhelp: [
-      { title: 'Режим самопомощи', body: 'Коротко покажу, что где. Это инструмент для стабилизации и расслабления, не замена терапии.' },
-      { target: 'resources', title: 'Ресурсы и стабилизация', body: 'Безопасное место, контейнер, поток света, объятие бабочки, дыхание. Безопасно практиковать самостоятельно.' },
-      { target: 'settings', title: 'Настройки', body: 'Паттерн движения, скорость, размах, звук и фон под себя.' },
-      { target: 'grounding', title: 'Стоп и заземление', body: 'В любой момент остановит стимуляцию и поможет успокоиться по технике 5-4-3-2-1 и дыханию.' },
-      { title: 'Готово', body: 'Переработку травмы ведет специалист, а не приложение. Это обучение можно перезапустить из меню.' },
-    ],
-  };
-  const en: Record<AppMode, TourStep[]> = {
-    specialist: [
-      { title: 'Practitioner mode', body: 'A quick tour of the interface. You guide the client, the app provides the bilateral stimulation.' },
-      { target: 'session', title: 'Session with a client', body: 'Create a room and send the link to your client. When they join, their screen mirrors your stimulation with no controls.' },
-      { target: 'clinical', title: 'Session conduct', body: 'The 8-phase protocol, SUD and VOC ratings, running sets. Quick controls on the fly, push mechanics to the client (butterfly, breathing, grounding), and mute sound on your side only.' },
-      { target: 'settings', title: 'Session settings', body: 'Movement pattern, speed, amplitude, stimulus sound and background. Build a preset and share a link.' },
-      { target: 'grounding', title: 'Stop and ground', body: 'Always available. Stops the stimulation and helps return to the here and now. Crisis contacts live here too.' },
-      { target: 'journal', title: 'Session journal', body: 'Local history: settings, sets, SUD trend. Stored on your device only, no names.' },
-      { target: 'switch', title: 'Switch mode', body: 'Switch between practitioner and self-help mode anytime.' },
-      { title: 'All set', body: 'Start by creating a session. You can replay this tour from the onboarding button in the menu.' },
-    ],
-    selfhelp: [
-      { title: 'Self-help mode', body: 'A quick look at what is where. This is a tool for stabilization and calm, not a replacement for therapy.' },
-      { target: 'resources', title: 'Resources and stabilization', body: 'Safe place, container, light stream, butterfly hug, breathing. Safe to practice on your own.' },
-      { target: 'settings', title: 'Settings', body: 'Movement pattern, speed, amplitude, sound and background to your taste.' },
-      { target: 'grounding', title: 'Stop and ground', body: 'Stops the stimulation anytime and helps you settle with 5-4-3-2-1 and breathing.' },
-      { title: 'All set', body: 'Trauma reprocessing is led by a practitioner, not an app. Replay this tour from the menu.' },
-    ],
-  };
-  return (lang === 'en' ? en : ru)[mode];
+// spotlight targets are structural (which rail control to highlight) and stay the
+// same across languages. title/body text comes from the dictionary (obSpecialist /
+// obSelfhelp), so the order here must match the order of those arrays.
+const TOUR_TARGETS: Record<AppMode, (string | undefined)[]> = {
+  specialist: [undefined, 'session', 'clinical', 'settings', 'grounding', 'journal', 'switch', undefined],
+  selfhelp: [undefined, 'resources', 'settings', 'grounding', undefined],
+};
+
+function buildSteps(mode: AppMode, content: { title: string; body: string }[]): TourStep[] {
+  const targets = TOUR_TARGETS[mode];
+  return content.map((c, i) => ({ target: targets[i], title: c.title, body: c.body }));
 }
 
 type Rect = { top: number; left: number; width: number; height: number };
 
 export function OnboardingFlow() {
+  const t = useT();
   const isOnboardingOpen = useStore((s) => s.isOnboardingOpen);
   const onboardingMode = useStore((s) => s.onboardingMode);
   const setIsOnboardingOpen = useStore((s) => s.setIsOnboardingOpen);
@@ -70,10 +43,8 @@ export function OnboardingFlow() {
   const setIsFeedbackOpen = useStore((s) => s.setIsFeedbackOpen);
 
   const mode: AppMode = onboardingMode ?? 'selfhelp';
-  const steps = getSteps(mode, lang);
-  const labels = lang === 'en'
-    ? { skip: 'Skip', back: 'Back', next: 'Next', done: 'Done', step: 'Step', of: 'of' }
-    : { skip: 'Пропустить', back: 'Назад', next: 'Далее', done: 'Готово', step: 'Шаг', of: 'из' };
+  const steps = buildSteps(mode, mode === 'specialist' ? t.obSpecialist : t.obSelfhelp);
+  const labels = { skip: t.obSkip, back: t.back, next: t.next, done: t.obDone, step: t.stepLabel, of: t.ofLabel };
 
   const [step, setStep] = useState(0);
   const [rect, setRect] = useState<Rect | null>(null);
@@ -153,7 +124,6 @@ export function OnboardingFlow() {
     calloutStyle = { left: '50%', top, transform: 'translateX(-50%)', width: cardW };
   }
 
-  // dim color using canonical bg token
   const dimColor = 'rgba(9,9,11,0.82)';
 
   return (

@@ -1,33 +1,14 @@
 'use client';
 
-/**
- * Tabs - tab bar with content panels.
- *
- * Two style variants:
- *   underline  - hairline indicator below active tab (drawer/settings style)
- *   fill       - translucent accent fill on active tab (pill style)
- *
- * Usage:
- *   <Tabs tabs={tabs} defaultTab="settings" variant="underline">
- *     {(activeId) => <div>{activeId === 'settings' && <Settings />}</div>}
- *   </Tabs>
- *
- * Or in controlled mode:
- *   <Tabs tabs={tabs} activeTab={tab} onTabChange={setTab} variant="fill" />
- */
-
 import * as React from 'react';
 import { useReducedMotion, motion, AnimatePresence } from 'framer-motion';
 import { cn } from './cn';
 import { COLORS, ACCENTS, RADIUS, TYPE, type AccentName } from './tokens';
 import { SPRING_SNAPPY, fadeRise, reduceVariants, reduceTransition } from './motion';
 
-/* ------------------------------------------------------------------ */
-
 export interface TabItem {
   id: string;
   label: string;
-  /** Optional icon before the label. */
   icon?: React.ReactNode;
   disabled?: boolean;
 }
@@ -40,24 +21,15 @@ export interface TabsProps {
   defaultTab?: string;
   /** Controlled active tab id. */
   activeTab?: string;
-  /** Fires when active tab changes. */
   onTabChange?: (id: string) => void;
   variant?: TabsVariant;
   accent?: AccentName;
-  /**
-   * Render prop for content area.
-   * Receives the current active tab id.
-   * If omitted, no content area is rendered (tab bar only).
-   */
+  /** Render prop for the content area; omit to render the tab bar only. */
   children?: (activeId: string) => React.ReactNode;
-  /** ARIA label for the tab list. */
   'aria-label'?: string;
   className?: string;
-  /** Extra classes on the content wrapper. */
   contentClassName?: string;
 }
-
-/* ------------------------------------------------------------------ */
 
 export function Tabs({
   tabs,
@@ -86,7 +58,6 @@ export function Tabs({
 
   const a = ACCENTS[accent];
 
-  /* Tab button styles per variant. */
   const tabButton = (isActive: boolean, disabled: boolean | undefined) => {
     if (variant === 'underline') {
       return cn(
@@ -129,7 +100,6 @@ export function Tabs({
 
   return (
     <div className={cn('flex flex-col', className)}>
-      {/* Tab bar */}
       <div
         role="tablist"
         aria-label={ariaLabel}
@@ -207,7 +177,6 @@ export function Tabs({
         })}
       </div>
 
-      {/* Content panels */}
       {children && (
         <div className={cn('mt-3', contentClassName)}>
           <AnimatePresence mode="wait" initial={false}>

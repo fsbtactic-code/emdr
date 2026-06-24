@@ -1,13 +1,8 @@
 'use client';
 
 /**
- * ColorSwatches - circular color picker row for EMDR UI state.
+ * Circular color picker row, e.g. for tagging a feeling or body sensation.
  *
- * Used wherever the therapist or client picks a color to represent
- * a feeling, body sensation, or target state. Active swatch gets a
- * translucent accent-tinted ring + subtle glow - no hard white ring.
- *
- * Usage:
  *   const FEELING_COLORS = [
  *     { value: 'calm',   hex: '#a78bfa', label: 'Calm' },
  *     { value: 'tense',  hex: '#f43f5e', label: 'Tension' },
@@ -21,32 +16,23 @@ import { cn } from './cn';
 import { COLORS, TYPE } from './tokens';
 import { reduceVariants, SPRING_SNAPPY, staggerContainer } from './motion';
 
-/* ------------------------------------------------------------------ */
-
 export interface SwatchItem {
-  /** Internal value for this color (e.g. 'calm', '#a78bfa', 'blue'). */
+  /** internal value, e.g. 'calm', '#a78bfa', 'blue' */
   value: string;
-  /** Actual CSS color shown as the swatch circle. */
+  /** CSS color shown as the swatch circle */
   hex: string;
-  /** Accessible label for the color. */
   label: string;
 }
 
 export interface ColorSwatchesProps {
   colors: SwatchItem[];
-  /** Currently selected value, or undefined. */
   value: string | undefined;
-  /** Called when user selects a color. Clicking active value clears it (passes undefined). */
+  /** clicking the active value clears it (passes undefined) */
   onChange: (value: string | undefined) => void;
-  /** Optional label shown above the row. */
   label?: string;
-  /** Size variant. Default: 'md'. */
   size?: 'sm' | 'md' | 'lg';
-  /** Extra class on root element. */
   className?: string;
 }
-
-/* ------------------------------------------------------------------ */
 
 const SIZE_MAP = {
   sm: { outer: 'w-6 h-6',  inner: 'w-4 h-4'  },
@@ -54,21 +40,13 @@ const SIZE_MAP = {
   lg: { outer: 'w-10 h-10', inner: 'w-7 h-7' },
 } as const;
 
-/* ------------------------------------------------------------------ */
-
 const swatchVariant = {
   hidden: { opacity: 0, scale: 0.75 },
   visible: { opacity: 1, scale: 1, transition: SPRING_SNAPPY },
 };
 
-/* ------------------------------------------------------------------ */
-
-/**
- * Build a subtle tonal glow + selection ring from a hex color.
- * Avoids hard white - uses 30% alpha of the swatch color itself.
- */
+/* selection ring + glow tinted from the swatch's own color rather than white */
 function activeStyle(hex: string): React.CSSProperties {
-  // Parse hex to rgb for rgba() usage
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
@@ -79,8 +57,6 @@ function activeStyle(hex: string): React.CSSProperties {
     ].join(', '),
   };
 }
-
-/* ------------------------------------------------------------------ */
 
 export function ColorSwatches({
   colors,
@@ -128,7 +104,7 @@ export function ColorSwatches({
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30',
                 'focus-visible:ring-offset-1',
                 isActive ? 'opacity-100' : 'opacity-60 hover:opacity-85',
-                // Subtle background ring slot so active state has contrast against dark bg
+                // background fill so the active ring has contrast on dark bg
                 `bg-[${COLORS.bgPanel}]`,
               )}
               style={isActive ? activeStyle(swatch.hex) : undefined}

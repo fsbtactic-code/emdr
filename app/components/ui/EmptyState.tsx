@@ -1,10 +1,6 @@
 'use client';
 
-/**
- * EmptyState - composed empty placeholder.
- * Used for empty session logs, empty protocol lists, no-results screens.
- * Accepts an icon, heading, description, and optional action slot.
- */
+// placeholder for empty session logs, empty protocol lists, no-results screens.
 
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -12,32 +8,17 @@ import { cn } from './cn';
 import { COLORS, RADIUS, SHADOW, SPACING, TYPE, type AccentName, ACCENTS } from './tokens';
 import { fadeRise, staggerContainer, reduceVariants } from './motion';
 
-/* ------------------------------------------------------------------ */
-
 export interface EmptyStateProps {
-  /**
-   * Lucide (or any) icon element. Rendered at 32px inside a tinted disc.
-   * Pass e.g. <BookOpen /> and sizing is applied automatically.
-   */
+  /** Icon element; sizing is applied by the disc, do not pre-size it. */
   icon?: React.ReactNode;
-  /** Short headline. */
   heading: string;
-  /** Supporting text that clarifies why this state exists. */
   description?: string;
-  /** Optional action button/link rendered below the description. */
   action?: React.ReactNode;
-  /**
-   * Accent that colors the icon disc.
-   * Default: 'primary'.
-   */
+  /** Colors the icon disc. */
   accent?: AccentName;
-  /** Controls overall layout density. Default: 'md'. */
   size?: 'sm' | 'md' | 'lg';
-  /** Additional class on the root wrapper. */
   className?: string;
 }
-
-/* ------------------------------------------------------------------ */
 
 const SIZE_PADDING: Record<'sm' | 'md' | 'lg', string> = {
   sm: `py-8 px-${SPACING.lg}`,
@@ -63,8 +44,6 @@ const HEADING_SIZE: Record<'sm' | 'md' | 'lg', string> = {
   lg: TYPE.heading,
 };
 
-/* ------------------------------------------------------------------ */
-
 export function EmptyState({
   icon,
   heading,
@@ -89,7 +68,6 @@ export function EmptyState({
       )}
       aria-live="polite"
     >
-      {/* Icon disc */}
       {icon && (
         <motion.div
           variants={reduceVariants(fadeRise, reduced)}
@@ -109,7 +87,6 @@ export function EmptyState({
         </motion.div>
       )}
 
-      {/* Heading */}
       <motion.h3
         variants={reduceVariants(fadeRise, reduced)}
         className={cn(
@@ -120,7 +97,6 @@ export function EmptyState({
         {heading}
       </motion.h3>
 
-      {/* Description */}
       {description && (
         <motion.p
           variants={reduceVariants(fadeRise, reduced)}
@@ -134,7 +110,6 @@ export function EmptyState({
         </motion.p>
       )}
 
-      {/* Action slot */}
       {action && (
         <motion.div
           variants={reduceVariants(fadeRise, reduced)}
@@ -147,14 +122,10 @@ export function EmptyState({
   );
 }
 
-/* ------------------------------------------------------------------ *
- * EmptyStateCard - same content wrapped in a soft surface card.
- * Convenience variant for when the empty state lives inside a panel
- * that already has its own background (e.g. session log, library tab).
- * ------------------------------------------------------------------ */
+// EmptyState wrapped in a surface card, for when it sits inside a panel
+// that already has its own background.
 
 export interface EmptyStateCardProps extends EmptyStateProps {
-  /** Shadow applied to the card. Default: true. */
   shadow?: boolean;
 }
 

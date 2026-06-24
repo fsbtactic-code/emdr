@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, AlertTriangle, Phone, X } from 'lucide-react';
 import { useStore } from '../store/useStore';
-import type { Locale } from '../i18n/dict';
+import { useT } from '../i18n/useT';
 import { IconButton } from './ui/IconButton';
 import { Button } from './ui/Button';
 import { SectionLabel } from './ui/SectionLabel';
@@ -12,102 +12,29 @@ import { AccentIconBadge } from './ui/AccentIconBadge';
 import { InfoBanner } from './ui/InfoBanner';
 import { COLORS, Z } from './ui/tokens';
 
-const STRINGS: Record<'ru' | 'en', {
-  badge: string;
-  title: string;
-  sub: string;
-
-  screenTitle: string;
-  screenIntro: string;
-  screenItems: string[];
-
-  stopTitle: string;
-  stopBody: string;
-  stopHint: string;
-  openResources: string;
-
-  consentTitle: string;
-  consentItems: string[];
-
-  accept: string;
-}> = {
-  ru: {
-    badge: 'Перед началом',
-    title: 'Краткая проверка',
-    sub: 'Займет меньше минуты. Помогает убедиться, что инструмент подходит вам сейчас.',
-
-    screenTitle: 'Отметьте, если это есть прямо сейчас',
-    screenIntro: 'По умолчанию все пункты - "нет". Отметьте любой, который верен для вас сейчас.',
-    screenItems: [
-      'Ощущение нереальности или отстраненности от себя и окружающего',
-      'Острые мысли о причинении вреда себе или суициде',
-      'Психоз или мания прямо сейчас',
-      'Тяжелое диссоциативное расстройство (диагноз)',
-      'Вещества, нарушающие способность саморегуляции',
-    ],
-
-    stopTitle: 'Сейчас лучше обратиться к специалисту',
-    stopBody:
-      'Один или несколько пунктов указывают, что самостоятельная работа с двойным вниманием сейчас небезопасна. ' +
-      'Это не критика - просто сигнал: нужна профессиональная поддержка.',
-    stopHint: 'Откройте раздел ресурсов, чтобы найти кризисную помощь и контакты специалистов.',
-    openResources: 'Открыть ресурсы поддержки',
-
-    consentTitle: 'Понимание и согласие',
-    consentItems: [
-      'Я понимаю, что это инструмент самопомощи, а не терапия и не замена специалисту.',
-      'Я могу остановить сессию в любой момент и использую заземление / 5-4-3-2-1, если почувствую дискомфорт.',
-      'Для полноценной работы с травмой рядом должен быть обученный специалист - я использую инструмент для заземления и расслабления.',
-    ],
-
-    accept: 'Начать',
-  },
-  en: {
-    badge: 'Before you start',
-    title: 'Quick check',
-    sub: 'Takes under a minute. Helps confirm the tool is right for you right now.',
-
-    screenTitle: 'Tap anything that is true right now',
-    screenIntro: 'All items default to "no". Tap any that apply to you at this moment.',
-    screenItems: [
-      'Feeling unreal or detached from yourself or surroundings',
-      'Acute thoughts of self-harm or suicide',
-      'Psychosis or mania right now',
-      'Known severe dissociative disorder (diagnosed)',
-      'Under substances that impair self-regulation',
-    ],
-
-    stopTitle: 'A specialist would be the right next step',
-    stopBody:
-      'One or more items suggest that self-guided dual-attention work is not safe right now. ' +
-      'This is not a judgment - just a signal that professional support would help.',
-    stopHint: 'Open the resources panel to find crisis lines and specialist contacts.',
-    openResources: 'Open support resources',
-
-    consentTitle: 'Understanding and consent',
-    consentItems: [
-      'I understand this is a self-help tool, not therapy and not a substitute for a specialist.',
-      'I can stop at any time and will use grounding / 5-4-3-2-1 if I feel distressed.',
-      'For actual trauma processing a trained specialist should be present - I am using this for grounding and relaxation.',
-    ],
-
-    accept: 'Start',
-  },
-};
-
-function resolveStrings(lang: Locale) {
-  return lang === 'en' ? STRINGS.en : STRINGS.ru;
-}
-
 export function PreSessionGate() {
-  const isGateOpen = useStore((s) => s.isGateOpen);
-  const lang = useStore((s) => s.lang);
-  const setConsentGiven = useStore((s) => s.setConsentGiven);
-  const setDissociationScreenPassed = useStore((s) => s.setDissociationScreenPassed);
-  const setIsGateOpen = useStore((s) => s.setIsGateOpen);
-  const setIsResourcesOpen = useStore((s) => s.setIsResourcesOpen);
+  const isGateOpen = useStore((st) => st.isGateOpen);
+  const setConsentGiven = useStore((st) => st.setConsentGiven);
+  const setDissociationScreenPassed = useStore((st) => st.setDissociationScreenPassed);
+  const setIsGateOpen = useStore((st) => st.setIsGateOpen);
+  const setIsResourcesOpen = useStore((st) => st.setIsResourcesOpen);
+  const t = useT();
 
-  const s = resolveStrings(lang);
+  const s = {
+    badge: t.gateBadge,
+    title: t.gateTitle,
+    sub: t.gateSub,
+    screenTitle: t.gateScreenTitle,
+    screenIntro: t.gateScreenIntro,
+    screenItems: t.gateScreenItems,
+    stopTitle: t.gateStopTitle,
+    stopBody: t.gateStopBody,
+    stopHint: t.gateStopHint,
+    openResources: t.gateOpenResources,
+    consentTitle: t.gateConsentTitle,
+    consentItems: t.gateConsentItems,
+    accept: t.gateAccept,
+  };
 
   const [step, setStep] = useState<'screen' | 'stop' | 'consent'>('screen');
   const [flags, setFlags] = useState<boolean[]>(s.screenItems.map(() => false));
@@ -188,7 +115,7 @@ export function PreSessionGate() {
 
             <IconButton
               onClick={handleDismiss}
-              aria-label={lang === 'en' ? 'Close' : 'Закрыть'}
+              aria-label={t.close}
               variant="ghost"
               shape="round"
               className="absolute top-3.5 right-3.5 z-20"
@@ -256,7 +183,7 @@ export function PreSessionGate() {
                     className="w-full"
                     style={!anyFlagged ? { background: '#ffffff', color: '#09090b' } : undefined}
                   >
-                    {lang === 'en' ? 'Next' : 'Далее'}
+                    {t.next}
                   </Button>
                 </div>
               )}

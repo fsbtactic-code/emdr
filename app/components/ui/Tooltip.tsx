@@ -1,43 +1,26 @@
 'use client';
 
-/**
- * Tooltip - glass-panel popover that appears near a trigger element.
- * Uses framer-motion AnimatePresence + spring fade. Positionable via `side`.
- * No external deps beyond framer-motion and lucide-react (already in project).
- */
-
 import React, { useId, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion, type Variants } from 'framer-motion';
 import { cn } from './cn';
 import { COLORS, RADIUS, SHADOW, TYPE, Z } from './tokens';
 import { fadeRise, reduceVariants, SPRING_SNAPPY } from './motion';
 
-/* ------------------------------------------------------------------ */
-
 export type TooltipSide = 'top' | 'bottom' | 'left' | 'right';
 
 export interface TooltipProps {
-  /** The element that triggers the tooltip on hover / focus. */
   children: React.ReactNode;
-  /** Tooltip copy. Can be a string or arbitrary content. */
   content: React.ReactNode;
-  /** Which side of the trigger the tooltip appears on. Default: 'top'. */
   side?: TooltipSide;
-  /** Pixel gap between trigger edge and tooltip. Default: 8. */
+  /** Pixel gap between trigger edge and tooltip. */
   gap?: number;
-  /** Delay before showing, ms. Default: 250. */
+  /** Delay before showing, ms. */
   delay?: number;
-  /** Extra class applied to the tooltip bubble. */
   className?: string;
-  /** Disable the tooltip entirely. */
   disabled?: boolean;
 }
 
-/* ------------------------------------------------------------------ *
- * Position helpers - tailwind-class-based offsets so we never inline
- * transform strings and keep tsc happy.
- * ------------------------------------------------------------------ */
-
+// class-based offsets rather than inline transform strings, to keep tsc happy.
 const SIDE_WRAPPER: Record<TooltipSide, string> = {
   top: 'bottom-full left-1/2 -translate-x-1/2 pb-2',
   bottom: 'top-full left-1/2 -translate-x-1/2 pt-2',
@@ -68,8 +51,6 @@ const SIDE_VARIANTS: Record<TooltipSide, { hidden: object; visible: object; exit
     exit: { opacity: 0, x: -4, transition: { duration: 0.12, ease: 'easeIn' } },
   },
 };
-
-/* ------------------------------------------------------------------ */
 
 export function Tooltip({
   children,
@@ -111,10 +92,8 @@ export function Tooltip({
       onFocusCapture={show}
       onBlurCapture={hide}
     >
-      {/* Trigger */}
       <span aria-describedby={open ? tooltipId : undefined}>{children}</span>
 
-      {/* Tooltip bubble */}
       <AnimatePresence>
         {open && (
           <span className={cn('pointer-events-none absolute z-[200]', SIDE_WRAPPER[side])}>

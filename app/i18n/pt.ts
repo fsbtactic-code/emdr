@@ -263,5 +263,283 @@ Os sons e as "frequências" aqui (incluindo 528 Hz e batimentos binaurais) são 
   sessClientBadge: "A sessão é conduzida por um especialista",
   sessClientWaiting: "Aguardando o condutor. Relaxe e respire com calma.",
   sessClientHint: "As configurações são controladas pelo especialista. Você não precisa apertar nada.",
-  sessEnd: "Encerrar a sessão"
+  sessEnd: "Encerrar a sessão",
+
+  navResources: "Recursos e estabilização",
+  navJournal: "Diário de sessões",
+
+  channelsSection: "Canais e acessibilidade",
+  blsVolume: "Volume do estímulo",
+  ambientVolumeLabel: "Volume do ambiente",
+  hapticLabel: "Estimulação por vibração",
+  hapticDesc: "Vibração alternada do telefone como canal tátil de EBL",
+  hapticUnsupported: "A vibração não é suportada neste dispositivo",
+  visualStim: "Estímulo visual",
+  visualStimDesc: "Desative para um modo de áudio/tátil: baixa visão, enjoo, condições visuais",
+  vestibular: "Proteção contra enjoo",
+  vestibularDesc: "Limita a velocidade e a amplitude se você sentir náusea ou tontura",
+
+  groundBeforeExit: "Aterre-se primeiro",
+  groundBeforeExitSub: "O sofrimento ainda está alto. Vale a pena voltar a um estado calmo antes de sair.",
+  closeAnyway: "Encerrar mesmo assim",
+  connLost: "A conexão com o especialista foi perdida. A estimulação foi interrompida. Respire com calma e aterre-se se for preciso.",
+
+  sigOk: "Estou bem",
+  sigPause: "Preciso de uma pausa",
+  sigStop: "Parar",
+  sigBadge: "O especialista pode ver o seu sinal",
+  sigHeading: "Sinal do cliente",
+  sigNone: "Sem sinais",
+  sigOkH: "Cliente: tudo bem",
+  sigPauseH: "O cliente pede uma pausa",
+  sigStopH: "O cliente pede para PARAR",
+  sigClear: "Limpar",
+
+  tpTitle: "Condução da sessão",
+  tpSub: "Protocolo por fases. Apenas para o especialista",
+  tpPhaseLabel: "Fase",
+  tpTarget: "Alvo (imagem ou lembrança)",
+  tpNeg: "Crença negativa (NC)",
+  tpPos: "Crença positiva (PC)",
+  tpEmotions: "Emoções",
+  tpBody: "Sensações corporais, onde",
+  tpSuds: "SUD (0-10)",
+  tpVoc: "VOC (1-7)",
+  tpVocInit: "VOC inicial",
+  tpStartSet: "Iniciar série",
+  tpStopSet: "Parar e perguntar",
+  tpNoticePrompt: "O que você nota agora?",
+  tpLogObs: "Registrar observação",
+  tpObsPh: "Em poucas palavras: imagem, pensamento, sensação",
+  tpNextSet: "Próxima série",
+  tpNotes: "Notas do especialista (sem dados pessoais)",
+  tpNotesPh: "Apenas observações clínicas, sem o nome do cliente",
+  tpSaveSession: "Salvar no diário",
+  tpSaved: "Salvo no diário",
+  tpReset: "Nova sessão",
+  tpSudsTrend: "Evolução do SUD",
+  tpSoloLock: "O protocolo completo com dessensibilização está disponível apenas em uma sessão com especialista. No modo individual estão disponíveis a preparação, os exercícios de recursos e o aterramento.",
+  tpHostOnly: "Crie uma sessão (painel à esquerda) para conduzir o protocolo com um cliente",
+
+  modeChooseTitle: "Como você vai trabalhar?",
+  modeChooseSub: "Você pode mudar o modo a qualquer momento no menu lateral",
+  modeSpecialist: "Para o especialista",
+  modeSpecialistDesc: "Conduzo uma sessão com um cliente: crio uma sala, envio o link, conduzo o protocolo por fases com medições de SUD e VOC.",
+  modeSelfHelp: "Para autoajuda",
+  modeSelfHelpDesc: "Para mim mesmo: estabilização, exercícios de recursos, aterramento e relaxamento. Sem o processamento autônomo do trauma.",
+  modeSwitch: "Mudar de modo",
+  modeContinue: "Continuar",
+  specIntroTitle: "Como conduzir uma sessão",
+  specStep1: "Abra o painel Sessão com especialista e toque em Criar sessão.",
+  specStep2: "Copie o link e envie ao cliente. Quando ele se conectar, aparecerá o status Cliente conectado.",
+  specStep3: "Abra Condução da sessão: o protocolo por fases com medições de SUD e VOC é desbloqueado quando você se torna o condutor.",
+  specStartBtn: "Criar sessão",
+  selfIntroTitle: "Por onde começar",
+  selfIntro1: "Comece pelos recursos e pela estabilização: lugar seguro, recipiente, respiração.",
+  selfIntro2: "O botão Parar e se aterrar está disponível a qualquer momento.",
+  selfIntro3: "Esta é uma ferramenta de autoajuda. O processamento do trauma é conduzido por um especialista, não por um aplicativo.",
+  selfStartBtn: "Abrir recursos",
+
+  navOnboarding: "Tutorial",
+  tpQuick: "Configurações rápidas",
+  tpLocalMute: "Silenciar só do meu lado",
+  tpLocalMuteHint: "Silenciar o áudio no seu dispositivo. O cliente continua ouvindo o som.",
+
+  cueTitle: "Mostrar ao cliente",
+  cueHint: "Exibe uma técnica calma na tela do cliente sobre a estimulação.",
+  cueButterfly: "Abraço da borboleta",
+  cueBreathing: "Respiração",
+  cueGrounding: "Aterramento",
+  cueClear: "Remover",
+  crisisHeading: "Apoio em crise",
+
+  close: "Fechar",
+  stepLabel: "Passo",
+  ofLabel: "de",
+
+  aboutNav: "Sobre",
+  aboutTitle: "O treinador de EMDR é um projeto livre",
+  aboutDesc: "Use gratuitamente. O código é aberto, então você pode hospedar o serviço no seu próprio servidor.",
+  aboutGithub: "Abrir no GitHub",
+  aboutDonate: "Apoiar o projeto",
+  aboutContact: "Entrar em contato com o autor",
+
+  cueLightstream: "Fluxo de luz",
+  cueContent: {
+    butterfly: {
+      title: "Abraço da borboleta",
+      steps: [
+        "Sente-se confortavelmente. Cruze os braços sobre o peito, com as palmas nos ombros.",
+        "Feche os olhos ou baixe suavemente o olhar. Uma respiração calma.",
+        "Dê leves toques nos ombros, um de cada vez: à esquerda, depois à direita.",
+        "Respire com calma e de forma uniforme. Mantenha um ritmo de cerca de um toque por segundo.",
+        "Faça 20-30 toques alternados em um ritmo calmo.",
+        "Pare. Baixe os braços e respire fundo."
+      ]
+    },
+    breathing: {
+      title: "Respiração quadrada",
+      steps: [
+        "Sente-se confortavelmente, relaxe os ombros. Acompanhe o círculo na tela.",
+        "Respire junto com o círculo: inspire quando ele se expande, expire quando ele se contrai.",
+        "Mantenha um ritmo uniforme: inspire 4, segure 4, expire 4, segure 4."
+      ]
+    },
+    grounding: {
+      title: "Aterramento 5-4-3-2-1",
+      steps: [
+        "Nomeie para si mesmo 5 coisas que você vê ao redor.",
+        "Nomeie 4 coisas que você pode tocar.",
+        "Nomeie 3 sons que você ouve.",
+        "Nomeie 2 cheiros que você sente.",
+        "Nomeie 1 sabor que você percebe. Respire com calma."
+      ]
+    },
+    lightstream: {
+      title: "Fluxo de luz",
+      steps: [
+        "Acomode-se confortavelmente e feche os olhos. Três respirações lentas e calmas.",
+        "Imagine uma luz quente e suave, de qualquer cor que lhe pareça curativa e tranquila.",
+        "Deixe essa luz entrar pelo topo da sua cabeça. Sinta um calor suave.",
+        "A luz desce lentamente: testa, rosto, pescoço, ombros. Por onde passa, a tensão se dissolve.",
+        "A luz flui pelo peito, pela barriga, pelas costas. Cada expiração traz um pouco mais de relaxamento.",
+        "Agora a luz passa pelos quadris, joelhos, panturrilhas, descendo em direção aos pés.",
+        "A luz chega aos pés e flui para a terra, levando embora tudo o que você não precisa mais. O corpo está calmo e leve."
+      ]
+    }
+  },
+
+  sjBadge: "Diário de sessões",
+  sjTitle: "Histórico de sessões",
+  sjSubtitle: "Os registros são armazenados apenas neste dispositivo",
+  sjEmpty: "Ainda não há sessões salvas.",
+  sjDuration: "Duração",
+  sjMode: "Modo",
+  sjModeSolo: "individual",
+  sjModeHost: "especialista",
+  sjModeClient: "cliente",
+  sjPhase: "Fase",
+  sjSuds: "SUD",
+  sjSudsTo: "para",
+  sjObservations: "observações",
+  sjClient: "Código do cliente",
+  sjDeleteOne: "Excluir",
+  sjClearAll: "Limpar tudo",
+  sjClearConfirm: "Excluir permanentemente todos os registros do diário?",
+  sjDownloadJson: "Baixar JSON",
+  sjDownloadCsv: "Baixar CSV",
+  sjPrivacyTitle: "Privacidade",
+  sjPrivacyBody: "Os dados são armazenados apenas neste dispositivo e pseudonimizados (sem nomes, apenas código). Você é o responsável pelos dados. Obtenha o consentimento do cliente antes de registrar.",
+
+  gateBadge: "Antes de começar",
+  gateTitle: "Verificação rápida",
+  gateSub: "Leva menos de um minuto. Ajuda a confirmar que a ferramenta é adequada para você agora.",
+  gateScreenTitle: "Marque o que for verdadeiro agora mesmo",
+  gateScreenIntro: 'Por padrão, todos os itens estão como "não". Marque qualquer um que se aplique a você neste momento.',
+  gateScreenItems: [
+    "Sensação de irrealidade ou de desligamento de si mesmo ou do ambiente",
+    "Pensamentos agudos de autolesão ou suicídio",
+    "Psicose ou mania agora mesmo",
+    "Transtorno dissociativo grave conhecido (diagnosticado)",
+    "Sob efeito de substâncias que prejudicam a autorregulação"
+  ],
+  gateStopTitle: "Agora, procurar um especialista seria o passo certo",
+  gateStopBody: "Um ou mais itens indicam que o trabalho de dupla atenção feito sozinho não é seguro agora. Isto não é uma crítica, apenas um sinal: o apoio profissional ajudaria.",
+  gateStopHint: "Abra o painel de recursos para encontrar linhas de crise e contatos de especialistas.",
+  gateOpenResources: "Abrir recursos de apoio",
+  gateConsentTitle: "Compreensão e consentimento",
+  gateConsentItems: [
+    "Entendo que esta é uma ferramenta de autoajuda, não uma terapia e não uma substituta do especialista.",
+    "Posso parar a qualquer momento e usarei o aterramento / 5-4-3-2-1 se me sentir mal.",
+    "Para o trabalho efetivo com o trauma, deve haver por perto um especialista treinado: eu uso isto para aterramento e relaxamento."
+  ],
+  gateAccept: "Iniciar",
+
+  obSkip: "Pular",
+  obDone: "Concluído",
+  obSpecialist: [
+    { title: "Modo especialista", body: "Um tour rápido pela interface. Você guia o cliente, o aplicativo fornece a estimulação bilateral." },
+    { title: "Sessão com um cliente", body: "Crie uma sala e envie o link ao cliente. Quando ele se conectar, a tela dele espelha a sua estimulação, sem controles." },
+    { title: "Condução da sessão", body: "O protocolo de 8 fases, medições de SUD e VOC, início de séries. Aqui também há configurações rápidas em tempo real e técnicas para mostrar ao cliente: borboleta, respiração, aterramento. E o botão para silenciar o som só do seu lado." },
+    { title: "Configurações da sessão", body: "Padrão de movimento, velocidade, amplitude, som do estímulo e fundo. Você pode montar uma predefinição e compartilhar um link." },
+    { title: "Parar e se aterrar", body: "Sempre à mão. Interrompe a estimulação e ajuda a voltar ao aqui e agora. Os contatos de crise também ficam aqui." },
+    { title: "Diário de sessões", body: "Histórico local: configurações, séries, evolução do SUD. Armazenado apenas no seu dispositivo, sem nomes." },
+    { title: "Mudar de modo", body: "Alterne entre o modo especialista e o de autoajuda a qualquer momento." },
+    { title: "Tudo pronto", body: "Comece criando uma sessão. Você pode rever este tutorial pelo botão de tutorial no menu." }
+  ],
+  obSelfhelp: [
+    { title: "Modo autoajuda", body: "Uma olhada rápida no que está onde. Esta é uma ferramenta de estabilização e calma, não uma substituta da terapia." },
+    { title: "Recursos e estabilização", body: "Lugar seguro, recipiente, fluxo de luz, abraço da borboleta, respiração. Seguro para praticar sozinho." },
+    { title: "Configurações", body: "Padrão de movimento, velocidade, amplitude, som e fundo do seu jeito." },
+    { title: "Parar e se aterrar", body: "Interrompe a estimulação a qualquer momento e ajuda você a se acalmar com o 5-4-3-2-1 e a respiração." },
+    { title: "Tudo pronto", body: "O processamento do trauma é conduzido por um especialista, não por um aplicativo. Reveja este tutorial pelo menu." }
+  ],
+
+  drawerVisual: "Visual",
+  drawerSound: "Som",
+  drawerChannels: "Canais",
+  drawerTiming: "Tempo",
+
+  previewPaused: "em pausa",
+  previewVisualOff: "visual desligado",
+
+  resNote: "Estabilização",
+  resTitle: "Exercícios de recursos",
+  resSubtitle: "Estabilização e aterramento - EMDR fase 2",
+  resDisclaimer: "Estes exercícios são de estabilização e aterramento, não de processamento do trauma. Seguros sem um terapeuta.",
+  resBackToList: "Voltar à lista",
+  resExercises: {
+    safe_place: {
+      name: "Lugar seguro / tranquilo",
+      tagline: "Visualização guiada de um espaço de paz",
+      steps: [
+        "Acomode-se confortavelmente. Feche os olhos ou baixe suavemente o olhar. Faça três respirações lentas e profundas.",
+        "Imagine um lugar onde você se sente calmo e seguro. Pode ser real ou totalmente imaginado.",
+        "Olhe ao redor nesse lugar. O que você vê? Note as cores, a luz, as formas.",
+        "Escute. Que sons existem ali, ou é silêncio?",
+        "Sinta o ar na sua pele. A temperatura, talvez um aroma. Sinta o chão ou a superfície sob você.",
+        "Permita-se estar plenamente presente ali. Sinta o corpo relaxar. Guarde essa sensação.",
+        "Dê um nome a este lugar - uma palavra ou imagem à qual você pode voltar a qualquer momento. Abra os olhos devagar."
+      ]
+    },
+    container: {
+      name: "Recipiente",
+      tagline: "Guardar mentalmente o material perturbador",
+      steps: [
+        "Sente-se confortavelmente. Faça algumas respirações calmas. Lembre-se: você está seguro neste momento.",
+        "Imagine um recipiente resistente - um cofre, um baú, uma caixa. Algo sólido, com tampa ou fechadura segura.",
+        "Examine-o: o material, o tamanho, a fechadura ou o trinco. Certifique-se de que parece firme o bastante.",
+        "Nomeie o que está incomodando você - apenas uma palavra ou imagem. Não mergulhe nos detalhes.",
+        "Imagine-se colocando isso dentro do recipiente. Feche a tampa. Tranque. O recipiente está seguro.",
+        "Coloque o recipiente em algum lugar seguro na sua imaginação - em uma prateleira, em um cofre. Ele vai ficar ali.",
+        "Respire. Você pode voltar a este material mais tarde, quando estiver pronto - e com apoio."
+      ]
+    },
+    light_stream: {
+      name: "Fluxo de luz",
+      tagline: "Luz quente percorrendo o corpo",
+      steps: [
+        "Sente-se ou deite-se confortavelmente. Feche os olhos. Três respirações lentas.",
+        "Imagine uma luz quente e suave - qualquer cor que lhe pareça curativa e tranquila.",
+        "Deixe essa luz entrar pelo topo da sua cabeça. Sinta um calor suave.",
+        "Aos poucos a luz desce: testa, rosto, pescoço. Por onde a luz passa, a tensão se dissolve.",
+        "A luz flui pelos ombros, braços, peito. Cada expiração traz um pouco mais de relaxamento.",
+        "Agora a luz percorre a barriga, a região lombar, os quadris, os joelhos, as panturrilhas.",
+        "A luz chega aos pés e flui para a terra, levando embora tudo o que você não precisa mais."
+      ]
+    },
+    butterfly_hug: {
+      name: "Abraço da borboleta",
+      tagline: "Toques alternados em si mesmo para se acalmar",
+      steps: [
+        "Sente-se ereto. Cruze os braços sobre o peito: a mão direita no ombro esquerdo, a mão esquerda no ombro direito.",
+        "Feche os olhos ou baixe suavemente o olhar. Faça uma respiração profunda.",
+        "Acompanhe a animação abaixo. Comece a dar toques de forma lenta e alternada: primeiro a mão direita, depois a esquerda.",
+        "Continue em um ritmo lento - cerca de um por segundo. Respire de forma estável e calma.",
+        "Pense em algo neutro ou levemente agradável enquanto dá os toques.",
+        "Faça 20-30 toques alternados. Depois pare. Respire fundo.",
+        "Baixe os braços. Como você se sente? Note quaisquer mudanças no seu corpo ou no seu humor."
+      ]
+    }
+  }
 };

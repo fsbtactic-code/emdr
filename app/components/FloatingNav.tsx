@@ -215,14 +215,14 @@ export const FloatingNav = () => {
               <div className="relative overflow-visible">
                 <button
                   onClick={() => setBananaOpen(true)}
-                  aria-label="O proekte"
+                  aria-label={t.aboutNav}
                   onMouseEnter={() => setHoveredId('banana')}
                   onMouseLeave={() => setHoveredId(null)}
                   onFocus={() => setHoveredId('banana')}
                   onBlur={() => setHoveredId(null)}
                   className="group w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/[0.07] hover:scale-105 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-1 focus-visible:ring-offset-zinc-950"
                 >
-                  {/* render the banana as a white monochrome glyph to match the other rail icons */}
+                  {/* white monochrome glyph to match the other rail icons */}
                   <img
                     src="/banana.png"
                     alt=""
@@ -230,7 +230,7 @@ export const FloatingNav = () => {
                     style={{ filter: 'brightness(0) invert(1)' }}
                   />
                 </button>
-                <NavTooltip label="O proekte" visible={hoveredId === 'banana'} />
+                <NavTooltip label={t.aboutNav} visible={hoveredId === 'banana'} />
               </div>
             </div>
           </motion.div>

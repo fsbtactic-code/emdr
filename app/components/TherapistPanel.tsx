@@ -15,7 +15,7 @@ import { useT } from '../i18n/useT';
 import { saveSession } from '../lib/journal';
 import { MiniStimPreview } from './MiniStimPreview';
 import { SessionSettingsDrawer } from './SessionSettingsDrawer';
-import { CUE_CONTENT, cueStepCount, clampCueStep, type CueTechnique } from '../content/cues';
+import { cueStepCount, clampCueStep, type CueTechnique } from '../content/cues';
 import { SectionLabel } from './ui/SectionLabel';
 import { Field } from './ui/Field';
 import { ScaleRow } from './ui/ScaleRow';
@@ -38,7 +38,6 @@ const PHASE_ORDER: SessionPhase[] = [
 
 export function TherapistPanel() {
   const t = useT();
-  const lang = useStore((s) => s.lang);
   const isClinicalOpen = useStore((s) => s.isClinicalOpen);
   const setIsClinicalOpen = useStore((s) => s.setIsClinicalOpen);
   const setIsResourcesOpen = useStore((s) => s.setIsResourcesOpen);
@@ -157,7 +156,7 @@ export function TherapistPanel() {
   const cueTech = cueActive ? (clientCue as CueTechnique) : null;
   const cueIdx = cueTech ? clampCueStep(cueTech, cueStep) : 0;
   const cueTotal = cueTech ? cueStepCount(cueTech) : 0;
-  const cueStepText = cueTech ? (lang === 'ru' ? CUE_CONTENT[cueTech].steps[cueIdx].ru : CUE_CONTENT[cueTech].steps[cueIdx].en) : '';
+  const cueStepText = cueTech ? t.cueContent[cueTech].steps[Math.min(cueIdx, t.cueContent[cueTech].steps.length - 1)] : '';
 
   const handleSave = async () => {
     const startedAt = sessionStartedAt ?? Date.now();
@@ -182,7 +181,7 @@ export function TherapistPanel() {
     }
   };
 
-  // does a phase have captured data (for the rail status dots)
+  // true when a phase has captured data, drives the rail status dots
   const phaseHasData = (ph: SessionPhase): boolean => {
     switch (ph) {
       case SessionPhase.History:
@@ -210,19 +209,17 @@ export function TherapistPanel() {
     { cue: 'butterfly', label: t.cueButterfly, Icon: Wind },
     { cue: 'breathing', label: t.cueBreathing, Icon: Anchor },
     { cue: 'grounding', label: t.cueGrounding, Icon: Leaf },
-    { cue: 'lightstream', label: lang === 'ru' ? 'Поток света' : 'Light stream', Icon: Sun },
+    { cue: 'lightstream', label: t.cueLightstream, Icon: Sun },
   ];
 
-  // Swatch palette mapped to ACCENTS hex values
   const swatchColors = [
-    ACCENTS.info.hex,    // cyan
-    ACCENTS.success.hex, // emerald
-    ACCENTS.warn.hex,    // amber
-    ACCENTS.danger.hex,  // rose
-    ACCENTS.primary.hex, // indigo
+    ACCENTS.info.hex,
+    ACCENTS.success.hex,
+    ACCENTS.warn.hex,
+    ACCENTS.danger.hex,
+    ACCENTS.primary.hex,
   ];
 
-  // ---- phase-adaptive center workspace ----
   const renderPhaseFields = () => {
     switch (currentPhase) {
       case SessionPhase.History:
@@ -432,7 +429,6 @@ export function TherapistPanel() {
     <AnimatePresence>
       {isClinicalOpen && (
         !isHost ? (
-          // ---- solo-lock branch (preserved) ----
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -478,7 +474,6 @@ export function TherapistPanel() {
             </motion.div>
           </motion.div>
         ) : (
-          // ---- host clinical console ----
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -486,7 +481,6 @@ export function TherapistPanel() {
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="fixed inset-0 z-50 bg-[#0a0a0c] flex flex-col h-[100dvh] overflow-hidden"
           >
-            {/* HEADER 56px */}
             <header className="shrink-0 h-14 px-4 md:px-5 flex items-center gap-3 border-b border-white/[0.06]">
               <div className="flex items-center gap-2.5 min-w-0">
                 <ClipboardList size={18} className="text-indigo-300 shrink-0" />
@@ -516,10 +510,9 @@ export function TherapistPanel() {
               </IconButton>
             </header>
 
-            {/* BODY: rail | center | operator. Stacks under lg. */}
+            {/* rail / center / operator, stacks vertically under lg */}
             <div className="flex-1 min-h-0 flex flex-col lg:flex-row">
 
-              {/* LEFT phase rail */}
               <nav className="order-1 shrink-0 lg:w-[72px] xl:w-[216px] 2xl:w-[232px] border-b lg:border-b-0 lg:border-r border-white/[0.06] px-2 xl:px-3 py-3 flex flex-row lg:flex-col gap-1 overflow-x-auto lg:overflow-visible no-scrollbar">
                 {PHASE_ORDER.map((ph, idx) => {
                   const meta = t.phases[idx];
@@ -548,9 +541,7 @@ export function TherapistPanel() {
                 })}
               </nav>
 
-              {/* CENTER workspace */}
               <main className="order-3 lg:order-2 flex-1 min-h-0 flex flex-col border-t lg:border-t-0 lg:border-r border-white/[0.06]">
-                {/* phase-adaptive top region */}
                 <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-5 md:px-7 py-5 flex flex-col gap-4">
                   <div className="flex flex-col gap-1">
                     <h3 className="text-[15px] font-semibold text-white tracking-tight">{currentMeta?.name}</h3>
@@ -559,7 +550,6 @@ export function TherapistPanel() {
                   {renderPhaseFields()}
                 </div>
 
-                {/* pinned notes + mini log (always visible) */}
                 <div className="shrink-0 border-t border-white/[0.06] px-5 md:px-7 py-3.5 flex flex-col gap-2.5">
                   <div className="flex items-center justify-between gap-3">
                     <SectionLabel>{t.tpNotes}</SectionLabel>
@@ -587,11 +577,9 @@ export function TherapistPanel() {
                 </div>
               </main>
 
-              {/* RIGHT operator column */}
               <aside className="order-2 lg:order-3 shrink-0 w-full lg:w-[320px] xl:w-[360px] 2xl:w-[384px] border-t lg:border-t-0 border-white/[0.06] px-4 py-4 flex flex-col gap-3.5 overflow-y-auto lg:overflow-hidden no-scrollbar">
                 <MiniStimPreview />
 
-                {/* Start / Stop */}
                 {!isPlaying ? (
                   <button
                     onClick={startSet}
@@ -608,7 +596,6 @@ export function TherapistPanel() {
                   </button>
                 )}
 
-                {/* quick controls */}
                 <div className="rounded-2xl bg-white/[0.02] px-3.5 py-3 flex flex-col gap-3">
                   <SectionLabel>{t.tpQuick}</SectionLabel>
                   <div className="flex flex-col gap-3">
@@ -682,7 +669,6 @@ export function TherapistPanel() {
                   </div>
                 </div>
 
-                {/* Show to client */}
                 <div className="rounded-2xl bg-white/[0.02] px-3.5 py-3 flex flex-col gap-2.5">
                   <SectionLabel accent="calm">{t.cueTitle}</SectionLabel>
                   <div className="grid grid-cols-2 gap-1.5">
@@ -714,7 +700,7 @@ export function TherapistPanel() {
                         <div className="flex flex-col gap-2.5 pt-1">
                           <div className="flex items-center justify-between">
                             <SectionLabel accent="calm">
-                              {(lang === 'ru' ? 'Шаг' : 'Step')} {cueIdx + 1}/{cueTotal}
+                              {t.stepLabel} {cueIdx + 1}/{cueTotal}
                             </SectionLabel>
                             <button
                               onClick={() => setClientCue('none')}
@@ -746,7 +732,6 @@ export function TherapistPanel() {
                   </AnimatePresence>
                 </div>
 
-                {/* Full settings */}
                 <button
                   onClick={() => setSettingsOpen(true)}
                   className="w-full py-3 rounded-2xl font-medium text-[13px] bg-white/[0.04] text-white/60 hover:bg-white/[0.07] hover:text-white transition-all flex items-center justify-center gap-2"
@@ -758,7 +743,6 @@ export function TherapistPanel() {
 
             <SessionSettingsDrawer open={settingsOpen} onClose={() => setSettingsOpen(false)} />
 
-            {/* Full log modal - using OverlayShell */}
             <OverlayShell
               open={logOpen}
               onClose={() => setLogOpen(false)}

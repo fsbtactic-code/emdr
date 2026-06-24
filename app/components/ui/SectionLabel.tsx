@@ -1,31 +1,16 @@
 'use client';
 
-/**
- * SectionLabel
- *
- * Small uppercase tracking label used to head a section of the UI.
- * Optional leading icon (lucide-react), optional accent color override.
- * Defaults to the canonical TYPE.label treatment (white/45, 11px, tracking-wide).
- */
-
 import { type ElementType, type ReactNode } from 'react';
 import { cn } from './cn';
 import { TYPE, ACCENTS, type AccentName } from './tokens';
 
-// Lucide icon component shape (we accept any icon as a generic component)
 type IconComponent = ElementType<{ size?: number; strokeWidth?: number; className?: string }>;
 
 export interface SectionLabelProps {
-  /** The label text. */
   children: ReactNode;
-  /** Optional lucide-react icon rendered before the text. */
   icon?: IconComponent;
-  /**
-   * Optional accent color name to tint the label text and icon.
-   * When omitted the default muted text-white/45 applies.
-   */
+  /** Tints label text and icon; defaults to muted text-white/45 when omitted. */
   accent?: AccentName;
-  /** Additional className fragments. */
   className?: string;
 }
 

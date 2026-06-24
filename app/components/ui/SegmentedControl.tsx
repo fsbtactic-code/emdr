@@ -1,24 +1,13 @@
 'use client';
 
-/**
- * SegmentedControl - mutually exclusive option group.
- *
- * Active option gets a translucent accent fill (no white ring).
- * Used for pattern selection, session mode, and form option groups.
- * Supports all AccentName keys from tokens.ts.
- */
-
 import { useReducedMotion, motion, AnimatePresence } from 'framer-motion';
 import { cn } from './cn';
 import { COLORS, ACCENTS, RADIUS, TYPE, type AccentName } from './tokens';
 import { SPRING_SNAPPY, reduceTransition } from './motion';
 
-/* ------------------------------------------------------------------ */
-
 export interface SegmentedOption<T extends string = string> {
   value: T;
   label: string;
-  /** Optional icon rendered before the label. */
   icon?: React.ReactNode;
   disabled?: boolean;
 }
@@ -27,16 +16,12 @@ export interface SegmentedControlProps<T extends string = string> {
   options: SegmentedOption<T>[];
   value: T;
   onChange: (value: T) => void;
-  /** Visual accent for the active thumb. Defaults to 'primary'. */
   accent?: AccentName;
-  /** Full-width stretches each segment equally. Default false. */
+  /** stretches each segment to equal width */
   fullWidth?: boolean;
-  /** ARIA label for the group. */
   'aria-label'?: string;
   className?: string;
 }
-
-/* ------------------------------------------------------------------ */
 
 export function SegmentedControl<T extends string = string>({
   options,
@@ -78,13 +63,10 @@ export function SegmentedControl<T extends string = string>({
               'text-[13px] font-medium select-none transition-colors duration-150',
               RADIUS.sm,
               fullWidth && 'flex-1',
-              /* Active text always uses accent tint. */
               isActive ? a.text : COLORS.text.muted,
-              /* Hover on inactive items. */
               !isActive && !opt.disabled && 'hover:text-white/70',
               opt.disabled && 'opacity-40 cursor-not-allowed',
               !opt.disabled && 'cursor-pointer',
-              /* Focus-visible ring uses accent color, not white. */
               'focus-visible:outline-none',
               isActive
                 ? 'focus-visible:ring-1 focus-visible:ring-offset-0'
@@ -96,7 +78,6 @@ export function SegmentedControl<T extends string = string>({
                 : undefined
             }
           >
-            {/* Animated fill thumb. */}
             <AnimatePresence initial={false}>
               {isActive && (
                 <motion.span
@@ -123,7 +104,7 @@ export function SegmentedControl<T extends string = string>({
               )}
             </AnimatePresence>
 
-            {/* Content above the thumb. */}
+            {/* sits above the thumb via z-10 */}
             <span className="relative flex items-center gap-1.5 z-10">
               {opt.icon && (
                 <span className="opacity-80 flex-shrink-0">{opt.icon}</span>

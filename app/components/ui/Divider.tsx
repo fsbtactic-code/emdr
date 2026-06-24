@@ -1,27 +1,13 @@
 'use client';
 
-/**
- * Divider
- *
- * Hairline separator, horizontal or vertical. Optionally shows a small
- * centered label (text or ReactNode) for titled section breaks.
- * The line color follows COLORS.border.base (border-white/[0.06]).
- */
-
 import { type ReactNode } from 'react';
 import { cn } from './cn';
 
 export interface DividerProps {
-  /** Layout axis. Defaults to 'horizontal'. */
   orientation?: 'horizontal' | 'vertical';
-  /**
-   * Optional label rendered in the center of a horizontal divider.
-   * Ignored for vertical dividers.
-   */
+  /** Centered label for a horizontal divider; ignored when vertical. */
   label?: ReactNode;
-  /** Additional className fragments applied to the root element. */
   className?: string;
-  /** aria-orientation forwarded for screen readers. */
   'aria-orientation'?: 'horizontal' | 'vertical';
 }
 

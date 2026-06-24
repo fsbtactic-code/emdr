@@ -1,18 +1,5 @@
 'use client';
 
-/**
- * Panel - glassy container surface for the EMDR trainer UI.
- *
- * A semi-transparent dark surface with a hairline border, soft panel shadow,
- * and an optional header slot. Calm, clinical-wellness aesthetic. No bright
- * white rings, no pure-black shadows.
- *
- * Usage:
- *   <Panel>content</Panel>
- *   <Panel title="Settings" description="Adjust session parameters">...</Panel>
- *   <Panel variant="raised" noPadding>...</Panel>
- */
-
 import * as React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
@@ -20,47 +7,27 @@ import { cn } from './cn';
 import { COLORS, RADIUS, SHADOW, TYPE } from './tokens';
 import { fadeRise, reduceVariants, SPRING } from './motion';
 
-/* ------------------------------------------------------------------ *
- * Types
- * ------------------------------------------------------------------ */
-
 type PanelVariant = 'base' | 'raised' | 'strong';
 
 export interface PanelProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
-  /**
-   * Elevation variant. Controls background fill intensity.
-   * - base: default resting surface (bg-white/0.03)
-   * - raised: slightly lifted (bg-white/0.04)
-   * - strong: active / prominent panel (bg-white/0.06)
-   */
+  /** background fill intensity: base resting, raised, strong for active panels */
   variant?: PanelVariant;
-  /** Optional panel title rendered in the header slot. */
   title?: React.ReactNode;
-  /** Optional subtitle / description below the title. */
   description?: React.ReactNode;
-  /** Optional element pinned to the right of the header (badge, icon-button). */
   headerTrailing?: React.ReactNode;
-  /** Remove default padding (useful for panels whose children supply their own). */
+  /** drop default padding for panels whose children supply their own */
   noPadding?: boolean;
-  /** Remove the top border separating header from body (when no header is used). */
+  /** drop the header-to-body border when there is no header */
   noBorder?: boolean;
-  /** Animate entrance with fadeRise. Defaults to true. */
+  /** defaults to true */
   animate?: boolean;
 }
-
-/* ------------------------------------------------------------------ *
- * Variant tables
- * ------------------------------------------------------------------ */
 
 const VARIANT_BG: Record<PanelVariant, string> = {
   base: COLORS.surface.base,
   raised: COLORS.surface.raised,
   strong: COLORS.surface.strong,
 };
-
-/* ------------------------------------------------------------------ *
- * Component
- * ------------------------------------------------------------------ */
 
 export const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
   function Panel(
@@ -82,23 +49,18 @@ export const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
     const hasHeader = title != null || description != null || headerTrailing != null;
 
     const rootClasses = cn(
-      // Shape
       RADIUS.lg,
-      // Surface
       VARIANT_BG[variant],
-      // Border - hairline, never bright
       'border',
       COLORS.border.base,
-      // Shadow
       SHADOW.panel,
-      // Overflow for corner-clipping
+      // clip children to the rounded corners
       'overflow-hidden',
       className,
     );
 
     const inner = (
       <div ref={ref} className={rootClasses} {...rest}>
-        {/* Header slot */}
         {hasHeader && (
           <div
             className={cn(
@@ -121,7 +83,6 @@ export const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
           </div>
         )}
 
-        {/* Body */}
         <div className={noPadding ? undefined : 'p-5'}>{children}</div>
       </div>
     );

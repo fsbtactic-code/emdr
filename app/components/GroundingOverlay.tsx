@@ -50,7 +50,6 @@ export const GroundingOverlay = () => {
       ariaLabel={t.groundTitle}
       className="max-h-[92vh] overflow-y-auto no-scrollbar"
     >
-      {/* Animated ambient glow blobs - geometry preserved, only backdrop unified */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden rounded-[28px]">
         <motion.div
           className="rounded-full"

@@ -24,7 +24,6 @@ import { Button } from './ui/Button';
 import { SHADOW, COLORS } from './ui/tokens';
 import { cn } from './ui/cn';
 
-/** Inline value readout badge - DS surface.strong + border.base */
 const ValueBadge = ({ children }: { children: React.ReactNode }) => (
   <span className="text-white/80 text-[13px] font-medium tabular-nums bg-white/[0.06] px-2.5 py-1 rounded-lg border border-white/[0.06]">
     {children}
@@ -131,7 +130,6 @@ export const SettingsPanel = () => {
             transition={{ type: 'spring', bounce: 0, duration: 0.6 }}
             className="fixed right-0 top-0 h-full w-[340px] md:w-[420px] bg-[#0a0a0c]/85 backdrop-blur-[40px] border-l border-white/[0.06] shadow-[-20px_0_60px_-10px_rgba(0,0,0,0.8)] z-50 flex flex-col"
           >
-            {/* header */}
             <div className="flex items-center justify-between px-5 pt-5 pb-4 shrink-0 border-b border-white/5">
               <div>
                 <h2 className="text-lg font-medium tracking-tight text-white">{t.settingsTitle}</h2>
@@ -160,10 +158,8 @@ export const SettingsPanel = () => {
               </div>
             </div>
 
-            {/* scrollable body */}
             <div className="flex-1 no-scrollbar overflow-y-auto">
 
-              {/* language */}
               <div className="px-5 pt-5 pb-1">
                 <SectionLabel>{t.languageSection}</SectionLabel>
                 <div className="grid grid-cols-4 gap-1.5 mt-2.5">
@@ -187,7 +183,6 @@ export const SettingsPanel = () => {
 
               <Divider className="mx-5 my-2" />
 
-              {/* presets */}
               <div className="px-5 pt-2 pb-2">
                 <SectionLabel>{t.programs}</SectionLabel>
                 <div className="flex flex-col gap-2 mt-3">
@@ -250,7 +245,6 @@ export const SettingsPanel = () => {
 
               <Divider className="mx-5 my-2" />
 
-              {/* movement patterns */}
               <div className="px-5 py-3">
                 <SectionLabel>{t.patternLabel}</SectionLabel>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-3">
@@ -271,7 +265,6 @@ export const SettingsPanel = () => {
                 </div>
               </div>
 
-              {/* shapes */}
               <div className="px-5 py-3 border-t border-white/5">
                 <SectionLabel>{t.shapeLabel}</SectionLabel>
                 <div className="grid grid-cols-4 gap-2 mt-3">
@@ -292,7 +285,6 @@ export const SettingsPanel = () => {
                 </div>
               </div>
 
-              {/* colors */}
               <div className="px-5 py-3 border-t border-white/5">
                 <SectionLabel>{t.colorLabel}</SectionLabel>
                 <div className="flex gap-3 mt-3 flex-wrap">
@@ -309,15 +301,13 @@ export const SettingsPanel = () => {
                       style={{
                         backgroundColor: c.value,
                         boxShadow: color === c.value ? c.shadow : 'none',
-                        // accent-tinted focus ring via inline style is not possible in Tailwind;
-                        // using white/30 as neutral fallback for color swatches
+                        // no accent-tinted focus ring here, Tailwind cannot do it inline; falls back to white/30
                       }}
                     />
                   ))}
                 </div>
               </div>
 
-              {/* sliders: speed / amplitude / cycles / size */}
               <div className="px-5 py-3 border-t border-white/5 flex flex-col gap-4">
                 <Slider
                   label={t.speedLabel}
@@ -362,7 +352,6 @@ export const SettingsPanel = () => {
                 />
               </div>
 
-              {/* toggles: mute / reduceMotion / saccades / symbols */}
               <div className="px-5 py-3 border-t border-white/5 flex flex-col gap-4">
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
@@ -452,7 +441,6 @@ export const SettingsPanel = () => {
                 </div>
               </div>
 
-              {/* audio section */}
               <div className="px-5 py-3 border-t border-white/5 flex flex-col gap-4">
                 <div>
                   <SectionLabel>{t.stimSound}</SectionLabel>
@@ -537,7 +525,6 @@ export const SettingsPanel = () => {
                 </div>
               </div>
 
-              {/* channels section */}
               <div className="px-5 py-3 border-t border-white/5 flex flex-col gap-4">
                 <SectionLabel accent="primary">{t.channelsSection}</SectionLabel>
                 <div className="flex items-center justify-between gap-3">
@@ -590,7 +577,6 @@ export const SettingsPanel = () => {
                 </div>
               </div>
 
-              {/* sessions counter */}
               <div className="px-5 py-3 border-t border-white/5">
                 <div className="flex items-center justify-between bg-white/[0.02] rounded-xl px-4 py-3 border border-white/[0.06]">
                   <SectionLabel>{t.sessionsToday}</SectionLabel>
@@ -598,7 +584,6 @@ export const SettingsPanel = () => {
                 </div>
               </div>
 
-              {/* footer actions */}
               <div className="px-5 py-5 shrink-0 flex flex-col gap-3">
                 <button
                   onClick={handleShare}

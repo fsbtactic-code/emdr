@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { BookOpen, Trash2, Download, FileJson, ShieldCheck } from 'lucide-react';
 import { useStore } from '../store/useStore';
-import type { Locale } from '../i18n/dict';
+import type { Locale, Dict } from '../i18n/dict';
+import { useT } from '../i18n/useT';
 import {
   listSessions,
   deleteSession,
@@ -18,91 +19,9 @@ import { Button } from './ui/Button';
 import { Chip } from './ui/Chip';
 import { InfoBanner } from './ui/InfoBanner';
 
-type Strings = {
-  badge: string;
-  title: string;
-  subtitle: string;
-  empty: string;
-  duration: string;
-  mode: string;
-  modeSolo: string;
-  modeHost: string;
-  modeClient: string;
-  phase: string;
-  suds: string;
-  sudsTo: string;
-  observations: string;
-  client: string;
-  deleteOne: string;
-  clearAll: string;
-  clearConfirm: string;
-  downloadJson: string;
-  downloadCsv: string;
-  close: string;
-  privacyTitle: string;
-  privacyBody: string;
-};
-
-const STRINGS: Record<'ru' | 'en', Strings> = {
-  ru: {
-    badge: 'Zhurnal sessij',
-    title: 'Istoriya sessij',
-    subtitle: 'Zapisi khranitsya tol\'ko na etom ustrojstve',
-    empty: 'Poka net sokhranyonnykh sessij.',
-    duration: 'Dlitel\'nost\'',
-    mode: 'Rezhim',
-    modeSolo: 'samostoyatel\'no',
-    modeHost: 'spetsialist',
-    modeClient: 'klient',
-    phase: 'Etap',
-    suds: 'SUD',
-    sudsTo: 'do',
-    observations: 'nablyudenij',
-    client: 'Kod klienta',
-    deleteOne: 'Udalit\'',
-    clearAll: 'Ochistit\' vse',
-    clearConfirm: 'Udalit\' vse zapisi zhurnala bez vozmozhnosti vosstanovleniya?',
-    downloadJson: 'Skachat\' JSON',
-    downloadCsv: 'Skachat\' CSV',
-    close: 'Zakryt\'',
-    privacyTitle: 'Privatnost\'',
-    privacyBody:
-      'Dannye khranitsya tol\'ko na etom ustrojstve i psevdonimizirovany (bez imen, tol\'ko kod). Vy yavlyaetes\' operatorom etikh dannykh. Poluchite soglasie klienta pered zapisyu.',
-  },
-  en: {
-    badge: 'Session journal',
-    title: 'Session history',
-    subtitle: 'Records are stored only on this device',
-    empty: 'No saved sessions yet.',
-    duration: 'Duration',
-    mode: 'Mode',
-    modeSolo: 'solo',
-    modeHost: 'practitioner',
-    modeClient: 'client',
-    phase: 'Phase',
-    suds: 'SUD',
-    sudsTo: 'to',
-    observations: 'observations',
-    client: 'Client code',
-    deleteOne: 'Delete',
-    clearAll: 'Clear all',
-    clearConfirm: 'Permanently delete all journal records?',
-    downloadJson: 'Download JSON',
-    downloadCsv: 'Download CSV',
-    close: 'Close',
-    privacyTitle: 'Privacy',
-    privacyBody:
-      'Data is stored only on this device and pseudonymized (no names, code only). You are the data controller. Obtain consent before recording.',
-  },
-};
-
-function pickStrings(lang: Locale): Strings {
-  return lang === 'en' ? STRINGS.en : STRINGS.ru;
-}
-
 function formatDate(ts: number, lang: Locale): string {
   try {
-    return new Date(ts).toLocaleString(lang === 'en' ? 'en-US' : 'ru-RU', {
+    return new Date(ts).toLocaleString(lang, {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -122,10 +41,10 @@ function formatDuration(sec: number, lang: Locale): string {
   return m > 0 ? `${m} min ${s} s` : `${s} s`;
 }
 
-function modeLabel(mode: JournalEntry['mode'], t: Strings): string {
-  if (mode === 'host') return t.modeHost;
-  if (mode === 'client') return t.modeClient;
-  return t.modeSolo;
+function modeLabel(mode: JournalEntry['mode'], t: Dict): string {
+  if (mode === 'host') return t.sjModeHost;
+  if (mode === 'client') return t.sjModeClient;
+  return t.sjModeSolo;
 }
 
 function download(filename: string, content: string, type: string) {
@@ -145,7 +64,7 @@ export function SessionJournal() {
   const isJournalOpen = useStore((s) => s.isJournalOpen);
   const setIsJournalOpen = useStore((s) => s.setIsJournalOpen);
   const lang = useStore((s) => s.lang);
-  const t = pickStrings(lang);
+  const t = useT();
 
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [loading, setLoading] = useState(false);
@@ -175,10 +94,10 @@ export function SessionJournal() {
   );
 
   const handleClearAll = useCallback(async () => {
-    if (typeof window !== 'undefined' && !window.confirm(t.clearConfirm)) return;
+    if (typeof window !== 'undefined' && !window.confirm(t.sjClearConfirm)) return;
     await clearSessions();
     await load();
-  }, [load, t.clearConfirm]);
+  }, [load, t.sjClearConfirm]);
 
   const handleJson = useCallback(() => {
     download(`emdr-journal-${Date.now()}.json`, exportJSON(entries), 'application/json');
@@ -195,10 +114,9 @@ export function SessionJournal() {
       maxWidth="max-w-2xl"
       z="overlay"
       glow="info"
-      ariaLabel={t.title}
+      ariaLabel={t.sjTitle}
       className="max-h-[92vh] overflow-y-auto no-scrollbar"
     >
-      {/* Close button */}
       <div className="absolute top-3 right-3 z-20">
         <IconButton
           aria-label={t.close}
@@ -213,10 +131,10 @@ export function SessionJournal() {
 
       <div className="relative z-10">
         <div className="flex items-center gap-2 text-cyan-200 text-[12px] font-bold uppercase tracking-[0.14em] mb-1">
-          <BookOpen size={14} /> {t.badge}
+          <BookOpen size={14} /> {t.sjBadge}
         </div>
-        <h2 className="text-[22px] font-bold text-white tracking-tight mb-1">{t.title}</h2>
-        <p className="text-white/45 text-[13px] mb-5">{t.subtitle}</p>
+        <h2 className="text-[22px] font-bold text-white tracking-tight mb-1">{t.sjTitle}</h2>
+        <p className="text-white/45 text-[13px] mb-5">{t.sjSubtitle}</p>
 
         <div className="flex flex-wrap gap-2 mb-5">
           <Button
@@ -226,7 +144,7 @@ export function SessionJournal() {
             disabled={entries.length === 0}
             onClick={handleJson}
           >
-            {t.downloadJson}
+            {t.sjDownloadJson}
           </Button>
           <Button
             variant="ghost"
@@ -235,7 +153,7 @@ export function SessionJournal() {
             disabled={entries.length === 0}
             onClick={handleCsv}
           >
-            {t.downloadCsv}
+            {t.sjDownloadCsv}
           </Button>
           <Button
             variant="danger"
@@ -245,13 +163,13 @@ export function SessionJournal() {
             onClick={handleClearAll}
             className="ml-auto"
           >
-            {t.clearAll}
+            {t.sjClearAll}
           </Button>
         </div>
 
         <div className="flex flex-col gap-2.5 mb-5">
           {entries.length === 0 && !loading && (
-            <p className="text-white/45 text-[13px] py-6 text-center">{t.empty}</p>
+            <p className="text-white/45 text-[13px] py-6 text-center">{t.sjEmpty}</p>
           )}
           {entries.map((e) => {
             const first = e.sudsLog.length > 0 ? e.sudsLog[0].value : null;
@@ -267,13 +185,13 @@ export function SessionJournal() {
                       {formatDate(e.startedAt, lang)}
                     </p>
                     <p className="text-[12px] text-white/45 mt-0.5">
-                      {t.duration}: {formatDuration(e.durationSec, lang)} {'·'} {t.mode}:{' '}
+                      {t.sjDuration}: {formatDuration(e.durationSec, lang)} {'·'} {t.sjMode}:{' '}
                       {modeLabel(e.mode, t)}
-                      {e.clientCode ? ` ${'·'} ${t.client}: ${e.clientCode}` : ''}
+                      {e.clientCode ? ` ${'·'} ${t.sjClient}: ${e.clientCode}` : ''}
                     </p>
                   </div>
                   <IconButton
-                    aria-label={t.deleteOne}
+                    aria-label={t.sjDeleteOne}
                     variant="ghost"
                     size="sm"
                     shape="round"
@@ -289,27 +207,27 @@ export function SessionJournal() {
                     <Chip
                       variant="accent"
                       accent="info"
-                      label={`${t.suds} ${first} ${t.sudsTo} ${last}`}
+                      label={`${t.sjSuds} ${first} ${t.sjSudsTo} ${last}`}
                     />
                   )}
                   {e.phaseReached && (
                     <Chip
                       variant="accent"
                       accent="primary"
-                      label={`${t.phase}: ${e.phaseReached}`}
+                      label={`${t.sjPhase}: ${e.phaseReached}`}
                     />
                   )}
                   {(e.vocInitial != null || e.vocCurrent != null) && (
                     <Chip
                       variant="accent"
                       accent="success"
-                      label={`VOC ${e.vocInitial ?? '-'} ${t.sudsTo} ${e.vocCurrent ?? '-'}`}
+                      label={`VOC ${e.vocInitial ?? '-'} ${t.sjSudsTo} ${e.vocCurrent ?? '-'}`}
                     />
                   )}
                   {e.observations.length > 0 && (
                     <Chip
                       variant="neutral"
-                      label={`${e.observations.length} ${t.observations}`}
+                      label={`${e.observations.length} ${t.sjObservations}`}
                     />
                   )}
                 </div>
@@ -320,9 +238,9 @@ export function SessionJournal() {
 
         <InfoBanner accent="warn" icon={<ShieldCheck size={16} />} className="mb-6">
           <p className="text-[12px] font-semibold text-amber-200/90 uppercase tracking-[0.14em] mb-1">
-            {t.privacyTitle}
+            {t.sjPrivacyTitle}
           </p>
-          <p className="text-[12px] text-white/60 leading-relaxed">{t.privacyBody}</p>
+          <p className="text-[12px] text-white/60 leading-relaxed">{t.sjPrivacyBody}</p>
         </InfoBanner>
 
         <Button
