@@ -203,7 +203,7 @@ export default function DesignSystemPage() {
     setTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
 
   return (
-    <main className="min-h-screen bg-[#09090b] text-white/90 antialiased">
+    <main className="h-[100dvh] overflow-y-auto bg-[#09090b] text-white/90 antialiased">
       {/* subtle top glow */}
       <div
         aria-hidden

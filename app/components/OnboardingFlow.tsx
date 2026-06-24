@@ -122,21 +122,31 @@ export function OnboardingFlow() {
   const hasSpot = !!rect;
 
   const MARGIN = 14;
+  const vw = typeof window !== 'undefined' ? window.innerWidth : 1200;
+  const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
+  const isMobile = vw < 640;
+  const cardW = Math.min(320, vw - MARGIN * 2);
   let calloutStyle: React.CSSProperties;
   let caretY = 0; // caret offset inside the card so it keeps pointing at the target
-  if (rect) {
-    const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
-    const vw = typeof window !== 'undefined' ? window.innerWidth : 1200;
+  let showCaret = false;
+  if (isMobile) {
+    // bottom sheet: full width minus margins, anchored to the bottom, no caret.
+    calloutStyle = { left: MARGIN, right: MARGIN, bottom: MARGIN, width: 'auto' };
+  } else if (rect) {
     const h = cardH || 280;
-    const w = 300;
     const centerY = rect.top + rect.height / 2;
-    // anchor by the card's top edge and clamp so the whole card stays on screen
+    // anchor by the card top edge and clamp so the whole card stays on screen
     const top = Math.min(Math.max(centerY - h / 2, MARGIN), Math.max(MARGIN, vh - h - MARGIN));
-    const left = Math.min(rect.left + rect.width + 22, vw - w - MARGIN);
-    calloutStyle = { left, top };
+    const left = Math.min(rect.left + rect.width + 22, vw - cardW - MARGIN);
+    calloutStyle = { left, top, width: cardW };
     caretY = Math.min(Math.max(centerY - top, 18), h - 18);
+    showCaret = true;
   } else {
-    calloutStyle = { left: '50%', top: '50%', transform: 'translate(-50%, -50%)' };
+    // welcome / finish: centered horizontally, clamped vertically (no translateY so
+    // a tall card never overflows the top/bottom of the viewport).
+    const h = cardH || 280;
+    const top = Math.max(MARGIN, (vh - h) / 2);
+    calloutStyle = { left: '50%', top, transform: 'translateX(-50%)', width: cardW };
   }
 
   return (
@@ -179,10 +189,10 @@ export function OnboardingFlow() {
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.12 } }}
               transition={{ type: 'spring', stiffness: 460, damping: 26 }}
-              className="absolute w-[300px] max-w-[calc(100vw-32px)] z-10"
+              className="absolute z-10"
               style={calloutStyle}
             >
-              {hasSpot && (
+              {showCaret && (
                 <span
                   aria-hidden="true"
                   className="absolute -left-[7px] -translate-y-1/2 h-0 w-0"
@@ -191,8 +201,9 @@ export function OnboardingFlow() {
               )}
               <div
                 ref={cardRef}
-                className="rounded-2xl p-5 backdrop-blur-2xl"
+                className="rounded-2xl p-5 backdrop-blur-2xl overflow-y-auto no-scrollbar"
                 style={{
+                  maxHeight: 'calc(100dvh - 28px)',
                   background: 'linear-gradient(180deg, rgba(20,20,26,0.97), rgba(11,11,15,0.97))',
                   boxShadow: '0 0 0 1px rgba(255,255,255,0.07), 0 24px 60px -16px rgba(0,0,0,0.8), 0 0 40px -10px rgba(99,102,241,0.35)',
                 }}
