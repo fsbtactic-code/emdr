@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, GraduationCap, Check } from 'lucide-react';
 import { useStore } from '../store/useStore';
@@ -73,6 +73,8 @@ export function OnboardingFlow() {
 
   const [step, setStep] = useState(0);
   const [rect, setRect] = useState<Rect | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [cardH, setCardH] = useState(0);
 
   const safe = Math.min(step, steps.length - 1);
   const current = steps[safe];
@@ -105,6 +107,13 @@ export function OnboardingFlow() {
     return () => { cancelAnimationFrame(raf); window.removeEventListener('resize', doMeasure); };
   }, [isOnboardingOpen, target]);
 
+  // measure the callout height so it can be clamped fully inside the viewport
+  useLayoutEffect(() => {
+    if (!isOnboardingOpen) return;
+    const h = cardRef.current?.offsetHeight ?? 0;
+    if (h) setCardH(h);
+  }, [isOnboardingOpen, safe, rect, lang]);
+
   const finish = () => { markOnboardingSeen(mode); setIsOnboardingOpen(false); };
   const next = () => { if (safe >= steps.length - 1) finish(); else setStep(safe + 1); };
   const back = () => setStep(Math.max(0, safe - 1));
@@ -112,12 +121,20 @@ export function OnboardingFlow() {
   const pad = 8;
   const hasSpot = !!rect;
 
+  const MARGIN = 14;
   let calloutStyle: React.CSSProperties;
+  let caretY = 0; // caret offset inside the card so it keeps pointing at the target
   if (rect) {
     const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
+    const vw = typeof window !== 'undefined' ? window.innerWidth : 1200;
+    const h = cardH || 280;
+    const w = 300;
     const centerY = rect.top + rect.height / 2;
-    const clampedY = Math.min(Math.max(centerY, 150), vh - 170);
-    calloutStyle = { left: rect.left + rect.width + 22, top: clampedY, transform: 'translateY(-50%)' };
+    // anchor by the card's top edge and clamp so the whole card stays on screen
+    const top = Math.min(Math.max(centerY - h / 2, MARGIN), Math.max(MARGIN, vh - h - MARGIN));
+    const left = Math.min(rect.left + rect.width + 22, vw - w - MARGIN);
+    calloutStyle = { left, top };
+    caretY = Math.min(Math.max(centerY - top, 18), h - 18);
   } else {
     calloutStyle = { left: '50%', top: '50%', transform: 'translate(-50%, -50%)' };
   }
@@ -168,11 +185,12 @@ export function OnboardingFlow() {
               {hasSpot && (
                 <span
                   aria-hidden="true"
-                  className="absolute -left-[7px] top-1/2 -translate-y-1/2 h-0 w-0"
-                  style={{ borderTop: '7px solid transparent', borderBottom: '7px solid transparent', borderRight: '8px solid rgba(17,17,21,0.97)' }}
+                  className="absolute -left-[7px] -translate-y-1/2 h-0 w-0"
+                  style={{ top: caretY, borderTop: '7px solid transparent', borderBottom: '7px solid transparent', borderRight: '8px solid rgba(17,17,21,0.97)' }}
                 />
               )}
               <div
+                ref={cardRef}
                 className="rounded-2xl p-5 backdrop-blur-2xl"
                 style={{
                   background: 'linear-gradient(180deg, rgba(20,20,26,0.97), rgba(11,11,15,0.97))',
