@@ -130,109 +130,114 @@ export const FloatingNav = () => {
   );
 
   return (
-    <AnimatePresence>
-      {!isPlaying && (
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          className="fixed left-4 top-4 md:left-6 md:top-6 z-40 flex flex-col gap-2 overflow-visible"
-        >
-          <div className="flex flex-col gap-1.5 p-1.5 rounded-[22px] bg-[#0a0a0c]/40 backdrop-blur-2xl border border-white/[0.08] shadow-2xl overflow-visible">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isHovered = hoveredId === item.id;
-              return (
-                <div key={item.id} className="relative overflow-visible">
-                  <button
-                    onClick={item.onClick}
-                    data-tour={item.id}
-                    aria-label={item.title}
-                    onMouseEnter={() => setHoveredId(item.id)}
-                    onMouseLeave={() => setHoveredId(null)}
-                    onFocus={() => setHoveredId(item.id)}
-                    onBlur={() => setHoveredId(null)}
-                    className={`relative w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-[18px] transition-all duration-300 group
-                      ${item.active
-                        ? 'bg-white text-zinc-950 shadow-[0_8px_16px_-4px_rgba(255,255,255,0.2)] scale-[0.98]'
-                        : item.id === 'grounding'
-                          ? 'bg-emerald-500/10 text-emerald-300/80 hover:bg-emerald-500/20 hover:text-emerald-100 hover:scale-105 active:scale-95'
-                          : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white hover:scale-105 active:scale-95'
-                      }`}
-                  >
-                    <Icon size={22} />
-                    {item.active && (
-                      <motion.div
-                        layoutId="active-nav-bg"
-                        className="absolute inset-0 rounded-[18px] ring-2 ring-white/20"
-                      />
-                    )}
-                  </button>
-                  <NavTooltip label={item.title} visible={isHovered} />
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="flex flex-col gap-1.5 p-1.5 rounded-[22px] bg-[#0a0a0c]/40 backdrop-blur-2xl border border-white/[0.08] shadow-2xl overflow-visible">
-            {appMode && (
-              <div className="relative overflow-visible">
-                <button
-                  onClick={() => { closeAll(); setOnboardingMode(appMode); setIsOnboardingOpen(true); }}
-                  data-tour="onboarding"
-                  aria-label={t.navOnboarding}
-                  onMouseEnter={() => setHoveredId('onboarding')}
-                  onMouseLeave={() => setHoveredId(null)}
-                  onFocus={() => setHoveredId('onboarding')}
-                  onBlur={() => setHoveredId(null)}
-                  className="w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-[18px] bg-white/5 text-white/60 hover:text-white hover:bg-white/10 hover:scale-105 active:scale-95 transition-all"
-                >
-                  <GraduationCap size={20} />
-                </button>
-                <NavTooltip label={t.navOnboarding} visible={hoveredId === 'onboarding'} />
-              </div>
-            )}
-            {appMode && (
-              <div className="relative overflow-visible">
-                <button
-                  onClick={() => { closeAll(); setAppMode(null); }}
-                  data-tour="switch"
-                  aria-label={t.modeSwitch}
-                  onMouseEnter={() => setHoveredId('switch')}
-                  onMouseLeave={() => setHoveredId(null)}
-                  onFocus={() => setHoveredId('switch')}
-                  onBlur={() => setHoveredId(null)}
-                  className="w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-[18px] bg-white/5 text-white/60 hover:text-white hover:bg-white/10 hover:scale-105 active:scale-95 transition-all"
-                >
-                  <Repeat size={20} />
-                </button>
-                <NavTooltip label={t.modeSwitch} visible={hoveredId === 'switch'} />
-              </div>
-            )}
-            <div className="relative overflow-visible">
-              <button
-                onClick={() => setBananaOpen(true)}
-                aria-label="О проекте"
-                onMouseEnter={() => setHoveredId('banana')}
-                onMouseLeave={() => setHoveredId(null)}
-                onFocus={() => setHoveredId('banana')}
-                onBlur={() => setHoveredId(null)}
-                className="group w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-[18px] bg-white/5 hover:bg-white/10 hover:scale-105 active:scale-95 transition-all"
-              >
-                {/* render the banana as a white monochrome glyph to match the other rail icons */}
-                <img
-                  src="/banana.png"
-                  alt=""
-                  className="w-6 h-6 object-contain opacity-60 group-hover:opacity-100 transition-opacity"
-                  style={{ filter: 'brightness(0) invert(1)' }}
-                />
-              </button>
-              <NavTooltip label="О проекте" visible={hoveredId === 'banana'} />
+    <>
+      <AnimatePresence>
+        {!isPlaying && (
+          <motion.div
+            key="nav-rail"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="fixed left-4 top-4 md:left-6 md:top-6 z-40 flex flex-col gap-2 overflow-visible"
+          >
+            <div className="flex flex-col gap-1.5 p-1.5 rounded-2xl bg-[#0a0a0c]/40 backdrop-blur-2xl border border-white/[0.06] shadow-2xl overflow-visible">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isHovered = hoveredId === item.id;
+                return (
+                  <div key={item.id} className="relative overflow-visible">
+                    <button
+                      onClick={item.onClick}
+                      data-tour={item.id}
+                      aria-label={item.title}
+                      aria-pressed={item.active}
+                      onMouseEnter={() => setHoveredId(item.id)}
+                      onMouseLeave={() => setHoveredId(null)}
+                      onFocus={() => setHoveredId(item.id)}
+                      onBlur={() => setHoveredId(null)}
+                      className={`relative w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-xl transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-zinc-950
+                        ${item.active
+                          ? 'bg-white text-zinc-950 shadow-[0_8px_16px_-4px_rgba(255,255,255,0.2)] scale-[0.98] focus-visible:ring-white/30'
+                          : item.id === 'grounding'
+                            ? 'bg-emerald-500/15 text-emerald-300/80 hover:bg-emerald-500/25 hover:text-emerald-100 hover:scale-105 active:scale-95 focus-visible:ring-emerald-500/50'
+                            : 'bg-white/[0.04] text-white/60 hover:bg-white/[0.07] hover:text-white hover:scale-105 active:scale-95 focus-visible:ring-white/20'
+                        }`}
+                    >
+                      <Icon size={22} />
+                      {item.active && (
+                        <motion.div
+                          layoutId="active-nav-bg"
+                          className="absolute inset-0 rounded-xl ring-2 ring-white/20"
+                        />
+                      )}
+                    </button>
+                    <NavTooltip label={item.title} visible={isHovered} />
+                  </div>
+                );
+              })}
             </div>
-          </div>
-        </motion.div>
-      )}
+
+            <div className="flex flex-col gap-1.5 p-1.5 rounded-2xl bg-[#0a0a0c]/40 backdrop-blur-2xl border border-white/[0.06] shadow-2xl overflow-visible">
+              {appMode && (
+                <div className="relative overflow-visible">
+                  <button
+                    onClick={() => { closeAll(); setOnboardingMode(appMode); setIsOnboardingOpen(true); }}
+                    data-tour="onboarding"
+                    aria-label={t.navOnboarding}
+                    onMouseEnter={() => setHoveredId('onboarding')}
+                    onMouseLeave={() => setHoveredId(null)}
+                    onFocus={() => setHoveredId('onboarding')}
+                    onBlur={() => setHoveredId(null)}
+                    className="w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-xl bg-white/[0.04] text-white/60 hover:text-white hover:bg-white/[0.07] hover:scale-105 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-1 focus-visible:ring-offset-zinc-950"
+                  >
+                    <GraduationCap size={20} />
+                  </button>
+                  <NavTooltip label={t.navOnboarding} visible={hoveredId === 'onboarding'} />
+                </div>
+              )}
+              {appMode && (
+                <div className="relative overflow-visible">
+                  <button
+                    onClick={() => { closeAll(); setAppMode(null); }}
+                    data-tour="switch"
+                    aria-label={t.modeSwitch}
+                    onMouseEnter={() => setHoveredId('switch')}
+                    onMouseLeave={() => setHoveredId(null)}
+                    onFocus={() => setHoveredId('switch')}
+                    onBlur={() => setHoveredId(null)}
+                    className="w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-xl bg-white/[0.04] text-white/60 hover:text-white hover:bg-white/[0.07] hover:scale-105 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-1 focus-visible:ring-offset-zinc-950"
+                  >
+                    <Repeat size={20} />
+                  </button>
+                  <NavTooltip label={t.modeSwitch} visible={hoveredId === 'switch'} />
+                </div>
+              )}
+              <div className="relative overflow-visible">
+                <button
+                  onClick={() => setBananaOpen(true)}
+                  aria-label="O proekte"
+                  onMouseEnter={() => setHoveredId('banana')}
+                  onMouseLeave={() => setHoveredId(null)}
+                  onFocus={() => setHoveredId('banana')}
+                  onBlur={() => setHoveredId(null)}
+                  className="group w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-white/[0.07] hover:scale-105 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-1 focus-visible:ring-offset-zinc-950"
+                >
+                  {/* render the banana as a white monochrome glyph to match the other rail icons */}
+                  <img
+                    src="/banana.png"
+                    alt=""
+                    className="w-6 h-6 object-contain opacity-60 group-hover:opacity-100 transition-opacity"
+                    style={{ filter: 'brightness(0) invert(1)' }}
+                  />
+                </button>
+                <NavTooltip label="O proekte" visible={hoveredId === 'banana'} />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <BananaPopup open={bananaOpen} onClose={() => setBananaOpen(false)} />
-    </AnimatePresence>
+    </>
   );
 };

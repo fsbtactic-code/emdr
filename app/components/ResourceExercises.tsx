@@ -4,6 +4,12 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Shield, Sun, Box, Wind, Sparkles } from 'lucide-react';
 import { useStore } from '../store/useStore';
+import { Button } from './ui/Button';
+import { IconButton } from './ui/IconButton';
+import { InfoBanner } from './ui/InfoBanner';
+import { SectionLabel } from './ui/SectionLabel';
+import { AccentIconBadge } from './ui/AccentIconBadge';
+import { COLORS } from './ui/tokens';
 
 type Locale = string;
 
@@ -359,6 +365,7 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
           </div>
         </div>
 
+        {/* warm-mode disclaimer: amber-600/20 is the in-palette border for this light-theme variant */}
         <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-500/[0.12] border border-amber-600/20 mb-5">
           <Shield size={12} className="text-amber-700/80 shrink-0" />
           <span className="text-[11px] text-amber-900/70 leading-tight">{s.disclaimer}</span>
@@ -400,6 +407,7 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
           </AnimatePresence>
         </div>
 
+        {/* warm-mode footer: amber-800/15 is the warm-theme divider */}
         <div className="flex gap-3 mt-6 pt-4 border-t border-amber-800/15">
           <button
             onClick={goBack}
@@ -424,22 +432,21 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center gap-3 mb-5">
-        <div
-          className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-          style={{ backgroundColor: `${accent}20` }}
-        >
-          {icon}
-        </div>
+        <AccentIconBadge
+          icon={icon}
+          accent="info"
+          size="sm"
+          className="w-9 h-9"
+        />
         <div className="min-w-0">
           <div className="text-[14px] font-semibold text-white/90 leading-tight">{exercise.name}</div>
-          <div className="text-[11px] text-white/35 mt-0.5">{exercise.tagline}</div>
+          <div className="text-[11px] text-white/45 mt-0.5">{exercise.tagline}</div>
         </div>
       </div>
 
-      <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-500/[0.07] border border-emerald-500/15 mb-5">
-        <Shield size={12} className="text-emerald-400/80 shrink-0" />
-        <span className="text-[11px] text-emerald-200/65 leading-tight">{s.disclaimer}</span>
-      </div>
+      <InfoBanner accent="success" icon={<Shield size={12} />} className="mb-5">
+        {s.disclaimer}
+      </InfoBanner>
 
       <div className="flex-1 flex flex-col">
         <div className="flex gap-1.5 justify-center mb-4">
@@ -456,7 +463,7 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
           ))}
         </div>
 
-        <div className="text-[11px] text-white/30 text-center mb-3 tabular-nums">
+        <div className="text-[11px] text-white/45 text-center mb-3 tabular-nums">
           {s.stepOf(step + 1, total)}
         </div>
 
@@ -477,23 +484,26 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
         </AnimatePresence>
       </div>
 
-      <div className="flex gap-3 mt-6 pt-4 border-t border-white/[0.05]">
-        <button
-          onClick={goBack}
+      <div className="flex gap-3 mt-6 pt-4 border-t border-white/[0.06]">
+        <Button
+          variant="secondary"
+          size="md"
+          iconLeft={<ChevronLeft size={15} />}
           disabled={step === 0}
-          className="flex items-center gap-1.5 px-4 py-3 rounded-xl bg-white/[0.05] text-white/50 text-[13px] font-medium disabled:opacity-30 hover:bg-white/[0.09] hover:text-white/80 transition-all active:scale-[0.97]"
+          onClick={goBack}
+          className="px-4 py-3 h-auto"
         >
-          <ChevronLeft size={15} />
           {s.back}
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="primary"
+          size="md"
+          iconRight={!isLast ? <ChevronRight size={15} /> : undefined}
           onClick={goNext}
-          className="flex-1 py-3 rounded-xl font-semibold text-[13px] flex items-center justify-center gap-1.5 transition-all active:scale-[0.97]"
-          style={{ backgroundColor: `${accent}22`, color: accent, border: `1px solid ${accent}35` }}
+          className="flex-1 py-3 h-auto"
         >
           {isLast ? s.finish : s.next}
-          {!isLast && <ChevronRight size={15} />}
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -502,14 +512,15 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
 interface ExerciseCard {
   id: string;
   accent: string;
+  hex: string;
   icon: React.ReactNode;
 }
 
 const CARDS: ExerciseCard[] = [
-  { id: 'safe_place', accent: '#22d3ee', icon: <Sparkles size={16} style={{ color: '#22d3ee' }} /> },
-  { id: 'container', accent: '#818cf8', icon: <Box size={16} style={{ color: '#818cf8' }} /> },
-  { id: 'light_stream', accent: '#fbbf24', icon: <Sun size={16} style={{ color: '#fbbf24' }} /> },
-  { id: 'butterfly_hug', accent: '#a78bfa', icon: <Wind size={16} style={{ color: '#a78bfa' }} /> },
+  { id: 'safe_place',    accent: '#06b6d4', hex: '#06b6d4', icon: <Sparkles size={16} style={{ color: '#06b6d4' }} /> },
+  { id: 'container',    accent: '#6366f1', hex: '#6366f1', icon: <Box      size={16} style={{ color: '#6366f1' }} /> },
+  { id: 'light_stream', accent: '#f59e0b', hex: '#f59e0b', icon: <Sun      size={16} style={{ color: '#f59e0b' }} /> },
+  { id: 'butterfly_hug',accent: '#a78bfa', hex: '#a78bfa', icon: <Wind     size={16} style={{ color: '#a78bfa' }} /> },
 ];
 
 export function ResourceExercises() {
@@ -546,7 +557,7 @@ export function ResourceExercises() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={handleClose}
-          className={`fixed inset-0 z-[120] flex items-center justify-center p-4 backdrop-blur-2xl ${isLightStream ? '' : 'bg-zinc-950/90'}`}
+          className={`fixed inset-0 z-[120] flex items-center justify-center p-4 backdrop-blur-2xl ${isLightStream ? '' : 'bg-zinc-950/85'}`}
           style={isLightStream ? { background: 'radial-gradient(circle at 50% 32%, rgba(255,243,224,0.93), rgba(254,215,170,0.9) 55%, rgba(255,228,230,0.92))' } : undefined}
         >
           <motion.div
@@ -559,11 +570,11 @@ export function ResourceExercises() {
             style={
               isLightStream
                 ? { background: 'linear-gradient(135deg, #fffbeb 0%, #fed7aa 45%, #ffe4e6 100%)', border: '1px solid rgba(180,83,9,0.14)' }
-                : { backgroundColor: '#0d0d0f', border: '1px solid rgba(255,255,255,0.06)' }
+                : { backgroundColor: COLORS.bgRaised, border: '1px solid rgba(255,255,255,0.06)' }
             }
           >
             {!isLightStream && (
-              <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-64 bg-indigo-500/8 blur-[80px] rounded-full pointer-events-none" />
+              <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-64 bg-indigo-500/[0.08] blur-[80px] rounded-full pointer-events-none" />
             )}
 
             {isLightStream && <WarmGlowLayer />}
@@ -571,31 +582,29 @@ export function ResourceExercises() {
             <div className="relative z-10 flex flex-col flex-1 min-h-0">
               <div className="flex items-center justify-between mb-4 shrink-0 h-9">
                 {activeId ? (
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    iconLeft={<ChevronLeft size={16} />}
                     onClick={() => setActiveId(null)}
                     aria-label="Back to list"
-                    className={`flex items-center gap-1 pl-2 pr-3 h-9 rounded-lg text-[13px] font-medium transition-all ${
-                      isLightStream
-                        ? 'text-amber-900/60 hover:text-amber-950 hover:bg-amber-900/10'
-                        : 'text-white/50 hover:text-white hover:bg-white/[0.06]'
-                    }`}
+                    className={isLightStream ? 'text-amber-900/60 hover:text-amber-950 hover:bg-amber-900/10 border-transparent' : ''}
                   >
-                    <ChevronLeft size={16} /> {s.back}
-                  </button>
+                    {s.back}
+                  </Button>
                 ) : (
                   <span />
                 )}
-                <button
-                  onClick={handleClose}
+                <IconButton
+                  variant="ghost"
+                  size="md"
+                  shape="round"
                   aria-label="Close"
-                  className={`w-9 h-9 flex items-center justify-center rounded-full transition-all ${
-                    isLightStream
-                      ? 'text-amber-900/50 hover:text-amber-950 hover:bg-amber-900/10'
-                      : 'text-white/40 hover:text-white hover:bg-white/[0.08]'
-                  }`}
+                  onClick={handleClose}
+                  className={isLightStream ? 'text-amber-900/50 hover:text-amber-950 hover:bg-amber-900/10 border-transparent' : ''}
                 >
                   <X size={18} />
-                </button>
+                </IconButton>
               </div>
 
               <AnimatePresence mode="wait">
@@ -607,12 +616,11 @@ export function ResourceExercises() {
                     exit={{ opacity: 0 }}
                     className="mb-5"
                   >
-                    <div className="flex items-center gap-2 text-indigo-300/80 text-[11px] font-bold uppercase tracking-[0.15em] mb-1">
-                      <Shield size={12} />
+                    <SectionLabel icon={Shield} accent="primary" className="mb-1">
                       {s.note}
-                    </div>
+                    </SectionLabel>
                     <h2 className="text-[20px] font-bold text-white tracking-tight leading-tight">{s.title}</h2>
-                    <p className="text-white/35 text-[12px] mt-1">{s.subtitle}</p>
+                    <p className="text-white/45 text-[12px] mt-1">{s.subtitle}</p>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -635,30 +643,29 @@ export function ResourceExercises() {
                             <button
                               key={card.id}
                               onClick={() => setActiveId(card.id)}
-                              className="group w-full text-left flex items-center gap-4 p-4 rounded-2xl border border-transparent bg-white/[0.03] hover:bg-white/[0.07] transition-all active:scale-[0.99]"
+                              className="group w-full text-left flex items-center gap-4 p-4 rounded-2xl border border-transparent bg-white/[0.03] hover:bg-white/[0.06] transition-all active:scale-[0.99]"
                             >
                               <div
                                 className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                                 style={{
-                                  backgroundColor: `${card.accent}18`,
+                                  backgroundColor: `${card.hex}18`,
                                 }}
                               >
                                 {card.icon}
                               </div>
                               <div className="flex-1 min-w-0">
                                 <div className="text-[14px] font-semibold text-white/90 leading-tight">{ex.name}</div>
-                                <div className="text-[12px] text-white/40 mt-0.5 leading-tight">{ex.tagline}</div>
+                                <div className="text-[12px] text-white/45 mt-0.5 leading-tight">{ex.tagline}</div>
                               </div>
-                              <ChevronRight size={15} className="text-white/20 group-hover:text-white/50 transition-colors shrink-0" />
+                              <ChevronRight size={15} className="text-white/25 group-hover:text-white/60 transition-colors shrink-0" />
                             </button>
                           );
                         })}
                       </div>
 
-                      <div className="mt-5 flex items-start gap-2 px-3 py-2.5 rounded-xl bg-amber-500/[0.05] border border-amber-500/12">
-                        <Shield size={12} className="text-amber-400/70 shrink-0 mt-0.5" />
-                        <p className="text-[11px] text-amber-200/55 leading-relaxed">{s.disclaimer}</p>
-                      </div>
+                      <InfoBanner accent="warn" icon={<Shield size={12} />} className="mt-5">
+                        {s.disclaimer}
+                      </InfoBanner>
                     </motion.div>
                   ) : activeCard && activeExercise ? (
                     <motion.div

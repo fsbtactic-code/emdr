@@ -5,6 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, AlertTriangle, Phone, X } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import type { Locale } from '../i18n/dict';
+import { IconButton } from './ui/IconButton';
+import { Button } from './ui/Button';
+import { SectionLabel } from './ui/SectionLabel';
+import { AccentIconBadge } from './ui/AccentIconBadge';
+import { InfoBanner } from './ui/InfoBanner';
+import { COLORS, Z } from './ui/tokens';
 
 const STRINGS: Record<'ru' | 'en', {
   badge: string;
@@ -165,7 +171,8 @@ export function PreSessionGate() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={handleDismiss}
-          className="fixed inset-0 z-[130] flex items-center justify-center p-4 bg-zinc-950/90 backdrop-blur-2xl"
+          className="fixed inset-0 flex items-center justify-center p-4 bg-zinc-950/85 backdrop-blur-2xl"
+          style={{ zIndex: Z.modal }}
         >
           <motion.div
             key="gate-panel"
@@ -174,33 +181,39 @@ export function PreSessionGate() {
             exit={{ scale: 0.96, y: 16, opacity: 0 }}
             transition={{ type: 'spring', damping: 26, stiffness: 200 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-lg bg-[#0d0d0f] border border-white/[0.06] rounded-[28px] p-7 shadow-2xl relative overflow-hidden max-h-[92vh] overflow-y-auto no-scrollbar"
+            className="w-full max-w-lg border border-white/[0.06] rounded-[28px] p-7 shadow-2xl relative overflow-hidden max-h-[92vh] overflow-y-auto no-scrollbar"
+            style={{ backgroundColor: '#0d0d10' }}
           >
             <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-48 bg-cyan-500/10 blur-[60px] rounded-full pointer-events-none" />
 
-            <button
+            <IconButton
               onClick={handleDismiss}
               aria-label={lang === 'en' ? 'Close' : 'Закрыть'}
-              className="absolute top-3.5 right-3.5 w-10 h-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full text-white/40 hover:text-white transition-all z-20"
+              variant="ghost"
+              shape="round"
+              className="absolute top-3.5 right-3.5 z-20"
             >
               <X size={18} />
-            </button>
+            </IconButton>
 
             <div className="relative z-10 flex flex-col items-center text-center">
-              <div className="flex items-center gap-2 text-cyan-300/90 text-[11px] font-bold uppercase tracking-[0.15em] mb-2">
-                <ShieldCheck size={13} />
+              <SectionLabel
+                icon={ShieldCheck}
+                accent="info"
+                className="mb-2 justify-center"
+              >
                 {s.badge}
-              </div>
+              </SectionLabel>
 
               <h2 className="text-[22px] font-bold text-white tracking-tight mb-1">{s.title}</h2>
-              <p className="text-white/45 text-[13px] mb-6 max-w-sm">{s.sub}</p>
+              <p className={`${COLORS.text.muted} text-[13px] mb-6 max-w-sm`}>{s.sub}</p>
 
               {step === 'screen' && (
                 <div className="w-full text-left">
-                  <p className="text-white/50 text-[12px] font-semibold uppercase tracking-wider mb-1">
+                  <SectionLabel className="mb-1">
                     {s.screenTitle}
-                  </p>
-                  <p className="text-white/35 text-[12px] mb-4">{s.screenIntro}</p>
+                  </SectionLabel>
+                  <p className={`${COLORS.text.faint} text-[12px] mb-4`}>{s.screenIntro}</p>
 
                   <div className="flex flex-col gap-2 mb-6">
                     {s.screenItems.map((item, i) => {
@@ -211,10 +224,10 @@ export function PreSessionGate() {
                           onClick={() => toggleFlag(i)}
                           className={[
                             'flex items-start gap-3 p-3.5 rounded-2xl border text-left transition-all duration-150',
-                            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400/60',
+                            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/50 focus-visible:ring-offset-1 focus-visible:ring-offset-zinc-950',
                             active
-                              ? 'bg-rose-500/15 border-rose-400/30 text-rose-200'
-                              : 'bg-white/[0.03] border-white/[0.06] text-white/65 hover:bg-white/[0.06] hover:text-white/80',
+                              ? 'bg-rose-500/15 border-rose-500/20 text-rose-200'
+                              : 'bg-white/[0.03] border-white/[0.06] text-white/60 hover:bg-white/[0.04] hover:text-white/80',
                           ].join(' ')}
                           aria-pressed={active}
                         >
@@ -222,8 +235,8 @@ export function PreSessionGate() {
                             className={[
                               'mt-[2px] flex-shrink-0 w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors',
                               active
-                                ? 'border-rose-400 bg-rose-500'
-                                : 'border-white/15 bg-transparent',
+                                ? 'border-rose-500 bg-rose-500'
+                                : 'border-white/12 bg-transparent',
                             ].join(' ')}
                           >
                             {active && (
@@ -236,17 +249,15 @@ export function PreSessionGate() {
                     })}
                   </div>
 
-                  <button
+                  <Button
                     onClick={handleScreenNext}
-                    className={[
-                      'w-full py-3.5 rounded-2xl font-semibold text-[14px] transition-all active:scale-[0.98]',
-                      anyFlagged
-                        ? 'bg-rose-500/20 border border-rose-400/30 text-rose-200 hover:bg-rose-500/30'
-                        : 'bg-white text-zinc-950 hover:bg-zinc-200',
-                    ].join(' ')}
+                    variant={anyFlagged ? 'danger' : 'secondary'}
+                    size="lg"
+                    className="w-full"
+                    style={!anyFlagged ? { background: '#ffffff', color: '#09090b' } : undefined}
                   >
                     {lang === 'en' ? 'Next' : 'Далее'}
-                  </button>
+                  </Button>
                 </div>
               )}
 
@@ -255,32 +266,41 @@ export function PreSessionGate() {
                   <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-48 bg-rose-500/10 blur-[60px] rounded-full pointer-events-none" />
 
                   <div className="relative flex flex-col items-center text-center mb-6">
-                    <div className="w-14 h-14 rounded-full bg-rose-500/15 border border-rose-400/20 flex items-center justify-center mb-4">
-                      <AlertTriangle size={24} className="text-rose-300" />
-                    </div>
+                    <AccentIconBadge
+                      icon={<AlertTriangle size={24} />}
+                      accent="danger"
+                      size="lg"
+                      shape="round"
+                      className="mb-4"
+                    />
                     <h3 className="text-[18px] font-bold text-white mb-2">{s.stopTitle}</h3>
-                    <p className="text-white/55 text-[13px] leading-relaxed mb-4">{s.stopBody}</p>
+                    <p className={`${COLORS.text.secondary} text-[13px] leading-relaxed mb-4`}>{s.stopBody}</p>
 
-                    <div className="w-full p-4 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-start gap-3 text-left mb-6">
-                      <Phone size={14} className="text-cyan-300/70 mt-0.5 flex-shrink-0" />
-                      <p className="text-white/50 text-[12px] leading-relaxed">{s.stopHint}</p>
-                    </div>
+                    <InfoBanner
+                      accent="info"
+                      icon={<Phone size={14} />}
+                      className="w-full text-left mb-6"
+                    >
+                      {s.stopHint}
+                    </InfoBanner>
 
-                    <button
+                    <Button
                       onClick={handleOpenResources}
-                      className="w-full py-3.5 bg-cyan-500/15 border border-cyan-400/25 text-cyan-200 rounded-2xl font-semibold text-[14px] hover:bg-cyan-500/25 transition-all active:scale-[0.98]"
+                      variant="primary"
+                      size="lg"
+                      className="w-full"
                     >
                       {s.openResources}
-                    </button>
+                    </Button>
                   </div>
                 </div>
               )}
 
               {step === 'consent' && (
                 <div className="w-full text-left">
-                  <p className="text-white/50 text-[12px] font-semibold uppercase tracking-wider mb-4">
+                  <SectionLabel className="mb-4">
                     {s.consentTitle}
-                  </p>
+                  </SectionLabel>
 
                   <div className="flex flex-col gap-2 mb-6">
                     {s.consentItems.map((item, i) => {
@@ -291,10 +311,10 @@ export function PreSessionGate() {
                           onClick={() => toggleCheck(i)}
                           className={[
                             'flex items-start gap-3 p-3.5 rounded-2xl border text-left transition-all duration-150',
-                            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60',
+                            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-1 focus-visible:ring-offset-zinc-950',
                             checked
-                              ? 'bg-emerald-500/12 border-emerald-400/25 text-emerald-100'
-                              : 'bg-white/[0.03] border-white/[0.06] text-white/60 hover:bg-white/[0.06] hover:text-white/80',
+                              ? 'bg-emerald-500/15 border-emerald-500/20 text-emerald-100'
+                              : 'bg-white/[0.03] border-white/[0.06] text-white/60 hover:bg-white/[0.04] hover:text-white/80',
                           ].join(' ')}
                           aria-pressed={checked}
                         >
@@ -302,8 +322,8 @@ export function PreSessionGate() {
                             className={[
                               'mt-[2px] flex-shrink-0 w-4 h-4 rounded border-2 flex items-center justify-center transition-colors',
                               checked
-                                ? 'border-emerald-400 bg-emerald-500'
-                                : 'border-white/15 bg-transparent',
+                                ? 'border-emerald-500 bg-emerald-500'
+                                : 'border-white/12 bg-transparent',
                             ].join(' ')}
                           >
                             {checked && (
@@ -318,18 +338,16 @@ export function PreSessionGate() {
                     })}
                   </div>
 
-                  <button
+                  <Button
                     onClick={handleAccept}
                     disabled={!allChecked}
-                    className={[
-                      'w-full py-3.5 rounded-2xl font-semibold text-[14px] transition-all active:scale-[0.98]',
-                      allChecked
-                        ? 'bg-white text-zinc-950 hover:bg-zinc-200'
-                        : 'bg-white/10 text-white/30 cursor-not-allowed',
-                    ].join(' ')}
+                    variant="secondary"
+                    size="lg"
+                    className="w-full"
+                    style={allChecked ? { background: '#ffffff', color: '#09090b' } : undefined}
                   >
                     {s.accept}
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>

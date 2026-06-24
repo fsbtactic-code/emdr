@@ -4,6 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Users, LifeBuoy, WifiOff } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { useT } from '../i18n/useT';
+import { Button } from './ui/Button';
+import { InfoBanner } from './ui/InfoBanner';
+import { COLORS } from './ui/tokens';
 
 export const SessionClientOverlay = () => {
   const {
@@ -19,9 +22,12 @@ export const SessionClientOverlay = () => {
     <>
       {}
       <div className="fixed top-4 inset-x-0 z-40 flex justify-center px-4 pointer-events-none">
-        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#0a0a0c]/50 backdrop-blur-xl border border-white/[0.06] shadow-lg max-w-full">
+        <div
+          className="flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-xl border border-white/[0.06] shadow-lg max-w-full"
+          style={{ backgroundColor: `${COLORS.bgPanel}80` }}
+        >
           <Users size={14} className="text-cyan-400 shrink-0" />
-          <span className="text-[12px] font-medium text-white/70 truncate">{t.sessClientBadge}</span>
+          <span className="text-[12px] font-medium text-white/60 truncate">{t.sessClientBadge}</span>
         </div>
       </div>
 
@@ -34,10 +40,9 @@ export const SessionClientOverlay = () => {
             exit={{ opacity: 0, y: -8 }}
             className="fixed top-16 inset-x-0 z-40 flex justify-center px-4 pointer-events-none"
           >
-            <div className="flex items-start gap-2 max-w-sm px-4 py-3 rounded-2xl bg-rose-500/15 backdrop-blur-xl border border-rose-500/30 shadow-lg">
-              <WifiOff size={16} className="text-rose-300 shrink-0 mt-0.5" />
-              <span className="text-[13px] leading-relaxed text-rose-100/90">{t.connLost}</span>
-            </div>
+            <InfoBanner accent="danger" icon={<WifiOff size={16} />} className="max-w-sm backdrop-blur-xl shadow-lg">
+              {t.connLost}
+            </InfoBanner>
           </motion.div>
         )}
       </AnimatePresence>
@@ -50,7 +55,8 @@ export const SessionClientOverlay = () => {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 8 }}
-              className="text-center text-white/55 text-[14px] leading-relaxed max-w-xs px-4 py-2.5 rounded-2xl bg-[#0a0a0c]/40 backdrop-blur-md border border-white/[0.06]"
+              className="text-center text-white/60 text-[14px] leading-relaxed max-w-xs px-4 py-2.5 rounded-2xl backdrop-blur-md border border-white/[0.06]"
+              style={{ backgroundColor: `${COLORS.bgPanel}66` }}
             >
               {t.sessClientWaiting}
             </motion.p>
@@ -60,34 +66,37 @@ export const SessionClientOverlay = () => {
         <div className="flex items-center justify-center gap-2">
           <button
             onClick={() => setClientSignal('ok')}
-            className={signalBtn(clientSignal === 'ok', 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-200/90 border-emerald-500/25')}
+            className={signalBtn(clientSignal === 'ok', 'bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-200/90 border-emerald-500/20')}
           >
             {t.sigOk}
           </button>
           <button
             onClick={() => setClientSignal('pause')}
-            className={signalBtn(clientSignal === 'pause', 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-200/90 border-amber-500/25')}
+            className={signalBtn(clientSignal === 'pause', 'bg-amber-500/12 hover:bg-amber-500/20 text-amber-200/90 border-amber-500/20')}
           >
             {t.sigPause}
           </button>
           <button
             onClick={() => { setClientSignal('stop'); setIsGroundingOpen(true); }}
-            className={signalBtn(clientSignal === 'stop', 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-200/90 border-rose-500/25')}
+            className={signalBtn(clientSignal === 'stop', 'bg-rose-500/15 hover:bg-rose-500/25 text-rose-200/90 border-rose-500/20')}
           >
             {t.sigStop}
           </button>
         </div>
 
-        <span className="text-[11px] text-white/40 text-center">{t.sigBadge}</span>
+        <span className="text-[11px] text-white/45 text-center">{t.sigBadge}</span>
 
-        <button
+        <Button
+          variant="success"
+          size="md"
+          iconLeft={<LifeBuoy size={13} />}
           onClick={() => setIsGroundingOpen(true)}
           aria-label={t.navGrounding}
           title={t.navGrounding}
-          className="px-5 py-2.5 flex items-center gap-2 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 active:scale-95 transition-all text-emerald-200/80 hover:text-emerald-100 text-xs font-semibold backdrop-blur-md border border-emerald-500/20 shadow-lg whitespace-nowrap"
+          className="px-5 backdrop-blur-md shadow-lg whitespace-nowrap"
         >
-          <LifeBuoy size={13} className="shrink-0" /> {t.stopGround}
-        </button>
+          {t.stopGround}
+        </Button>
       </div>
     </>
   );

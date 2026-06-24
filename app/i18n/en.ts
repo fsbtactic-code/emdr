@@ -351,5 +351,135 @@ The sounds and "frequencies" here (including 528 Hz and binaural beats) are rela
   cueBreathing: "Breathing",
   cueGrounding: "Grounding",
   cueClear: "Clear",
-  crisisHeading: "Crisis support"
+  crisisHeading: "Crisis support",
+
+  close: "Close",
+  stepLabel: "Step",
+  ofLabel: "of",
+
+  aboutNav: "About",
+  aboutTitle: "EMDR Trainer is a free project",
+  aboutDesc: "Use it for free. The code is open, so you can host the service on your own server.",
+  aboutGithub: "Open on GitHub",
+  aboutDonate: "Support the project",
+  aboutContact: "Contact the author",
+
+  cueLightstream: "Light stream",
+  cueContent: {
+    butterfly: {
+      title: "Butterfly hug",
+      steps: [
+        "Sit comfortably. Cross your arms over your chest, palms on your shoulders.",
+        "Close your eyes or soften your gaze downward. One calm breath.",
+        "Tap your shoulders slowly, one at a time: left, then right.",
+        "Breathe steadily and calmly. Keep a pace of about one tap per second.",
+        "Do 20-30 alternating taps at a calm pace.",
+        "Stop. Lower your arms and take a deep breath."
+      ]
+    },
+    breathing: {
+      title: "Box breathing",
+      steps: [
+        "Sit comfortably, relax your shoulders. Follow the circle on screen.",
+        "Breathe with the circle: inhale as it grows, exhale as it shrinks.",
+        "Keep an even rhythm: inhale 4, hold 4, exhale 4, hold 4."
+      ]
+    },
+    grounding: {
+      title: "Grounding 5-4-3-2-1",
+      steps: [
+        "Name to yourself 5 things you can see around you.",
+        "Name 4 things you can touch.",
+        "Name 3 sounds you can hear.",
+        "Name 2 smells you can notice.",
+        "Name 1 taste you can sense. Take a calm breath."
+      ]
+    },
+    lightstream: {
+      title: "Light stream",
+      steps: [
+        "Settle in comfortably and close your eyes. Three slow, calm breaths.",
+        "Imagine a warm, gentle light - any color that feels healing and calm to you.",
+        "Let this light enter through the top of your head. Feel a gentle warmth.",
+        "The light moves slowly down: forehead, face, neck, shoulders. Where it passes, tension dissolves.",
+        "Light flows through the chest, belly, back. Each exhale brings a little more relaxation.",
+        "Now the light moves through hips, knees, calves - down toward your feet.",
+        "The light reaches your feet and flows into the earth, carrying away anything you no longer need. Body calm and light."
+      ]
+    }
+  },
+
+  sjBadge: "Session journal",
+  sjTitle: "Session history",
+  sjSubtitle: "Records are stored only on this device",
+  sjEmpty: "No saved sessions yet.",
+  sjDuration: "Duration",
+  sjMode: "Mode",
+  sjModeSolo: "solo",
+  sjModeHost: "practitioner",
+  sjModeClient: "client",
+  sjPhase: "Phase",
+  sjSuds: "SUD",
+  sjSudsTo: "to",
+  sjObservations: "observations",
+  sjClient: "Client code",
+  sjDeleteOne: "Delete",
+  sjClearAll: "Clear all",
+  sjClearConfirm: "Permanently delete all journal records?",
+  sjDownloadJson: "Download JSON",
+  sjDownloadCsv: "Download CSV",
+  sjPrivacyTitle: "Privacy",
+  sjPrivacyBody: "Data is stored only on this device and pseudonymized (no names, code only). You are the data controller. Obtain consent before recording.",
+
+  gateBadge: "Before you start",
+  gateTitle: "Quick check",
+  gateSub: "Takes under a minute. Helps confirm the tool is right for you right now.",
+  gateScreenTitle: "Tap anything that is true right now",
+  gateScreenIntro: 'All items default to "no". Tap any that apply to you at this moment.',
+  gateScreenItems: [
+    "Feeling unreal or detached from yourself or surroundings",
+    "Acute thoughts of self-harm or suicide",
+    "Psychosis or mania right now",
+    "Known severe dissociative disorder (diagnosed)",
+    "Under substances that impair self-regulation"
+  ],
+  gateStopTitle: "A specialist would be the right next step",
+  gateStopBody: "One or more items suggest that self-guided dual-attention work is not safe right now. This is not a judgment - just a signal that professional support would help.",
+  gateStopHint: "Open the resources panel to find crisis lines and specialist contacts.",
+  gateOpenResources: "Open support resources",
+  gateConsentTitle: "Understanding and consent",
+  gateConsentItems: [
+    "I understand this is a self-help tool, not therapy and not a substitute for a specialist.",
+    "I can stop at any time and will use grounding / 5-4-3-2-1 if I feel distressed.",
+    "For actual trauma processing a trained specialist should be present - I am using this for grounding and relaxation."
+  ],
+  gateAccept: "Start",
+
+  obSkip: "Skip",
+  obDone: "Done",
+  obSpecialist: [
+    { title: "Practitioner mode", body: "A quick tour of the interface. You guide the client, the app provides the bilateral stimulation." },
+    { title: "Session with a client", body: "Create a room and send the link to your client. When they join, their screen mirrors your stimulation with no controls." },
+    { title: "Session conduct", body: "The 8-phase protocol, SUD and VOC ratings, running sets. Quick controls on the fly, push mechanics to the client (butterfly, breathing, grounding), and mute sound on your side only." },
+    { title: "Session settings", body: "Movement pattern, speed, amplitude, stimulus sound and background. Build a preset and share a link." },
+    { title: "Stop and ground", body: "Always available. Stops the stimulation and helps return to the here and now. Crisis contacts live here too." },
+    { title: "Session journal", body: "Local history: settings, sets, SUD trend. Stored on your device only, no names." },
+    { title: "Switch mode", body: "Switch between practitioner and self-help mode anytime." },
+    { title: "All set", body: "Start by creating a session. You can replay this tour from the onboarding button in the menu." }
+  ],
+  obSelfhelp: [
+    { title: "Self-help mode", body: "A quick look at what is where. This is a tool for stabilization and calm, not a replacement for therapy." },
+    { title: "Resources and stabilization", body: "Safe place, container, light stream, butterfly hug, breathing. Safe to practice on your own." },
+    { title: "Settings", body: "Movement pattern, speed, amplitude, sound and background to your taste." },
+    { title: "Stop and ground", body: "Stops the stimulation anytime and helps you settle with 5-4-3-2-1 and breathing." },
+    { title: "All set", body: "Trauma reprocessing is led by a practitioner, not an app. Replay this tour from the menu." }
+  ],
+
+  drawerVisual: "Visual",
+  drawerSound: "Sound",
+  drawerChannels: "Channels",
+  drawerTiming: "Timing",
+
+  previewPaused: "paused",
+  previewVisualOff: "visual off"
 };

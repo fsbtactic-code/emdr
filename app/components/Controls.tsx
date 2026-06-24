@@ -3,6 +3,7 @@
 import { useStore } from '../store/useStore';
 import { Play, Square, LifeBuoy } from 'lucide-react';
 import { useT } from '../i18n/useT';
+import { Button } from './ui/Button';
 
 export const Controls = () => {
   const {
@@ -23,20 +24,20 @@ export const Controls = () => {
                 setIsGroundingOpen(true);
               }
             }}
-            className="px-4 sm:px-5 py-2.5 flex items-center gap-2 rounded-2xl bg-white/5 hover:bg-white/10 active:scale-95 transition-all text-white/40 hover:text-white/90 text-xs font-medium backdrop-blur-md border border-white/5 shadow-lg whitespace-nowrap shrink-0"
+            className="px-4 sm:px-5 py-2.5 flex items-center gap-2 rounded-2xl bg-white/[0.06] hover:bg-white/[0.08] active:scale-95 transition-all text-white/45 hover:text-white/90 text-xs font-medium backdrop-blur-md border border-white/[0.06] shadow-lg whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:ring-offset-1 focus-visible:ring-offset-zinc-950"
           >
             <Square size={12} fill="currentColor" /> {t.finish}
           </button>
           <button
             onClick={() => setIsGroundingOpen(true)}
-            className="px-4 sm:px-5 py-2.5 flex items-center gap-2 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 active:scale-95 transition-all text-emerald-200/80 hover:text-emerald-100 text-xs font-semibold backdrop-blur-md border border-emerald-500/20 shadow-lg whitespace-nowrap shrink-0"
+            className="px-4 sm:px-5 py-2.5 flex items-center gap-2 rounded-2xl bg-emerald-500/15 hover:bg-emerald-500/25 active:scale-95 transition-all text-emerald-200 hover:text-emerald-100 text-xs font-semibold backdrop-blur-md border border-emerald-500/20 shadow-lg whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-1 focus-visible:ring-offset-zinc-950"
           >
             <LifeBuoy size={13} className="shrink-0" /> {t.stopGround}
           </button>
         </div>
         {setsCompleted > 0 && (
-          <p className="text-[11px] tracking-widest uppercase text-white/40 font-medium">
-            {t.series}: <strong className="text-white/80">{setsCompleted}</strong>
+          <p className="text-[11px] tracking-[0.14em] uppercase text-white/45 font-semibold">
+            {t.series}: <strong className="text-white/90">{setsCompleted}</strong>
           </p>
         )}
       </div>
@@ -60,13 +61,13 @@ export const Controls = () => {
             togglePlaying();
             setIsSettingsOpen(false);
           }}
-          className="px-8 py-4 rounded-2xl bg-white text-zinc-950 font-semibold text-[15px] shadow-xl hover:bg-zinc-200 active:scale-95 transition-all flex items-center gap-2"
+          className="px-8 py-4 rounded-2xl bg-white text-zinc-950 font-semibold text-[15px] shadow-xl hover:bg-zinc-200 active:scale-95 transition-all flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-1 focus-visible:ring-offset-zinc-950"
         >
           <Play size={18} fill="currentColor" style={{ transform: 'translateX(1px)' }} />
           {startLabel}
         </button>
         {setsCompleted > 0 && (
-          <p className="mt-4 text-xs tracking-widest uppercase text-white/50 font-medium">
+          <p className="mt-4 text-[11px] tracking-[0.14em] uppercase text-white/45 font-semibold">
             {t.series}: <strong className="text-white/90">{setsCompleted}</strong>
           </p>
         )}

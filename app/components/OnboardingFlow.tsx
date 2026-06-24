@@ -5,6 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, GraduationCap, Check } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import type { AppMode } from '../store/useStore';
+import { Button } from './ui/Button';
+import { ProgressDots } from './ui/ProgressDots';
+import { AccentIconBadge } from './ui/AccentIconBadge';
+import { COLORS, Z } from './ui/tokens';
 
 type TourStep = { target?: string; title: string; body: string };
 
@@ -149,6 +153,9 @@ export function OnboardingFlow() {
     calloutStyle = { left: '50%', top, transform: 'translateX(-50%)', width: cardW };
   }
 
+  // dim color using canonical bg token
+  const dimColor = 'rgba(9,9,11,0.82)';
+
   return (
     <AnimatePresence>
       {isOnboardingOpen && (
@@ -156,23 +163,28 @@ export function OnboardingFlow() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[130]"
+          className="fixed inset-0"
+          style={{ zIndex: Z.modal }}
         >
           <div className="absolute inset-0" onClick={next} />
 
-          {!hasSpot && <div className="absolute inset-0 bg-[#06060a]/85 backdrop-blur-[2px] pointer-events-none" />}
+          {!hasSpot && (
+            <div
+              className="absolute inset-0 backdrop-blur-[2px] pointer-events-none"
+              style={{ backgroundColor: 'rgba(9,9,11,0.85)' }}
+            />
+          )}
 
           {hasSpot && rect && (() => {
-            const dim = 'rgba(6,6,10,0.82)';
             const hT = rect.top - pad, hL = rect.left - pad, hW = rect.width + pad * 2, hH = rect.height + pad * 2;
             return (
               <>
-                <div className="absolute left-0 right-0 top-0 pointer-events-none transition-all duration-300 ease-out" style={{ height: Math.max(0, hT), background: dim }} />
-                <div className="absolute left-0 right-0 bottom-0 pointer-events-none transition-all duration-300 ease-out" style={{ top: hT + hH, background: dim }} />
-                <div className="absolute left-0 pointer-events-none transition-all duration-300 ease-out" style={{ top: hT, width: Math.max(0, hL), height: hH, background: dim }} />
-                <div className="absolute right-0 pointer-events-none transition-all duration-300 ease-out" style={{ top: hT, left: hL + hW, height: hH, background: dim }} />
+                <div className="absolute left-0 right-0 top-0 pointer-events-none transition-all duration-300 ease-out" style={{ height: Math.max(0, hT), background: dimColor }} />
+                <div className="absolute left-0 right-0 bottom-0 pointer-events-none transition-all duration-300 ease-out" style={{ top: hT + hH, background: dimColor }} />
+                <div className="absolute left-0 pointer-events-none transition-all duration-300 ease-out" style={{ top: hT, width: Math.max(0, hL), height: hH, background: dimColor }} />
+                <div className="absolute right-0 pointer-events-none transition-all duration-300 ease-out" style={{ top: hT, left: hL + hW, height: hH, background: dimColor }} />
                 <motion.div
-                  className="absolute rounded-[18px] pointer-events-none"
+                  className="absolute rounded-2xl pointer-events-none"
                   initial={false}
                   animate={{ top: hT, left: hL, width: hW, height: hH }}
                   transition={{ type: 'spring', stiffness: 300, damping: 30 }}
@@ -201,56 +213,65 @@ export function OnboardingFlow() {
               )}
               <div
                 ref={cardRef}
-                className="rounded-2xl p-5 backdrop-blur-2xl overflow-y-auto no-scrollbar"
+                className="rounded-2xl p-5 backdrop-blur-2xl overflow-y-auto no-scrollbar border border-white/[0.06]"
                 style={{
                   maxHeight: 'calc(100dvh - 28px)',
-                  background: 'linear-gradient(180deg, rgba(20,20,26,0.97), rgba(11,11,15,0.97))',
-                  boxShadow: '0 0 0 1px rgba(255,255,255,0.07), 0 24px 60px -16px rgba(0,0,0,0.8), 0 0 40px -10px rgba(99,102,241,0.35)',
+                  backgroundColor: '#0d0d10',
+                  boxShadow: '0 0 0 1px rgba(255,255,255,0.06), 0 24px 60px -16px rgba(0,0,0,0.8), 0 0 40px -10px rgba(99,102,241,0.35)',
                 }}
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="w-7 h-7 flex items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-300 shrink-0">
-                    <GraduationCap size={15} />
-                  </span>
-                  <span className="text-[11px] uppercase tracking-[0.15em] font-semibold text-indigo-300/70">
+                  <AccentIconBadge
+                    icon={<GraduationCap size={15} />}
+                    accent="primary"
+                    size="sm"
+                  />
+                  <span className={`text-[11px] uppercase tracking-[0.14em] font-semibold ${COLORS.text.muted}`}>
                     {labels.step} {safe + 1} {labels.of} {steps.length}
                   </span>
                 </div>
 
                 <h3 className="text-[16px] font-bold text-white tracking-tight mb-1.5">{current.title}</h3>
-                <p className="text-[13px] leading-relaxed text-white/60">{current.body}</p>
+                <p className={`text-[13px] leading-relaxed ${COLORS.text.secondary}`}>{current.body}</p>
 
-                <div className="flex gap-1.5 mt-4 mb-4">
-                  {steps.map((_, i) => (
-                    <span
-                      key={i}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${i === safe ? 'w-5 bg-indigo-400' : 'w-1.5 bg-white/15'}`}
-                    />
-                  ))}
-                </div>
+                <ProgressDots
+                  total={steps.length}
+                  current={safe}
+                  accent="primary"
+                  className="mt-4 mb-4"
+                  aria-label={`${labels.step} ${safe + 1} ${labels.of} ${steps.length}`}
+                />
 
                 <div className="flex items-center justify-between gap-2">
-                  <button
+                  <Button
                     onClick={finish}
-                    className="text-[12px] font-medium text-white/40 hover:text-white/70 transition-colors px-1"
+                    variant="ghost"
+                    size="sm"
+                    className="px-1"
                   >
                     {labels.skip}
-                  </button>
+                  </Button>
                   <div className="flex items-center gap-2">
                     {safe > 0 && (
-                      <button
+                      <Button
                         onClick={back}
-                        className="flex items-center gap-1 px-3 py-2 rounded-xl text-[13px] font-medium text-white/70 bg-white/[0.05] hover:bg-white/[0.09] transition-all"
+                        variant="secondary"
+                        size="sm"
+                        iconLeft={<ChevronLeft size={15} />}
                       >
-                        <ChevronLeft size={15} /> {labels.back}
-                      </button>
+                        {labels.back}
+                      </Button>
                     )}
-                    <button
+                    <Button
                       onClick={next}
-                      className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[13px] font-bold text-zinc-950 bg-white hover:bg-zinc-200 active:scale-95 transition-all"
+                      variant="secondary"
+                      size="sm"
+                      style={{ background: '#ffffff', color: '#09090b' }}
+                      iconLeft={safe >= steps.length - 1 ? <Check size={15} /> : undefined}
+                      iconRight={safe >= steps.length - 1 ? undefined : <ChevronRight size={15} />}
                     >
-                      {safe >= steps.length - 1 ? (<><Check size={15} /> {labels.done}</>) : (<>{labels.next} <ChevronRight size={15} /></>)}
-                    </button>
+                      {safe >= steps.length - 1 ? labels.done : labels.next}
+                    </Button>
                   </div>
                 </div>
               </div>

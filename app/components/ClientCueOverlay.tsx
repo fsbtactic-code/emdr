@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../store/useStore';
 import { CUE_CONTENT, cueStepCount, clampCueStep, type CueTechnique } from '../content/cues';
+import { SectionLabel } from './ui/SectionLabel';
 
 const BOX_SECONDS = [4, 4, 4, 4];
 const BOX_SCALE = [1.0, 1.0, 0.62, 0.62];
@@ -23,13 +24,15 @@ function BreathingCircle({ phases }: { phases: [string, string, string, string] 
 
   return (
     <div className="relative w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center">
+      {/* bg-emerald-500/15 = ACCENTS.success.fill */}
       <motion.div
-        className="absolute w-40 h-40 sm:w-44 sm:h-44 rounded-full bg-emerald-500/12"
+        className="absolute w-40 h-40 sm:w-44 sm:h-44 rounded-full bg-emerald-500/15"
         animate={{ scale: BOX_SCALE[phase], opacity: [0.7, 0.95, 0.7] }}
         transition={{ duration: BOX_SECONDS[phase], ease: 'easeInOut' }}
       />
+      {/* bg-cyan-500/15 = ACCENTS.info.fill approximation for the glow layer */}
       <motion.div
-        className="absolute w-40 h-40 sm:w-44 sm:h-44 rounded-full bg-cyan-400/[0.18] blur-2xl"
+        className="absolute w-40 h-40 sm:w-44 sm:h-44 rounded-full bg-cyan-500/15 blur-2xl"
         animate={{ scale: BOX_SCALE[phase] }}
         transition={{ duration: BOX_SECONDS[phase], ease: 'easeInOut' }}
       />
@@ -60,9 +63,11 @@ function ButterflyGuide() {
             transition={{ duration: 0.9, ease: 'easeInOut' }}
             className="relative flex items-center justify-center"
           >
-            <div className="absolute w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-violet-500/20 blur-2xl" />
-            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-indigo-500/[0.16] flex items-center justify-center">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-violet-400/30" />
+            {/* bg-violet-500/15 = ACCENTS.calm.fill */}
+            <div className="absolute w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-violet-500/15 blur-2xl" />
+            {/* bg-indigo-500/15 = ACCENTS.primary.fill, bg-violet-500/15 inner */}
+            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-indigo-500/15 flex items-center justify-center">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-violet-500/15" />
             </div>
           </motion.div>
         );
@@ -133,7 +138,7 @@ export function ClientCueOverlay() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className="fixed inset-0 z-[115] flex items-center justify-center px-6 py-10 bg-zinc-950/92 backdrop-blur-2xl"
+          className="fixed inset-0 z-[115] flex items-center justify-center px-6 py-10 bg-zinc-950/85 backdrop-blur-2xl"
         >
           <div
             className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-72 h-72 blur-[90px] rounded-full pointer-events-none ${
@@ -143,9 +148,9 @@ export function ClientCueOverlay() {
 
           <div className="relative z-10 flex flex-col items-center text-center gap-8 max-w-md w-full">
             <div className="flex flex-col items-center gap-2">
-              <span className="text-[11px] uppercase tracking-[0.18em] font-semibold tabular-nums text-white/35">
+              <SectionLabel className="tabular-nums">
                 {(isRu ? 'Шаг' : 'Step')} {stepIdx + 1} / {stepTotal}
-              </span>
+              </SectionLabel>
               <h2 className="text-white text-[22px] sm:text-[26px] font-medium tracking-tight">{title}</h2>
             </div>
 

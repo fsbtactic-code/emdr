@@ -6,6 +6,8 @@ export interface EvidenceRowT { level: EvidenceLevel; condition: string; note: s
 export interface PhaseT { n: number; name: string; desc: string }
 export interface RelabelT { original: string; verdict: string; honest: string }
 export interface PresetT { label: string; desc: string }
+export interface TourStepT { title: string; body: string }
+export interface CueContentEntry { title: string; steps: string[] }
 
 export interface Dict {
   start: string;
@@ -259,6 +261,77 @@ export interface Dict {
   cueGrounding: string;
   cueClear: string;
   crisisHeading: string;
+
+  // generic, reused across surfaces
+  close: string;
+  stepLabel: string;
+  ofLabel: string;
+
+  // about / banana popup
+  aboutNav: string;
+  aboutTitle: string;
+  aboutDesc: string;
+  aboutGithub: string;
+  aboutDonate: string;
+  aboutContact: string;
+
+  // client cue content (specialist advances the steps, client sees the current one)
+  cueLightstream: string;
+  cueContent: Record<"butterfly" | "breathing" | "grounding" | "lightstream", CueContentEntry>;
+
+  // session journal
+  sjBadge: string;
+  sjTitle: string;
+  sjSubtitle: string;
+  sjEmpty: string;
+  sjDuration: string;
+  sjMode: string;
+  sjModeSolo: string;
+  sjModeHost: string;
+  sjModeClient: string;
+  sjPhase: string;
+  sjSuds: string;
+  sjSudsTo: string;
+  sjObservations: string;
+  sjClient: string;
+  sjDeleteOne: string;
+  sjClearAll: string;
+  sjClearConfirm: string;
+  sjDownloadJson: string;
+  sjDownloadCsv: string;
+  sjPrivacyTitle: string;
+  sjPrivacyBody: string;
+
+  // pre-session gate (self-help screening + consent)
+  gateBadge: string;
+  gateTitle: string;
+  gateSub: string;
+  gateScreenTitle: string;
+  gateScreenIntro: string;
+  gateScreenItems: string[];
+  gateStopTitle: string;
+  gateStopBody: string;
+  gateStopHint: string;
+  gateOpenResources: string;
+  gateConsentTitle: string;
+  gateConsentItems: string[];
+  gateAccept: string;
+
+  // onboarding tours (text only; spotlight targets stay structural in the component)
+  obSkip: string;
+  obDone: string;
+  obSpecialist: TourStepT[];
+  obSelfhelp: TourStepT[];
+
+  // session settings drawer tabs
+  drawerVisual: string;
+  drawerSound: string;
+  drawerChannels: string;
+  drawerTiming: string;
+
+  // mini stimulation preview
+  previewPaused: string;
+  previewVisualOff: string;
 }
 
 export const ru: Dict = {
@@ -612,5 +685,135 @@ export const ru: Dict = {
   cueBreathing: "Дыхание",
   cueGrounding: "Заземление",
   cueClear: "Убрать",
-  crisisHeading: "Кризисная помощь"
+  crisisHeading: "Кризисная помощь",
+
+  close: "Закрыть",
+  stepLabel: "Шаг",
+  ofLabel: "из",
+
+  aboutNav: "О проекте",
+  aboutTitle: "EMDR-тренажер - свободный проект",
+  aboutDesc: "Пользуйтесь бесплатно. Код открыт, можно развернуть сервис на своем сервере.",
+  aboutGithub: "Открыть на GitHub",
+  aboutDonate: "Поддержать проект",
+  aboutContact: "Связаться с автором",
+
+  cueLightstream: "Поток света",
+  cueContent: {
+    butterfly: {
+      title: "Объятие бабочки",
+      steps: [
+        "Сядьте удобно. Скрестите руки на груди, ладони на плечах.",
+        "Закройте глаза или мягко опустите взгляд. Один спокойный вдох.",
+        "Медленно постукивайте по плечам по очереди: слева, потом справа.",
+        "Дышите ровно и спокойно. Держите ритм примерно раз в секунду.",
+        "Сделайте 20-30 попеременных постукиваний в спокойном темпе.",
+        "Остановитесь. Опустите руки и сделайте глубокий вдох."
+      ]
+    },
+    breathing: {
+      title: "Дыхание по квадрату",
+      steps: [
+        "Сядьте удобно, расслабьте плечи. Следите за кругом на экране.",
+        "Дышите вместе с кругом: вдох на расширении, выдох на сжатии.",
+        "Держите ровный ритм: вдох 4, задержка 4, выдох 4, задержка 4."
+      ]
+    },
+    grounding: {
+      title: "Заземление 5-4-3-2-1",
+      steps: [
+        "Назовите про себя 5 вещей, которые вы видите вокруг.",
+        "Назовите 4 вещи, которые вы можете потрогать.",
+        "Назовите 3 звука, которые вы слышите.",
+        "Назовите 2 запаха, которые вы чувствуете.",
+        "Назовите 1 вкус, который вы ощущаете. Сделайте спокойный вдох."
+      ]
+    },
+    lightstream: {
+      title: "Поток света",
+      steps: [
+        "Устройтесь удобно и закройте глаза. Три медленных спокойных дыхания.",
+        "Представьте теплый, мягкий свет - такого цвета, который ощущается целительным и спокойным.",
+        "Пусть свет входит через макушку головы. Ощутите мягкое тепло.",
+        "Свет медленно движется вниз: лоб, лицо, шея, плечи. Там, где он проходит, напряжение растворяется.",
+        "Свет течет через грудь, живот, спину. Каждый выдох - чуть больше расслабления.",
+        "Теперь свет проходит через бедра, колени, голени - вниз, к ступням.",
+        "Свет достигает ступней и уходит в землю, унося все лишнее. Тело светлое и спокойное."
+      ]
+    }
+  },
+
+  sjBadge: "Журнал сессий",
+  sjTitle: "История сессий",
+  sjSubtitle: "Записи хранятся только на этом устройстве",
+  sjEmpty: "Пока нет сохраненных сессий.",
+  sjDuration: "Длительность",
+  sjMode: "Режим",
+  sjModeSolo: "самостоятельно",
+  sjModeHost: "специалист",
+  sjModeClient: "клиент",
+  sjPhase: "Этап",
+  sjSuds: "SUD",
+  sjSudsTo: "до",
+  sjObservations: "наблюдений",
+  sjClient: "Код клиента",
+  sjDeleteOne: "Удалить",
+  sjClearAll: "Очистить все",
+  sjClearConfirm: "Удалить все записи журнала без возможности восстановления?",
+  sjDownloadJson: "Скачать JSON",
+  sjDownloadCsv: "Скачать CSV",
+  sjPrivacyTitle: "Приватность",
+  sjPrivacyBody: "Данные хранятся только на этом устройстве и псевдонимизированы (без имен, только код). Вы являетесь оператором этих данных. Получите согласие клиента перед записью.",
+
+  gateBadge: "Перед началом",
+  gateTitle: "Краткая проверка",
+  gateSub: "Займет меньше минуты. Помогает убедиться, что инструмент подходит вам сейчас.",
+  gateScreenTitle: "Отметьте, если это есть прямо сейчас",
+  gateScreenIntro: 'По умолчанию все пункты - "нет". Отметьте любой, который верен для вас сейчас.',
+  gateScreenItems: [
+    "Ощущение нереальности или отстраненности от себя и окружающего",
+    "Острые мысли о причинении вреда себе или суициде",
+    "Психоз или мания прямо сейчас",
+    "Тяжелое диссоциативное расстройство (диагноз)",
+    "Вещества, нарушающие способность саморегуляции"
+  ],
+  gateStopTitle: "Сейчас лучше обратиться к специалисту",
+  gateStopBody: "Один или несколько пунктов указывают, что самостоятельная работа с двойным вниманием сейчас небезопасна. Это не критика - просто сигнал: нужна профессиональная поддержка.",
+  gateStopHint: "Откройте раздел ресурсов, чтобы найти кризисную помощь и контакты специалистов.",
+  gateOpenResources: "Открыть ресурсы поддержки",
+  gateConsentTitle: "Понимание и согласие",
+  gateConsentItems: [
+    "Я понимаю, что это инструмент самопомощи, а не терапия и не замена специалисту.",
+    "Я могу остановить сессию в любой момент и использую заземление / 5-4-3-2-1, если почувствую дискомфорт.",
+    "Для полноценной работы с травмой рядом должен быть обученный специалист - я использую инструмент для заземления и расслабления."
+  ],
+  gateAccept: "Начать",
+
+  obSkip: "Пропустить",
+  obDone: "Готово",
+  obSpecialist: [
+    { title: "Режим специалиста", body: "Коротко проведу по интерфейсу. Вы ведете клиента, приложение дает билатеральную стимуляцию." },
+    { title: "Сессия со специалистом", body: "Создайте комнату и отправьте ссылку клиенту. Когда он подключится, его экран зеркалит вашу стимуляцию без настроек." },
+    { title: "Ведение сессии", body: "Протокол по 8 фазам, замеры SUD и VOC, запуск сетов. Здесь же быстрые настройки на лету и показ механик клиенту: бабочка, дыхание, заземление. И кнопка заглушить звук только у себя." },
+    { title: "Настройки сессии", body: "Паттерн движения, скорость, размах, звук стимула и фон. Можно собрать пресет и поделиться ссылкой." },
+    { title: "Стоп и заземление", body: "Всегда под рукой. Останавливает стимуляцию и помогает вернуться в здесь и сейчас. Тут же кризисные контакты." },
+    { title: "Журнал сессий", body: "Локальная история: настройки, сеты, динамика SUD. Хранится только на вашем устройстве, без имен." },
+    { title: "Сменить режим", body: "Переключиться между режимами специалиста и самопомощи в любой момент." },
+    { title: "Готово", body: "Начните с создания сессии. Это обучение можно перезапустить кнопкой обучения в меню." }
+  ],
+  obSelfhelp: [
+    { title: "Режим самопомощи", body: "Коротко покажу, что где. Это инструмент для стабилизации и расслабления, не замена терапии." },
+    { title: "Ресурсы и стабилизация", body: "Безопасное место, контейнер, поток света, объятие бабочки, дыхание. Безопасно практиковать самостоятельно." },
+    { title: "Настройки", body: "Паттерн движения, скорость, размах, звук и фон под себя." },
+    { title: "Стоп и заземление", body: "В любой момент остановит стимуляцию и поможет успокоиться по технике 5-4-3-2-1 и дыханию." },
+    { title: "Готово", body: "Переработку травмы ведет специалист, а не приложение. Это обучение можно перезапустить из меню." }
+  ],
+
+  drawerVisual: "Визуал",
+  drawerSound: "Звук",
+  drawerChannels: "Каналы",
+  drawerTiming: "Тайминг",
+
+  previewPaused: "пауза",
+  previewVisualOff: "визуал выключен"
 };

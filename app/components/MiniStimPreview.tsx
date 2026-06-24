@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Wind, Anchor, Leaf, Sun, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { CUE_CONTENT, cueStepCount, clampCueStep, type CueTechnique } from '../content/cues';
+import { ACCENTS, TYPE } from './ui/tokens';
 
 const shapeClass = (shape: string) => {
   switch (shape) {
@@ -19,10 +20,14 @@ const CUE_META: Record<
   CueTechnique,
   { Icon: typeof Wind; tint: string; ring: string }
 > = {
-  butterfly: { Icon: Wind, tint: 'text-violet-200', ring: 'bg-violet-500/15' },
-  breathing: { Icon: Anchor, tint: 'text-cyan-200', ring: 'bg-cyan-500/15' },
-  grounding: { Icon: Leaf, tint: 'text-emerald-200', ring: 'bg-emerald-500/15' },
-  lightstream: { Icon: Sun, tint: 'text-amber-200', ring: 'bg-amber-500/15' },
+  // calm = violet
+  butterfly: { Icon: Wind, tint: ACCENTS.calm.text, ring: ACCENTS.calm.fill },
+  // info = cyan
+  breathing: { Icon: Anchor, tint: ACCENTS.info.text, ring: ACCENTS.info.fill },
+  // success = emerald
+  grounding: { Icon: Leaf, tint: ACCENTS.success.text, ring: ACCENTS.success.fill },
+  // warn = amber
+  lightstream: { Icon: Sun, tint: ACCENTS.warn.text, ring: ACCENTS.warn.fill },
 };
 
 // framer-motion % on x/y resolves against the element (14px), not the container - animate in px instead
@@ -161,7 +166,7 @@ export function MiniStimPreview() {
             <motion.div
               key={dir}
               className="w-10 h-12 rounded-[60%_40%_50%_50%_/_60%_60%_40%_40%]"
-              style={{ background: 'rgba(167,139,250,0.22)', transformOrigin: dir < 0 ? 'right center' : 'left center' }}
+              style={{ background: `${ACCENTS.calm.hex}38`, transformOrigin: dir < 0 ? 'right center' : 'left center' }}
               animate={{ scaleX: [1, 0.7, 1], opacity: [0.5, 0.85, 0.5] }}
               transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
             />
@@ -174,7 +179,7 @@ export function MiniStimPreview() {
         <div className="absolute inset-0 flex items-center justify-center">
           <motion.div
             className="w-16 h-16 rounded-full"
-            style={{ background: 'rgba(34,211,238,0.16)', border: '1px solid rgba(34,211,238,0.4)' }}
+            style={{ background: `${ACCENTS.info.hex}29`, border: `1px solid ${ACCENTS.info.hex}66` }}
             animate={{ scale: [0.7, 1.25, 1.25, 0.7], opacity: [0.4, 0.8, 0.8, 0.4] }}
             transition={{ duration: 8, times: [0, 0.25, 0.75, 1], repeat: Infinity, ease: 'easeInOut' }}
           />
@@ -186,7 +191,7 @@ export function MiniStimPreview() {
         <div className="absolute inset-0 flex items-center justify-center">
           <motion.div
             className="w-20 h-20 rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(251,191,36,0.45) 0%, rgba(251,146,60,0.18) 60%, transparent 85%)' }}
+            style={{ background: `radial-gradient(circle, ${ACCENTS.warn.hex}73 0%, ${ACCENTS.warn.hex}2e 60%, transparent 85%)` }}
             animate={{ scale: [1, 1.2, 0.92, 1], opacity: [0.7, 1, 0.65, 0.7] }}
             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
           />
@@ -197,7 +202,7 @@ export function MiniStimPreview() {
       <div className="absolute inset-0 flex items-end justify-center pb-6">
         <motion.div
           className="w-28 h-10 rounded-full blur-md"
-          style={{ background: 'rgba(16,185,129,0.22)' }}
+          style={{ background: `${ACCENTS.success.hex}38` }}
           animate={{ opacity: [0.35, 0.6, 0.35] }}
           transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
         />
@@ -218,7 +223,7 @@ export function MiniStimPreview() {
   return (
     <div ref={boxRef} className="relative w-full aspect-video rounded-2xl overflow-hidden bg-zinc-950">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-8 -left-6 w-32 h-32 bg-blue-600/10 blur-[40px] rounded-full" />
+        <div className="absolute -top-8 -left-6 w-32 h-32 bg-cyan-600/10 blur-[40px] rounded-full" />
         <div className="absolute -bottom-8 -right-6 w-32 h-32 bg-emerald-600/10 blur-[40px] rounded-full" />
       </div>
 
@@ -232,7 +237,7 @@ export function MiniStimPreview() {
             </div>
           </div>
           <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2">
-            <span className={`text-[10px] uppercase tracking-[0.18em] font-semibold tabular-nums ${cueMeta.tint}`}>
+            <span className={`${TYPE.label} tabular-nums ${cueMeta.tint}`}>
               {(lang === 'ru' ? 'Шаг' : 'Step')} {stepIdx + 1}/{stepTotal}
             </span>
           </div>
@@ -240,7 +245,7 @@ export function MiniStimPreview() {
       ) : !visualEnabled ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5">
           <EyeOff size={18} className="text-white/25" />
-          <span className="text-[10px] uppercase tracking-[0.18em] font-semibold text-white/25">{noVisualLabel}</span>
+          <span className={`${TYPE.label} text-white/25`}>{noVisualLabel}</span>
         </div>
       ) : (
         <>
@@ -248,7 +253,7 @@ export function MiniStimPreview() {
             {isPlaying ? renderMoving() : <div className={dotClass} style={dotStyle} />}
           </div>
           {!isPlaying && (
-            <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.18em] font-semibold text-white/25">
+            <div className={`absolute bottom-2.5 left-1/2 -translate-x-1/2 ${TYPE.label} text-white/25`}>
               {pausedLabel}
             </div>
           )}
