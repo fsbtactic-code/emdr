@@ -217,9 +217,15 @@ export const FloatingNav = () => {
                 onMouseLeave={() => setHoveredId(null)}
                 onFocus={() => setHoveredId('banana')}
                 onBlur={() => setHoveredId(null)}
-                className="w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-[18px] bg-white/5 text-white/60 hover:text-white hover:bg-white/10 hover:scale-105 active:scale-95 transition-all"
+                className="group w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-[18px] bg-white/5 hover:bg-white/10 hover:scale-105 active:scale-95 transition-all"
               >
-                <img src="/banana.png" alt="" className="w-6 h-6 object-contain" />
+                {/* render the banana as a white monochrome glyph to match the other rail icons */}
+                <img
+                  src="/banana.png"
+                  alt=""
+                  className="w-6 h-6 object-contain opacity-60 group-hover:opacity-100 transition-opacity"
+                  style={{ filter: 'brightness(0) invert(1)' }}
+                />
               </button>
               <NavTooltip label="О проекте" visible={hoveredId === 'banana'} />
             </div>

@@ -9,18 +9,22 @@ const manrope = Manrope({
   display: "swap"
 });
 
-const ogImage = "https://s3.twcstorage.ru/strelo/emdr/og.jpg";
+// Served from the site's own origin so link-preview crawlers (Telegram, etc.)
+// always fetch it, with no cross-origin dependency.
+const ogImage = "https://emdr.digital/og.jpg";
 const description =
   "Free EMDR tool for specialists and their clients. Bilateral stimulation for grounding and relaxation, with a therapist-led session mode. Evidence-based, multilingual, open-source.";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://emdr.digital"),
   title: "EMDR Trainer",
   description,
   openGraph: {
     title: "EMDR Trainer",
     description,
     type: "website",
-    images: [{ url: ogImage, width: 1200, height: 675, alt: "EMDR Trainer" }]
+    url: "https://emdr.digital/",
+    images: [{ url: ogImage, width: 1200, height: 676, alt: "EMDR Trainer" }]
   },
   twitter: {
     card: "summary_large_image",
