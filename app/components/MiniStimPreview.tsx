@@ -2,7 +2,7 @@
 
 import { useStore } from '../store/useStore';
 import { motion } from 'framer-motion';
-import { Wind, Anchor, Leaf, EyeOff } from 'lucide-react';
+import { Wind, Anchor, Leaf, Sun, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { CUE_CONTENT, cueStepCount, clampCueStep, type CueTechnique } from '../content/cues';
 
@@ -22,6 +22,7 @@ const CUE_META: Record<
   butterfly: { Icon: Wind, tint: 'text-violet-200', ring: 'bg-violet-500/15' },
   breathing: { Icon: Anchor, tint: 'text-cyan-200', ring: 'bg-cyan-500/15' },
   grounding: { Icon: Leaf, tint: 'text-emerald-200', ring: 'bg-emerald-500/15' },
+  lightstream: { Icon: Sun, tint: 'text-amber-200', ring: 'bg-amber-500/15' },
 };
 
 // framer-motion % on x/y resolves against the element (14px), not the container - animate in px instead
@@ -176,6 +177,18 @@ export function MiniStimPreview() {
             style={{ background: 'rgba(34,211,238,0.16)', border: '1px solid rgba(34,211,238,0.4)' }}
             animate={{ scale: [0.7, 1.25, 1.25, 0.7], opacity: [0.4, 0.8, 0.8, 0.4] }}
             transition={{ duration: 8, times: [0, 0.25, 0.75, 1], repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </div>
+      );
+    }
+    if (tech === 'lightstream') {
+      return (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <motion.div
+            className="w-20 h-20 rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(251,191,36,0.45) 0%, rgba(251,146,60,0.18) 60%, transparent 85%)' }}
+            animate={{ scale: [1, 1.2, 0.92, 1], opacity: [0.7, 1, 0.65, 0.7] }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
           />
         </div>
       );

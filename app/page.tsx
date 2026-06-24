@@ -2,7 +2,6 @@
 
 import { StimulationEngine } from './components/StimulationEngine';
 import { Controls } from './components/Controls';
-import { FeedbackPanel } from './components/FeedbackPanel';
 import { SettingsPanel } from './components/SettingsPanel';
 import { InstallPrompt } from './components/InstallPrompt';
 import { EmdrGuide } from './components/EmdrGuide';
@@ -119,7 +118,6 @@ export default function SessionPage() {
       <ResourceExercises />
       <SessionJournal />
       <Controls />
-      <FeedbackPanel />
       <EmdrGuide />
       <InstallPrompt />
       <Disclaimer />

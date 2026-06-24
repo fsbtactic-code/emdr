@@ -45,7 +45,7 @@ const BGS = ['black', 'aurora', 'stars'];
 const SYM = ['ru', 'en', 'numbers'];
 const LOCS = ['ru', 'en', 'es', 'it', 'de', 'fr', 'pt'];
 const SIGNALS = ['ok', 'pause', 'stop'];
-const CUES = ['none', 'butterfly', 'breathing', 'grounding'];
+const CUES = ['none', 'butterfly', 'breathing', 'grounding', 'lightstream'];
 
 function sanitize(raw: any): Record<string, unknown> {
   const c = raw || {};
@@ -126,12 +126,21 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
   });
 }
 
-export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
   if (!validId(id)) return NextResponse.json({ error: 'bad id' }, { status: 400 });
   if (rateLimited(id)) return NextResponse.json({ error: 'rate' }, { status: 429 });
   const room = rooms.get(id);
-  if (!room) return NextResponse.json({ state: null, v: 0, signal: null });
-  room.lastPoll = Date.now();
-  return NextResponse.json({ state: room.state, v: room.v, signal: room.signal ?? null });
+  if (!room) return NextResponse.json({ state: null, v: 0, signal: null, clientActive: false });
+  const now = Date.now();
+  // The host polls with ?role=host to read client signals while idle; that poll
+  // must not count as client presence, so only the client GET refreshes lastPoll.
+  const isHostPoll = req.nextUrl.searchParams.get('role') === 'host';
+  if (!isHostPoll) room.lastPoll = now;
+  return NextResponse.json({
+    state: room.state,
+    v: room.v,
+    signal: room.signal ?? null,
+    clientActive: now - room.lastPoll < 6000
+  });
 }

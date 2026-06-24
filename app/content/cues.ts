@@ -3,7 +3,7 @@
 // current step only (no navigation). cueStep is broadcast clamped to 0-30,
 // so keep step counts well within that range.
 
-export type CueTechnique = 'butterfly' | 'breathing' | 'grounding';
+export type CueTechnique = 'butterfly' | 'breathing' | 'grounding' | 'lightstream';
 
 export interface CueStep {
   ru: string;
@@ -92,6 +92,41 @@ export const CUE_CONTENT: Record<CueTechnique, CueContent> = {
       {
         ru: 'Назовите 1 вкус, который вы ощущаете. Сделайте спокойный вдох.',
         en: 'Name 1 taste you can sense. Take a calm breath.',
+      },
+    ],
+  },
+  lightstream: {
+    id: 'lightstream',
+    titleRu: 'Поток света',
+    titleEn: 'Light stream',
+    steps: [
+      {
+        ru: 'Устройтесь удобно и закройте глаза. Три медленных спокойных дыхания.',
+        en: 'Settle in comfortably and close your eyes. Three slow, calm breaths.',
+      },
+      {
+        ru: 'Представьте теплый, мягкий свет - такого цвета, который ощущается целительным и спокойным.',
+        en: 'Imagine a warm, gentle light - any color that feels healing and calm to you.',
+      },
+      {
+        ru: 'Пусть свет входит через макушку головы. Ощутите мягкое тепло.',
+        en: 'Let this light enter through the top of your head. Feel a gentle warmth.',
+      },
+      {
+        ru: 'Свет медленно движется вниз: лоб, лицо, шея, плечи. Там, где он проходит, напряжение растворяется.',
+        en: 'The light moves slowly down: forehead, face, neck, shoulders. Where it passes, tension dissolves.',
+      },
+      {
+        ru: 'Свет течет через грудь, живот, спину. Каждый выдох - чуть больше расслабления.',
+        en: 'Light flows through the chest, belly, back. Each exhale brings a little more relaxation.',
+      },
+      {
+        ru: 'Теперь свет проходит через бедра, колени, голени - вниз, к ступням.',
+        en: 'Now the light moves through hips, knees, calves - down toward your feet.',
+      },
+      {
+        ru: 'Свет достигает ступней и уходит в землю, унося все лишнее. Тело светлое и спокойное.',
+        en: 'The light reaches your feet and flows into the earth, carrying away anything you no longer need. Body calm and light.',
       },
     ],
   },

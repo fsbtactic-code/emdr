@@ -71,11 +71,43 @@ function ButterflyGuide() {
   );
 }
 
+function LightStreamGlow() {
+  return (
+    <div className="relative w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center">
+      <motion.div
+        className="absolute w-48 h-48 sm:w-56 sm:h-56 rounded-full"
+        style={{
+          background: 'radial-gradient(circle, rgba(251,191,36,0.22) 0%, rgba(251,146,60,0.12) 55%, transparent 80%)',
+          filter: 'blur(18px)',
+        }}
+        animate={{ scale: [1, 1.12, 0.96, 1], opacity: [0.7, 1, 0.75, 0.7] }}
+        transition={{ duration: 6, ease: 'easeInOut', repeat: Infinity }}
+      />
+      <motion.div
+        className="absolute w-32 h-32 sm:w-36 sm:h-36 rounded-full"
+        style={{
+          background: 'radial-gradient(circle, rgba(253,186,116,0.30) 0%, rgba(251,191,36,0.14) 60%, transparent 85%)',
+          filter: 'blur(10px)',
+        }}
+        animate={{ scale: [1, 1.18, 0.92, 1], opacity: [0.8, 1, 0.7, 0.8] }}
+        transition={{ duration: 6, ease: 'easeInOut', repeat: Infinity, delay: 0.8 }}
+      />
+      <motion.div
+        className="w-16 h-16 sm:w-20 sm:h-20 rounded-full"
+        style={{ background: 'radial-gradient(circle, rgba(253,230,138,0.55) 0%, rgba(251,191,36,0.25) 70%, transparent 100%)' }}
+        animate={{ scale: [1, 1.1, 0.95, 1], opacity: [0.85, 1, 0.8, 0.85] }}
+        transition={{ duration: 6, ease: 'easeInOut', repeat: Infinity, delay: 0.4 }}
+      />
+    </div>
+  );
+}
+
 // Animation paired with each technique; identical regardless of step so the
 // calming motion stays continuous while the specialist advances the prompt.
 function CueAnimation({ tech }: { tech: CueTechnique }) {
   const lang = useStore((s) => s.lang) === 'ru' ? 'ru' : 'en';
   if (tech === 'butterfly') return <ButterflyGuide />;
+  if (tech === 'lightstream') return <LightStreamGlow />;
   return <BreathingCircle phases={BREATH_PHASES[lang]} />;
 }
 
@@ -105,7 +137,7 @@ export function ClientCueOverlay() {
         >
           <div
             className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-72 h-72 blur-[90px] rounded-full pointer-events-none ${
-              tech === 'butterfly' ? 'bg-violet-500/10' : 'bg-emerald-500/10'
+              tech === 'butterfly' ? 'bg-violet-500/10' : tech === 'lightstream' ? 'bg-amber-400/10' : 'bg-emerald-500/10'
             }`}
           />
 

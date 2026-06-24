@@ -9,7 +9,7 @@ export type VisualBackground = 'black' | 'aurora' | 'stars';
 export type SymbolLanguage = 'ru' | 'en' | 'numbers';
 export type ClientSignal = 'ok' | 'pause' | 'stop';
 export type AppMode = 'specialist' | 'selfhelp';
-export type ClientCue = 'none' | 'butterfly' | 'breathing' | 'grounding';
+export type ClientCue = 'none' | 'butterfly' | 'breathing' | 'grounding' | 'lightstream';
 
 export interface SudsEntry { t: number; phase: string; value: number }
 export interface SetObservation { set: number; note: string; suds: number | null }

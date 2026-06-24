@@ -55,6 +55,23 @@ export const SessionManager = () => {
   }, [isHost, roomId, broadcastKey, setClientActive, setIncomingSignal]);
 
   useEffect(() => {
+    if (!isHost || !roomId) return;
+    const poll = async () => {
+      try {
+        const r = await fetch(`/api/session/${roomId}?role=host`, { cache: 'no-store' });
+        if (r.ok) {
+          const d = await r.json();
+          setIncomingSignal(d && d.signal ? d.signal.value : null);
+          setClientActive(!!(d && d.clientActive));
+        }
+      } catch {}
+    };
+    poll();
+    const iv = setInterval(poll, 1500);
+    return () => clearInterval(iv);
+  }, [isHost, roomId, setIncomingSignal, setClientActive]);
+
+  useEffect(() => {
     if (!isClient || !roomId) return;
     let lastV = -1;
     let lastSuccess = Date.now();

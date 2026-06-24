@@ -43,24 +43,21 @@ export const SessionClientOverlay = () => {
       </AnimatePresence>
 
       {}
-      <AnimatePresence>
-        {!isPlaying && (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            className="fixed inset-x-0 bottom-24 z-30 flex justify-center px-6 pointer-events-none"
-          >
-            <p className="text-center text-white/55 text-[14px] leading-relaxed max-w-xs px-4 py-2.5 rounded-2xl bg-[#0a0a0c]/40 backdrop-blur-md border border-white/[0.06]">
+      <div className="fixed inset-x-0 bottom-6 z-40 flex flex-col items-center gap-3 px-4">
+        <AnimatePresence>
+          {!isPlaying && (
+            <motion.p
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 8 }}
+              className="text-center text-white/55 text-[14px] leading-relaxed max-w-xs px-4 py-2.5 rounded-2xl bg-[#0a0a0c]/40 backdrop-blur-md border border-white/[0.06]"
+            >
               {t.sessClientWaiting}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.p>
+          )}
+        </AnimatePresence>
 
-      {}
-      <div className="fixed bottom-6 inset-x-0 z-40 flex flex-col items-center gap-2 px-4">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center gap-2">
           <button
             onClick={() => setClientSignal('ok')}
             className={signalBtn(clientSignal === 'ok', 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-200/90 border-emerald-500/25')}
@@ -80,7 +77,9 @@ export const SessionClientOverlay = () => {
             {t.sigStop}
           </button>
         </div>
-        <span className="text-[11px] text-white/40">{t.sigBadge}</span>
+
+        <span className="text-[11px] text-white/40 text-center">{t.sigBadge}</span>
+
         <button
           onClick={() => setIsGroundingOpen(true)}
           aria-label={t.navGrounding}

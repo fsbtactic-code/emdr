@@ -3,7 +3,7 @@
 import {
   X, Lock, Play, Pause, Save, Check,
   ClipboardList, Radio, BookOpen,
-  Wind, Anchor, Leaf, EyeOff, LifeBuoy, VolumeX, Volume2,
+  Wind, Anchor, Leaf, Sun, EyeOff, LifeBuoy, VolumeX, Volume2,
   SlidersHorizontal, ChevronLeft, ChevronRight, ListOrdered,
 } from 'lucide-react';
 import {
@@ -246,6 +246,7 @@ export function TherapistPanel() {
     { cue: 'butterfly', label: t.cueButterfly, Icon: Wind },
     { cue: 'breathing', label: t.cueBreathing, Icon: Anchor },
     { cue: 'grounding', label: t.cueGrounding, Icon: Leaf },
+    { cue: 'lightstream', label: lang === 'ru' ? 'Поток света' : 'Light stream', Icon: Sun },
   ];
 
   // ---- phase-adaptive center workspace ----
@@ -623,7 +624,7 @@ export function TherapistPanel() {
                 {/* Show to client */}
                 <div className="rounded-2xl bg-white/[0.02] px-3.5 py-3 flex flex-col gap-2.5">
                   <Label color="text-violet-300/80">{t.cueTitle}</Label>
-                  <div className="grid grid-cols-3 gap-1.5">
+                  <div className="grid grid-cols-2 gap-1.5">
                     {cueButtons.map(({ cue, label, Icon }) => {
                       const active = clientCue === cue;
                       return (

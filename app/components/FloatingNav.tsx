@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { useStore } from '../store/useStore';
-import { Settings2, MessageSquareHeart, HelpCircle, LifeBuoy, Users, Github, Heart, ClipboardList, BookOpen, Repeat, GraduationCap } from 'lucide-react';
+import { Settings2, HelpCircle, LifeBuoy, Users, Heart, ClipboardList, BookOpen, Repeat, GraduationCap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useT } from '../i18n/useT';
+import { BananaPopup } from './BananaPopup';
 
 function NavTooltip({ label, visible }: { label: string; visible: boolean }) {
   return (
@@ -43,7 +44,7 @@ function NavTooltip({ label, visible }: { label: string; visible: boolean }) {
 export const FloatingNav = () => {
   const {
     isSettingsOpen, setIsSettingsOpen,
-    isFeedbackOpen, setIsFeedbackOpen,
+    isFeedbackOpen: _isFeedbackOpen, setIsFeedbackOpen: _setIsFeedbackOpen,
     isGuideOpen, setIsGuideOpen,
     isSessionOpen, setIsSessionOpen,
     isResourcesOpen, setIsResourcesOpen,
@@ -57,10 +58,11 @@ export const FloatingNav = () => {
   const t = useT();
 
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [bananaOpen, setBananaOpen] = useState(false);
 
   const closeAll = () => {
     setIsSettingsOpen(false);
-    setIsFeedbackOpen(false);
+    _setIsFeedbackOpen(false);
     setIsGuideOpen(false);
     setIsSessionOpen(false);
     setIsResourcesOpen(false);
@@ -113,13 +115,6 @@ export const FloatingNav = () => {
       active: isJournalOpen,
       title: t.navJournal,
       onClick: () => { const v = !isJournalOpen; closeAll(); setIsJournalOpen(v); }
-    },
-    {
-      id: 'feedback',
-      icon: MessageSquareHeart,
-      active: isFeedbackOpen,
-      title: t.navFeedback,
-      onClick: () => { const v = !isFeedbackOpen; closeAll(); setIsFeedbackOpen(v); }
     },
     {
       id: 'grounding',
@@ -215,24 +210,23 @@ export const FloatingNav = () => {
               </div>
             )}
             <div className="relative overflow-visible">
-              <a
-                href="https://github.com/fsbtactic-code/emdr"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub"
-                onMouseEnter={() => setHoveredId('github')}
+              <button
+                onClick={() => setBananaOpen(true)}
+                aria-label="О проекте"
+                onMouseEnter={() => setHoveredId('banana')}
                 onMouseLeave={() => setHoveredId(null)}
-                onFocus={() => setHoveredId('github')}
+                onFocus={() => setHoveredId('banana')}
                 onBlur={() => setHoveredId(null)}
                 className="w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-[18px] bg-white/5 text-white/60 hover:text-white hover:bg-white/10 hover:scale-105 active:scale-95 transition-all"
               >
-                <Github size={20} />
-              </a>
-              <NavTooltip label="GitHub" visible={hoveredId === 'github'} />
+                <img src="/banana.png" alt="" className="w-6 h-6 object-contain" />
+              </button>
+              <NavTooltip label="О проекте" visible={hoveredId === 'banana'} />
             </div>
           </div>
         </motion.div>
       )}
+      <BananaPopup open={bananaOpen} onClose={() => setBananaOpen(false)} />
     </AnimatePresence>
   );
 };
