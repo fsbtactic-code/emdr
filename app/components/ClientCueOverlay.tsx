@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../store/useStore';
 
-// Box-breathing cadence (seconds per phase) and the scale the circle eases to.
 const BOX_SECONDS = [4, 4, 4, 4];
 const BOX_SCALE = [1.0, 1.0, 0.62, 0.62];
 
@@ -18,7 +17,6 @@ type Strings = {
   grounding: [string, string, string, string, string];
 };
 
-// Local copy, ru + en only (any other locale falls back to ru).
 const RU: Strings = {
   butterflyTitle: 'Объятие бабочки',
   butterflyHint: 'Скрестите руки на груди и мягко постукивайте по плечам, по очереди слева и справа, в спокойном ритме.',
@@ -51,7 +49,6 @@ const EN: Strings = {
   ],
 };
 
-// A slow box-breathing circle, shared by 'breathing' and 'grounding'.
 function BreathingCircle({ phases }: { phases: [string, string, string, string] }) {
   const [phase, setPhase] = useState(0);
 
@@ -80,7 +77,6 @@ function BreathingCircle({ phases }: { phases: [string, string, string, string] 
   );
 }
 
-// Butterfly-hug guide: two glowing shoulder zones alternating ~1 Hz.
 function ButterflyGuide({ s }: { s: Strings }) {
   const [side, setSide] = useState<0 | 1>(0);
 
@@ -141,7 +137,6 @@ export function ClientCueOverlay() {
           transition={{ duration: 0.5 }}
           className="fixed inset-0 z-[115] flex items-center justify-center px-6 py-10 bg-zinc-950/92 backdrop-blur-2xl overflow-y-auto no-scrollbar"
         >
-          {/* soft accent glow, color follows the cue */}
           <div
             className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-72 h-72 blur-[90px] rounded-full pointer-events-none ${
               clientCue === 'butterfly' ? 'bg-violet-500/10' : 'bg-emerald-500/10'

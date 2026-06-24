@@ -23,10 +23,7 @@ export const DICTS: Record<Locale, Partial<Dict>> = { ru, en, es, it, de, fr, pt
 
 export const LOCALES = Object.keys(DICTS) as Locale[];
 
-// Fallback chain: ru is the type-source and always complete; en is the
-// secondary base for new keys not yet translated; the requested locale
-// overrides on top. This lets us add new UI strings without breaking the
-// typecheck on the 6 partially-translated locales.
+// ru is complete; en fills gaps for other locales before their own keys apply
 export function getDict(lang: Locale): Dict {
   if (lang === "ru") return ru;
   const base = { ...ru, ...en } as Dict;

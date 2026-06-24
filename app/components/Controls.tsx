@@ -19,8 +19,6 @@ export const Controls = () => {
           <button
             onClick={() => {
               setPlaying(false);
-              // In a practitioner session the clinician decides what comes next;
-              // never auto-pop grounding. The self-help path keeps the safety net.
               if (appMode !== 'specialist' && suds !== null && suds >= 4) {
                 setIsGroundingOpen(true);
               }
@@ -54,8 +52,6 @@ export const Controls = () => {
       <div className="flex flex-col items-center">
         <button
           onClick={() => {
-            // Safety gate: self-help users get the screening + consent before a start.
-            // The practitioner runs the screening with the client, so no app gate here.
             if (appMode !== 'specialist' && !consentGiven) {
               setIsGateOpen(true);
               return;

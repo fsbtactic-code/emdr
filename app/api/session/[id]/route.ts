@@ -15,7 +15,6 @@ const hits: Map<string, number[]> = g.__emdrHits ?? (g.__emdrHits = new Map());
 
 const ROOM_TTL = 1000 * 60 * 60 * 2;
 
-// lightweight in-memory rate limiter: max ~150 requests per id in a 10s window
 const RATE_WINDOW = 10000;
 const RATE_MAX = 150;
 
@@ -40,7 +39,7 @@ function gc() {
 
 const PATTERNS = ['horizontal', 'vertical', 'diagonal-1', 'diagonal-2', 'lemniscate', 'dots', 'pulse', 'bars', 'zigzag'];
 const FORMATS = ['continuous', 'click', 'metronome', 'white_noise', 'binaural_beats'];
-const AMBIENTS = ['none', 'rain', 'ocean', 'breath', 'hz528', 'wind_harmonics', 'breathform'];
+const AMBIENTS = ['none', 'rain', 'ocean', 'breath', 'hz528', 'wind_harmonics', 'breathform', 'pink', 'brown', 'drone'];
 const SHAPES = ['circle', 'square', 'ring', 'butterfly'];
 const BGS = ['black', 'aurora', 'stars'];
 const SYM = ['ru', 'en', 'numbers'];
@@ -77,6 +76,10 @@ function sanitize(raw: any): Record<string, unknown> {
   put('isPlaying', b(c.isPlaying));
   put('isGroundingOpen', b(c.isGroundingOpen));
   put('clientCue', one(c.clientCue, CUES));
+  put('ambientVolume', num(c.ambientVolume, 0, 1));
+  put('hapticEnabled', b(c.hapticEnabled));
+  put('visualEnabled', b(c.visualEnabled));
+  put('vestibularSafe', b(c.vestibularSafe));
   return o;
 }
 
@@ -90,7 +93,6 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
   const body = await req.json().catch(() => ({}));
   const now = Date.now();
 
-  // client -> host signal: ephemeral enum only, counts as client activity
   if (body && typeof body.signal === 'string' && SIGNALS.includes(body.signal)) {
     const prev = rooms.get(id);
     const value = body.signal as Signal['value'];
@@ -105,7 +107,6 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
     return NextResponse.json({ ok: true });
   }
 
-  // host -> client state broadcast
   const state = sanitize(body?.state);
   const prev = rooms.get(id);
   const room: Room = {

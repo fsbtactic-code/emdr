@@ -1,13 +1,9 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Shield, Sun, Box, Wind, Sparkles } from 'lucide-react';
 import { useStore } from '../store/useStore';
-
-// ---------------------------------------------------------------------------
-// Local strings - ru + en, no edits to shared i18n files
-// ---------------------------------------------------------------------------
 
 type Locale = string;
 
@@ -173,11 +169,6 @@ function getStrings(lang: Locale): ExStrings {
   return strings[lang] ?? strings['ru'];
 }
 
-// ---------------------------------------------------------------------------
-// Sub-components
-// ---------------------------------------------------------------------------
-
-/** Slow breathing circle used in Safe Place and Light Stream steps */
 function BreathCircle({ color }: { color: string }) {
   return (
     <div className="relative w-28 h-28 flex items-center justify-center mx-auto my-4">
@@ -216,10 +207,8 @@ function BreathCircle({ color }: { color: string }) {
   );
 }
 
-/** Butterfly Hug pacing: a butterfly whose wings bloom with color alternately
- *  (left, then right) in a slow, smooth rhythm to pace the alternating self-taps. */
 function ButterflyHugAnim() {
-  const D = 2.6; // full left+right cycle, calm pace (~1.3s per side)
+  const D = 2.6; // full left+right cycle (~1.3s per side)
   const tr = (times: number[]) => ({ duration: D, times, repeat: Infinity, ease: 'easeInOut' as const });
 
   return (
@@ -238,7 +227,6 @@ function ButterflyHugAnim() {
           </radialGradient>
         </defs>
 
-        {/* wing outlines - always visible, color fills in on the active side */}
         <g fill="none" stroke="rgba(196,181,253,0.4)" strokeWidth={1.5}>
           <ellipse cx={76} cy={60} rx={37} ry={29} />
           <ellipse cx={85} cy={108} rx={28} ry={24} />
@@ -246,7 +234,6 @@ function ButterflyHugAnim() {
           <ellipse cx={135} cy={108} rx={28} ry={24} />
         </g>
 
-        {/* left wings fill (blooms first) */}
         <motion.g
           fill="url(#bwing)"
           style={{ transformBox: 'fill-box', transformOrigin: '92% 50%' }}
@@ -257,7 +244,6 @@ function ButterflyHugAnim() {
           <ellipse cx={85} cy={108} rx={28} ry={24} />
         </motion.g>
 
-        {/* right wings fill (blooms second) */}
         <motion.g
           fill="url(#bwing)"
           style={{ transformBox: 'fill-box', transformOrigin: '8% 50%' }}
@@ -268,7 +254,6 @@ function ButterflyHugAnim() {
           <ellipse cx={135} cy={108} rx={28} ry={24} />
         </motion.g>
 
-        {/* body + head + antennae */}
         <ellipse cx={110} cy={86} rx={5} ry={38} fill="#ddd6fe" />
         <circle cx={110} cy={50} r={6} fill="#ddd6fe" />
         <path d="M110 46 C 104 32, 97 28, 90 26" fill="none" stroke="#c4b5fd" strokeWidth={1.5} strokeLinecap="round" />
@@ -280,7 +265,6 @@ function ButterflyHugAnim() {
   );
 }
 
-/** Container for exercise-specific animation on a given step */
 function StepAnimation({ exerciseId, stepIndex, accent }: { exerciseId: string; stepIndex: number; accent: string }) {
   if (exerciseId === 'butterfly_hug' && stepIndex >= 2 && stepIndex <= 5) {
     return <ButterflyHugAnim />;
@@ -293,14 +277,9 @@ function StepAnimation({ exerciseId, stepIndex, accent }: { exerciseId: string; 
   return null;
 }
 
-// ---------------------------------------------------------------------------
-// Warm glow layer for Light Stream exercise
-// ---------------------------------------------------------------------------
-
 function WarmGlowLayer() {
   return (
     <div className="absolute inset-0 overflow-hidden rounded-[28px] pointer-events-none">
-      {/* Glow 1 - top-left amber orb */}
       <motion.div
         className="absolute rounded-full"
         style={{
@@ -319,7 +298,6 @@ function WarmGlowLayer() {
         }}
         transition={{ duration: 9, ease: 'easeInOut', repeat: Infinity }}
       />
-      {/* Glow 2 - bottom-right rose orb */}
       <motion.div
         className="absolute rounded-full"
         style={{
@@ -341,10 +319,6 @@ function WarmGlowLayer() {
     </div>
   );
 }
-
-// ---------------------------------------------------------------------------
-// Step runner
-// ---------------------------------------------------------------------------
 
 interface StepRunnerProps {
   exercise: ExerciseDef;
@@ -372,7 +346,6 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
   if (isLightStream) {
     return (
       <div className="flex flex-col h-full relative">
-        {/* Header (top padding clears the corner back/close buttons so they do not overlap the icon) */}
         <div className="flex items-center gap-3 mb-5">
           <div
             className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
@@ -386,15 +359,12 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
           </div>
         </div>
 
-        {/* Disclaimer badge - warm tones */}
         <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-500/[0.12] border border-amber-600/20 mb-5">
           <Shield size={12} className="text-amber-700/80 shrink-0" />
           <span className="text-[11px] text-amber-900/70 leading-tight">{s.disclaimer}</span>
         </div>
 
-        {/* Step content */}
         <div className="flex-1 flex flex-col">
-          {/* Progress dots */}
           <div className="flex gap-1.5 justify-center mb-4">
             {exercise.steps.map((_, i) => (
               <motion.div
@@ -430,7 +400,6 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
           </AnimatePresence>
         </div>
 
-        {/* Nav buttons */}
         <div className="flex gap-3 mt-6 pt-4 border-t border-amber-800/15">
           <button
             onClick={goBack}
@@ -454,7 +423,6 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
       <div className="flex items-center gap-3 mb-5">
         <div
           className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
@@ -468,15 +436,12 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
         </div>
       </div>
 
-      {/* Disclaimer badge */}
       <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-500/[0.07] border border-emerald-500/15 mb-5">
         <Shield size={12} className="text-emerald-400/80 shrink-0" />
         <span className="text-[11px] text-emerald-200/65 leading-tight">{s.disclaimer}</span>
       </div>
 
-      {/* Step content */}
       <div className="flex-1 flex flex-col">
-        {/* Progress dots */}
         <div className="flex gap-1.5 justify-center mb-4">
           {exercise.steps.map((_, i) => (
             <motion.div
@@ -495,7 +460,6 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
           {s.stepOf(step + 1, total)}
         </div>
 
-        {/* Animation area */}
         <AnimatePresence mode="wait">
           <motion.div
             key={step}
@@ -513,7 +477,6 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
         </AnimatePresence>
       </div>
 
-      {/* Nav buttons */}
       <div className="flex gap-3 mt-6 pt-4 border-t border-white/[0.05]">
         <button
           onClick={goBack}
@@ -536,10 +499,6 @@ function StepRunner({ exercise, accent, icon, strings: s, onClose }: StepRunnerP
   );
 }
 
-// ---------------------------------------------------------------------------
-// Exercise card data
-// ---------------------------------------------------------------------------
-
 interface ExerciseCard {
   id: string;
   accent: string;
@@ -553,10 +512,6 @@ const CARDS: ExerciseCard[] = [
   { id: 'butterfly_hug', accent: '#a78bfa', icon: <Wind size={16} style={{ color: '#a78bfa' }} /> },
 ];
 
-// ---------------------------------------------------------------------------
-// Main component
-// ---------------------------------------------------------------------------
-
 export function ResourceExercises() {
   const isResourcesOpen = useStore((s) => s.isResourcesOpen);
   const setIsResourcesOpen = useStore((s) => s.setIsResourcesOpen);
@@ -567,7 +522,6 @@ export function ResourceExercises() {
 
   const s = getStrings(lang);
 
-  // Stop stimulation when overlay opens
   useEffect(() => {
     if (isResourcesOpen) {
       setPlaying(false);
@@ -608,17 +562,13 @@ export function ResourceExercises() {
                 : { backgroundColor: '#0d0d0f', border: '1px solid rgba(255,255,255,0.06)' }
             }
           >
-            {/* Ambient glow - dark theme only */}
             {!isLightStream && (
               <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-64 h-64 bg-indigo-500/8 blur-[80px] rounded-full pointer-events-none" />
             )}
 
-            {/* Warm animated glows - light stream only */}
             {isLightStream && <WarmGlowLayer />}
 
             <div className="relative z-10 flex flex-col flex-1 min-h-0">
-              {/* Top controls: aligned to the card content padding, never overlap content.
-                  Back (when inside an exercise) on the left, close on the right. */}
               <div className="flex items-center justify-between mb-4 shrink-0 h-9">
                 {activeId ? (
                   <button
@@ -648,7 +598,6 @@ export function ResourceExercises() {
                 </button>
               </div>
 
-              {/* Header */}
               <AnimatePresence mode="wait">
                 {!activeId && (
                   <motion.div
@@ -668,7 +617,6 @@ export function ResourceExercises() {
                 )}
               </AnimatePresence>
 
-              {/* Content area */}
               <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar">
                 <AnimatePresence mode="wait">
                   {!activeId ? (

@@ -57,7 +57,7 @@ const AnimatedBackground = ({ type }: { type: string }) => {
 };
 
 export const StimulationEngine = () => {
-  const { speed, color, size, pattern, isPlaying, randomness, amplitude, cyclesPerSet, setPlaying, incrementSets, isSaccadic, showSymbols, symbolLanguage, targetShape, isSettingsOpen, visualBackground, safeMode, isClient, vestibularSafe, visualEnabled } = useStore();
+  const { speed, color, size, pattern, isPlaying, randomness, amplitude, cyclesPerSet, setPlaying, incrementSets, isSaccadic, showSymbols, symbolLanguage, targetShape, visualBackground, safeMode, isClient, vestibularSafe, visualEnabled } = useStore();
   const [symbol, setSymbol] = useState('');
 
   const effSpeed = (safeMode || vestibularSafe) ? Math.min(speed, 1.5) : speed;

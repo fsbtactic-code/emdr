@@ -24,8 +24,6 @@ export const Disclaimer = () => {
 
   const handleAccept = () => {
     localStorage.setItem(STORAGE_KEY, 'true');
-    // The disclaimer already carries the screening list + confirmation checkbox,
-    // so accepting it satisfies the session-start safety gate (no double screening).
     setConsentGiven(true);
     setDissociationScreenPassed(true);
     setShow(false);

@@ -26,7 +26,7 @@ export const SessionPanel = () => {
 
   const clientLink =
     typeof window !== 'undefined' && roomId
-      ? `${window.location.origin}/emdr?room=${roomId}&lang=${lang}`
+      ? `${window.location.origin}${window.location.pathname}?room=${roomId}&lang=${lang}`
       : '';
 
   const createSession = () => {

@@ -11,8 +11,7 @@ import type { CrisisContact } from '../content/crisis';
 
 export const GroundingOverlay = () => {
   const { isGroundingOpen, setIsGroundingOpen, setPlaying, lang, appMode, isClient } = useStore();
-  // In a practitioner-led session the clinician handles crisis, so the app does not
-  // surface hotlines on either the specialist or the client side. Self-help users do.
+  // practitioner-led sessions hide hotlines on both sides
   const hideCrisis = appMode === 'specialist' || isClient;
   const t = useT();
   const [breath, setBreath] = useState({ idx: 0, count: BOX_BREATH_SECONDS[0] });
@@ -46,8 +45,6 @@ export const GroundingOverlay = () => {
           onClick={() => setIsGroundingOpen(false)}
           className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-zinc-950/92 backdrop-blur-2xl overflow-hidden"
         >
-          {/* Calming background that breathes in sync with the box-breathing timer:
-              expands and brightens on inhale/hold, contracts and dims on exhale/hold. */}
           <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
             <motion.div
               className="rounded-full"
@@ -123,7 +120,6 @@ export const GroundingOverlay = () => {
 
               {!hideCrisis && (
               <div className="w-full mt-6 rounded-2xl bg-rose-500/[0.04] p-3 text-left">
-                {/* heading row */}
                 <div className="flex items-center gap-2 mb-3">
                   <LifeBuoy size={13} className="text-rose-400/80 shrink-0" />
                   <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-rose-300/70">
@@ -131,7 +127,6 @@ export const GroundingOverlay = () => {
                   </span>
                 </div>
 
-                {/* contact cards */}
                 <div className="flex flex-col gap-2">
                   {getCrisisContacts(lang).map((c: CrisisContact) => {
                     const hasPhone = Boolean(c.phone);
@@ -141,7 +136,6 @@ export const GroundingOverlay = () => {
                         key={c.name}
                         className="flex items-start gap-3 bg-white/[0.03] rounded-xl px-3 py-2.5"
                       >
-                        {/* icon chip */}
                         <div
                           className={[
                             'mt-0.5 w-7 h-7 rounded-full flex items-center justify-center shrink-0',
@@ -157,7 +151,6 @@ export const GroundingOverlay = () => {
                           )}
                         </div>
 
-                        {/* text column */}
                         <div className="flex flex-col gap-0.5 min-w-0">
                           <span className="text-[13px] text-white/70 leading-snug">{c.name}</span>
 

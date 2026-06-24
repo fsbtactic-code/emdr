@@ -6,9 +6,6 @@ import { ShieldCheck, AlertTriangle, Phone, X } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import type { Locale } from '../i18n/dict';
 
-// ---------------------------------------------------------------------------
-// Local strings (ru + en). No edits to shared dict.ts.
-// ---------------------------------------------------------------------------
 const STRINGS: Record<'ru' | 'en', {
   badge: string;
   title: string;
@@ -92,14 +89,10 @@ const STRINGS: Record<'ru' | 'en', {
   },
 };
 
-// Resolve to 'ru' or 'en'; anything else falls back to 'ru'.
 function resolveStrings(lang: Locale) {
   return lang === 'en' ? STRINGS.en : STRINGS.ru;
 }
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
 export function PreSessionGate() {
   const isGateOpen = useStore((s) => s.isGateOpen);
   const lang = useStore((s) => s.lang);
@@ -110,14 +103,10 @@ export function PreSessionGate() {
 
   const s = resolveStrings(lang);
 
-  // Step: 'screen' | 'stop' | 'consent'
   const [step, setStep] = useState<'screen' | 'stop' | 'consent'>('screen');
-  // Screening: array of booleans, one per item. All false = "no" by default.
   const [flags, setFlags] = useState<boolean[]>(s.screenItems.map(() => false));
-  // Consent checkboxes.
   const [checks, setChecks] = useState<boolean[]>(s.consentItems.map(() => false));
 
-  // Reset internal state when gate opens.
   const handleOpen = () => {
     setFlags(s.screenItems.map(() => false));
     setChecks(s.consentItems.map(() => false));
@@ -163,7 +152,6 @@ export function PreSessionGate() {
     setIsGateOpen(false);
   };
 
-  // Escape hatch: close without granting consent.
   const handleDismiss = () => {
     setIsGateOpen(false);
   };
@@ -188,10 +176,8 @@ export function PreSessionGate() {
             onClick={(e) => e.stopPropagation()}
             className="w-full max-w-lg bg-[#0d0d0f] border border-white/[0.06] rounded-[28px] p-7 shadow-2xl relative overflow-hidden max-h-[92vh] overflow-y-auto no-scrollbar"
           >
-            {/* Glow */}
             <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-48 bg-cyan-500/10 blur-[60px] rounded-full pointer-events-none" />
 
-            {/* Close (escape hatch): dismisses without granting consent */}
             <button
               onClick={handleDismiss}
               aria-label={lang === 'en' ? 'Close' : 'Закрыть'}
@@ -201,7 +187,6 @@ export function PreSessionGate() {
             </button>
 
             <div className="relative z-10 flex flex-col items-center text-center">
-              {/* Badge */}
               <div className="flex items-center gap-2 text-cyan-300/90 text-[11px] font-bold uppercase tracking-[0.15em] mb-2">
                 <ShieldCheck size={13} />
                 {s.badge}
@@ -210,7 +195,6 @@ export function PreSessionGate() {
               <h2 className="text-[22px] font-bold text-white tracking-tight mb-1">{s.title}</h2>
               <p className="text-white/45 text-[13px] mb-6 max-w-sm">{s.sub}</p>
 
-              {/* ---- STEP: SCREENING ---- */}
               {step === 'screen' && (
                 <div className="w-full text-left">
                   <p className="text-white/50 text-[12px] font-semibold uppercase tracking-wider mb-1">
@@ -234,7 +218,6 @@ export function PreSessionGate() {
                           ].join(' ')}
                           aria-pressed={active}
                         >
-                          {/* Toggle indicator */}
                           <span
                             className={[
                               'mt-[2px] flex-shrink-0 w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors',
@@ -267,10 +250,8 @@ export function PreSessionGate() {
                 </div>
               )}
 
-              {/* ---- STEP: STOP PANEL ---- */}
               {step === 'stop' && (
                 <div className="w-full text-left">
-                  {/* Stop glow override */}
                   <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-48 h-48 bg-rose-500/10 blur-[60px] rounded-full pointer-events-none" />
 
                   <div className="relative flex flex-col items-center text-center mb-6">
@@ -295,7 +276,6 @@ export function PreSessionGate() {
                 </div>
               )}
 
-              {/* ---- STEP: CONSENT ---- */}
               {step === 'consent' && (
                 <div className="w-full text-left">
                   <p className="text-white/50 text-[12px] font-semibold uppercase tracking-wider mb-4">
@@ -318,7 +298,6 @@ export function PreSessionGate() {
                           ].join(' ')}
                           aria-pressed={checked}
                         >
-                          {/* Checkbox indicator */}
                           <span
                             className={[
                               'mt-[2px] flex-shrink-0 w-4 h-4 rounded border-2 flex items-center justify-center transition-colors',

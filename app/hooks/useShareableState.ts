@@ -52,7 +52,7 @@ export const useShareableState = () => {
     if (typeof c.color === 'string' && /^#[0-9a-fA-F]{3,8}$/.test(c.color)) out.color = c.color;
     const pattern = oneOf(c.pattern, ['horizontal', 'vertical', 'diagonal-1', 'diagonal-2', 'lemniscate', 'dots', 'pulse', 'bars', 'zigzag'] as const); if (pattern) out.pattern = pattern;
     const fmt = oneOf(c.audioFormat, ['continuous', 'click', 'metronome', 'white_noise', 'binaural_beats'] as const); if (fmt) out.audioFormat = fmt;
-    const amb = oneOf(c.ambientSound, ['none', 'rain', 'ocean', 'breath', 'hz528', 'wind_harmonics', 'breathform'] as const); if (amb) out.ambientSound = amb;
+    const amb = oneOf(c.ambientSound, ['none', 'rain', 'ocean', 'breath', 'hz528', 'wind_harmonics', 'breathform', 'pink', 'brown', 'drone'] as const); if (amb) out.ambientSound = amb;
     const shape = oneOf(c.targetShape, ['circle', 'square', 'ring', 'butterfly'] as const); if (shape) out.targetShape = shape;
     const bg = oneOf(c.visualBackground, ['black', 'aurora', 'stars'] as const); if (bg) out.visualBackground = bg;
     const lang = oneOf(c.symbolLanguage, ['ru', 'en', 'numbers'] as const); if (lang) out.symbolLanguage = lang;

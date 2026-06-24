@@ -6,9 +6,6 @@ import { Settings2, MessageSquareHeart, HelpCircle, LifeBuoy, Users, Github, Hea
 import { motion, AnimatePresence } from 'framer-motion';
 import { useT } from '../i18n/useT';
 
-// Tooltip that springs out to the right of a nav rail button: a 3D hinge-open
-// with overshoot, a popping caret, an accent glow, a pulsing dot and a one-shot
-// shimmer sweep across the pill.
 function NavTooltip({ label, visible }: { label: string; visible: boolean }) {
   return (
     <AnimatePresence>
@@ -22,7 +19,6 @@ function NavTooltip({ label, visible }: { label: string; visible: boolean }) {
           style={{ transformPerspective: 700, transformOrigin: 'left center' }}
           className="pointer-events-none absolute left-full top-1/2 z-50 ml-3 -translate-y-1/2"
         >
-          {/* Caret that pops in just after the pill */}
           <motion.span
             aria-hidden="true"
             initial={{ scaleX: 0, opacity: 0 }}
@@ -35,7 +31,6 @@ function NavTooltip({ label, visible }: { label: string; visible: boolean }) {
               borderRight: '6px solid rgba(10,10,12,0.9)',
             }}
           />
-          {/* Pill body: gradient surface, accent ring, soft indigo glow, shimmer sweep */}
           <span className="relative flex items-center rounded-xl px-3.5 py-2 text-[13px] font-semibold text-white/90 whitespace-nowrap bg-[#0a0a0c]/90 backdrop-blur-xl border border-white/[0.06] shadow-[0_8px_24px_-6px_rgba(0,0,0,0.7)]">
             {label}
           </span>
@@ -61,7 +56,6 @@ export const FloatingNav = () => {
   } = useStore();
   const t = useT();
 
-  // Track which button is hovered by id string (null = none)
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   const closeAll = () => {
@@ -147,10 +141,8 @@ export const FloatingNav = () => {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
-          // overflow-visible so tooltips aren't clipped by the rail container
           className="fixed left-4 top-4 md:left-6 md:top-6 z-40 flex flex-col gap-2 overflow-visible"
         >
-          {/* Main nav group */}
           <div className="flex flex-col gap-1.5 p-1.5 rounded-[22px] bg-[#0a0a0c]/40 backdrop-blur-2xl border border-white/[0.08] shadow-2xl overflow-visible">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -187,7 +179,6 @@ export const FloatingNav = () => {
             })}
           </div>
 
-          {/* Bottom group: onboarding, switch-mode, GitHub */}
           <div className="flex flex-col gap-1.5 p-1.5 rounded-[22px] bg-[#0a0a0c]/40 backdrop-blur-2xl border border-white/[0.08] shadow-2xl overflow-visible">
             {appMode && (
               <div className="relative overflow-visible">

@@ -1,9 +1,4 @@
-// Crisis contact data for the EMDR trainer safety overlay.
-// These are general public helplines compiled from official sources.
-// Verify each number before relying on it - lines change, merge, or close.
-// This file is NOT a substitute for local emergency services.
-// If life is in immediate danger, call the local emergency number (112 in EU, 911 in US/CA, etc.).
-
+// numbers should be verified periodically - helplines change and close
 import type { Locale } from '../i18n/dict';
 
 export type CrisisContact = {
@@ -214,10 +209,6 @@ export const CRISIS_CONTACTS: Record<Locale, CrisisContact[]> = {
   ],
 };
 
-/**
- * Returns crisis contacts for the given locale.
- * Falls back to English if the locale array is empty or missing.
- */
 export function getCrisisContacts(lang: Locale): CrisisContact[] {
   const contacts = CRISIS_CONTACTS[lang];
   if (contacts && contacts.length > 0) {

@@ -9,7 +9,7 @@ const validRoom = (r: string) => /^[a-z0-9]{4,32}$/i.test(r);
 export const SessionManager = () => {
   const s = useStore();
   const {
-    isHost, isClient, roomId, clientSignal,
+    isHost, isClient, roomId, clientSignal, signalAt,
     setIsHost, setIsClient, setRoomId, setClientActive,
     applyConfig, setPlaying, setIsGroundingOpen, setLang,
     setIncomingSignal, setConnectionLost
@@ -32,7 +32,8 @@ export const SessionManager = () => {
     targetShape: s.targetShape, visualBackground: s.visualBackground, isDesync: s.isDesync,
     randomness: s.randomness, amplitude: s.amplitude, safeMode: s.safeMode,
     isPlaying: s.isPlaying, isGroundingOpen: s.isGroundingOpen, lang: s.lang,
-    clientCue: s.clientCue
+    clientCue: s.clientCue, ambientVolume: s.ambientVolume,
+    hapticEnabled: s.hapticEnabled, visualEnabled: s.visualEnabled, vestibularSafe: s.vestibularSafe
   });
 
   useEffect(() => {
@@ -60,23 +61,22 @@ export const SessionManager = () => {
     const tick = async () => {
       try {
         const r = await fetch(`/api/session/${roomId}`, { cache: 'no-store' });
-        if (!r.ok) return;
-        const d = await r.json();
-        if (!d || typeof d.v !== 'number') return;
-        // a 200 with data refreshes the connection regardless of staleness
-        lastSuccess = Date.now();
-        setConnectionLost(false);
-        if (d.v !== lastV && d.state) {
-          lastV = d.v;
-          const { isPlaying, isGroundingOpen, lang, ...cfg } = d.state as Record<string, unknown>;
-          applyConfig(cfg);
-          if (typeof isPlaying === 'boolean') setPlaying(isPlaying);
-          if (typeof isGroundingOpen === 'boolean') setIsGroundingOpen(isGroundingOpen);
-          if (isLocale(lang)) setLang(lang);
+        if (r.ok) {
+          const d = await r.json();
+          if (d && typeof d.v === 'number') {
+            lastSuccess = Date.now();
+            setConnectionLost(false);
+            if (d.v !== lastV && d.state) {
+              lastV = d.v;
+              const { isPlaying, isGroundingOpen, lang, ...cfg } = d.state as Record<string, unknown>;
+              applyConfig(cfg);
+              if (typeof isPlaying === 'boolean') setPlaying(isPlaying);
+              if (typeof isGroundingOpen === 'boolean') setIsGroundingOpen(isGroundingOpen);
+              if (isLocale(lang)) setLang(lang);
+            }
+          }
         }
-      } catch {
-        // failed/throwing fetch does not refresh lastSuccess
-      }
+      } catch {}
       if (Date.now() - lastSuccess > 5000) {
         setConnectionLost(true);
         setPlaying(false);
@@ -87,7 +87,6 @@ export const SessionManager = () => {
     return () => clearInterval(iv);
   }, [isClient, roomId, applyConfig, setPlaying, setIsGroundingOpen, setLang, setConnectionLost]);
 
-  // client -> host signal sender: POST when clientSignal changes
   useEffect(() => {
     if (!isClient || !roomId || !clientSignal) return;
     const tid = setTimeout(() => {
@@ -98,7 +97,7 @@ export const SessionManager = () => {
       }).catch(() => {});
     }, 150);
     return () => clearTimeout(tid);
-  }, [isClient, roomId, clientSignal]);
+  }, [isClient, roomId, clientSignal, signalAt]);
 
   return null;
 };

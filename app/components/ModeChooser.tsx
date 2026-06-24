@@ -12,13 +12,8 @@ export function ModeChooser() {
   const setIsResourcesOpen = useStore((s) => s.setIsResourcesOpen);
   const t = useT();
 
-  // Returning users (mode already set) never see the overlay.
   const open = appMode === null;
 
-  // Picking a mode sets it (which hides this overlay); the guided onboarding
-  // for that mode then auto-opens on top, and underneath we open the first
-  // panel the user needs (session creation for the practitioner, resources for
-  // self-help).
   const pickSpecialist = () => {
     setIsSessionOpen(true);
     setAppMode('specialist');

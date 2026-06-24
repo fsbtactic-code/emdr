@@ -3,7 +3,7 @@ import { useStore } from '../store/useStore';
 import { startAmbient, setAmbientBusVolume, type AmbientHandle } from '../lib/audio';
 
 export const useAmbientAudio = () => {
-  const { ambientSound, isPlaying, audioEnabled, audioVolume } = useStore();
+  const { ambientSound, isPlaying, audioEnabled, ambientVolume } = useStore();
   const handleRef = useRef<AmbientHandle | null>(null);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ export const useAmbientAudio = () => {
     }
     if (!audioEnabled || !isPlaying || ambientSound === 'none') return;
 
-    setAmbientBusVolume(audioVolume);
+    setAmbientBusVolume(ambientVolume);
     handleRef.current = startAmbient(ambientSound);
 
     return () => {
@@ -25,6 +25,6 @@ export const useAmbientAudio = () => {
   }, [ambientSound, isPlaying, audioEnabled]);
 
   useEffect(() => {
-    setAmbientBusVolume(audioVolume);
-  }, [audioVolume]);
+    setAmbientBusVolume(ambientVolume);
+  }, [ambientVolume]);
 };

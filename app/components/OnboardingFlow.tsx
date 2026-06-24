@@ -8,8 +8,6 @@ import type { AppMode } from '../store/useStore';
 
 type TourStep = { target?: string; title: string; body: string };
 
-// Walkthrough steps anchored to real nav rail elements (data-tour="...").
-// Welcome/finish steps have no target and render centered.
 function getSteps(mode: AppMode, lang: string): TourStep[] {
   const ru: Record<AppMode, TourStep[]> = {
     specialist: [
@@ -60,7 +58,6 @@ export function OnboardingFlow() {
   const setIsOnboardingOpen = useStore((s) => s.setIsOnboardingOpen);
   const markOnboardingSeen = useStore((s) => s.markOnboardingSeen);
   const lang = useStore((s) => s.lang);
-  // panel setters: close everything so the nav rail is clean and visible for the tour
   const setIsSettingsOpen = useStore((s) => s.setIsSettingsOpen);
   const setIsSessionOpen = useStore((s) => s.setIsSessionOpen);
   const setIsClinicalOpen = useStore((s) => s.setIsClinicalOpen);
@@ -83,7 +80,6 @@ export function OnboardingFlow() {
   useEffect(() => {
     if (!isOnboardingOpen) return;
     setStep(0);
-    // clean the canvas: close any open panel so the highlighted rail icons are visible
     setIsSettingsOpen(false);
     setIsSessionOpen(false);
     setIsClinicalOpen(false);
@@ -92,8 +88,7 @@ export function OnboardingFlow() {
     setIsFeedbackOpen(false);
   }, [isOnboardingOpen, onboardingMode, setIsSettingsOpen, setIsSessionOpen, setIsClinicalOpen, setIsResourcesOpen, setIsJournalOpen, setIsFeedbackOpen]);
 
-  // Depend on the target STRING (stable per step), not the step object identity,
-  // otherwise the effect would re-run every render and loop on setRect.
+  // depend on the target string, not the step object, to avoid looping on setRect
   const target = current?.target ?? null;
   useLayoutEffect(() => {
     if (!isOnboardingOpen) return;
@@ -117,7 +112,6 @@ export function OnboardingFlow() {
   const pad = 8;
   const hasSpot = !!rect;
 
-  // Callout position: to the right of a highlighted target, otherwise centered.
   let calloutStyle: React.CSSProperties;
   if (rect) {
     const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
@@ -137,14 +131,10 @@ export function OnboardingFlow() {
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[130]"
         >
-          {/* Click catcher: blocks app interaction; advances on click outside the card */}
           <div className="absolute inset-0" onClick={next} />
 
-          {/* Full dim when there is no target (welcome / finish) */}
           {!hasSpot && <div className="absolute inset-0 bg-[#06060a]/85 backdrop-blur-[2px] pointer-events-none" />}
 
-          {/* Spotlight: four light dim panels frame the hole (cheap to repaint),
-              and a glowing ring glides to the highlighted element. */}
           {hasSpot && rect && (() => {
             const dim = 'rgba(6,6,10,0.82)';
             const hT = rect.top - pad, hL = rect.left - pad, hW = rect.width + pad * 2, hH = rect.height + pad * 2;
@@ -165,7 +155,6 @@ export function OnboardingFlow() {
             );
           })()}
 
-          {/* Callout card */}
           <AnimatePresence mode="wait">
             <motion.div
               key={safe}
@@ -176,7 +165,6 @@ export function OnboardingFlow() {
               className="absolute w-[300px] max-w-[calc(100vw-32px)] z-10"
               style={calloutStyle}
             >
-              {/* caret pointing to the highlighted element */}
               {hasSpot && (
                 <span
                   aria-hidden="true"
@@ -203,7 +191,6 @@ export function OnboardingFlow() {
                 <h3 className="text-[16px] font-bold text-white tracking-tight mb-1.5">{current.title}</h3>
                 <p className="text-[13px] leading-relaxed text-white/60">{current.body}</p>
 
-                {/* progress dots */}
                 <div className="flex gap-1.5 mt-4 mb-4">
                   {steps.map((_, i) => (
                     <span

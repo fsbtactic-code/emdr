@@ -1,7 +1,3 @@
-// Local-only session journal backed by IndexedDB.
-// No server, no network, no third-party libraries. Data never leaves the device.
-// Entries are pseudonymized: clientCode only, never a real name.
-
 export type JournalEntry = {
   id: string;
   startedAt: number;
@@ -32,9 +28,8 @@ function genId(): string {
       return crypto.randomUUID();
     }
   } catch {
-    // fall through to manual generation
+    // fall through
   }
-  // Fallback id: timestamp plus random suffix, good enough for a local key.
   return 's-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
 }
 
@@ -83,7 +78,6 @@ export async function listSessions(): Promise<JournalEntry[]> {
       req.onsuccess = () => resolve((req.result as JournalEntry[]) || []);
       req.onerror = () => reject(req.error);
     });
-    // Newest first by start time.
     return entries.sort((a, b) => b.startedAt - a.startedAt);
   } finally {
     db.close();
@@ -126,8 +120,7 @@ export function exportJSON(entries: JournalEntry[]): string {
   return JSON.stringify(entries, null, 2);
 }
 
-// Escape one CSV cell: spreadsheet-safe, quotes/commas/newlines handled,
-// and a leading formula trigger is neutralized to avoid CSV injection.
+// neutralizes leading formula chars to prevent csv injection
 function csvCell(value: unknown): string {
   let s = value === null || value === undefined ? '' : String(value);
   if (/^[=+\-@]/.test(s)) {

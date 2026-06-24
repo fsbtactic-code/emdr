@@ -20,7 +20,6 @@ import { saveSession } from '../lib/journal';
 import { isHapticSupported } from '../hooks/useHapticBLS';
 import { MiniStimPreview } from './MiniStimPreview';
 
-// Ordered phase list. Index aligns with the t.phases array (phase 1 to 8).
 const PHASE_ORDER: SessionPhase[] = [
   SessionPhase.Idle,
   SessionPhase.History,
@@ -31,8 +30,6 @@ const PHASE_ORDER: SessionPhase[] = [
   SessionPhase.BodyScan,
   SessionPhase.Closure
 ];
-
-// ---- shared primitives (dense clinical UI, single radius + accent scale) ----
 
 const Label = ({ children, color = 'text-white/40' }: { children: React.ReactNode; color?: string }) => (
   <span className={`text-[11px] uppercase tracking-[0.14em] font-semibold ${color}`}>{children}</span>
@@ -47,14 +44,12 @@ const SectionLabel = ({ children, color = 'text-white/40', icon: Icon }: {
   </div>
 );
 
-// Filled value pill (no white outline).
 const Badge = ({ children }: { children: React.ReactNode }) => (
   <span className="text-white/80 text-[13px] font-medium tabular-nums bg-white/[0.05] px-2.5 py-1 rounded-lg">
     {children}
   </span>
 );
 
-// Toggle: accent fill when on, filled track when off (no white ring).
 const Toggle = ({ enabled, onChange, accent }: { enabled: boolean; onChange: () => void; accent: string }) => (
   <button
     onClick={onChange}
@@ -83,7 +78,6 @@ const Field = ({ label, value, onChange, placeholder, rows = 2 }: {
   </div>
 );
 
-// A row of numbered buttons for a bounded scale (SUD 0-10, VOC 1-7).
 const ScaleRow = ({ from, to, value, onPick, accent }: {
   from: number;
   to: number;
@@ -113,7 +107,6 @@ const ScaleRow = ({ from, to, value, onPick, accent }: {
   );
 };
 
-// Slider row with a value badge, mirroring SettingsPanel.
 const SliderRow = ({ label, value, min, max, step, val, onChange, hint, color = 'text-white/50' }: {
   label: string;
   value: string;
@@ -143,7 +136,6 @@ const SliderRow = ({ label, value, min, max, step, val, onChange, hint, color = 
   </div>
 );
 
-// Icon + label tile used for pattern / shape / ambient / background pickers.
 const Tile = ({ active, accent, onClick, icon: Icon, children }: {
   active: boolean;
   accent: string;
@@ -161,8 +153,6 @@ const Tile = ({ active, accent, onClick, icon: Icon, children }: {
     <span className="block max-w-full truncate leading-[1.1]">{children}</span>
   </button>
 );
-
-// ---- static option tables (ids + icons), labels resolved from the dict ----
 
 const PATTERNS: { id: PatternType; icon: typeof Gauge }[] = [
   { id: 'horizontal', icon: ArrowLeftRight },
@@ -223,7 +213,6 @@ export function TherapistPanel() {
   const setIsGroundingOpen = useStore((s) => s.setIsGroundingOpen);
   const isHost = useStore((s) => s.isHost);
 
-  // clinical slice
   const currentPhase = useStore((s) => s.currentPhase);
   const setPhase = useStore((s) => s.setPhase);
   const targetDesc = useStore((s) => s.targetDesc);
@@ -253,7 +242,6 @@ export function TherapistPanel() {
   const isPlaying = useStore((s) => s.isPlaying);
   const setPlaying = useStore((s) => s.setPlaying);
 
-  // live stimulation controls (broadcast to client via room.state)
   const speed = useStore((s) => s.speed);
   const setSpeed = useStore((s) => s.setSpeed);
   const amplitude = useStore((s) => s.amplitude);
@@ -284,20 +272,18 @@ export function TherapistPanel() {
   const setVisualEnabled = useStore((s) => s.setVisualEnabled);
   const vestibularSafe = useStore((s) => s.vestibularSafe);
   const setVestibularSafe = useStore((s) => s.setVestibularSafe);
-  // host-local audio (NOT broadcast: muting here only affects the host device)
+  // host-local only, NOT broadcast to client
   const audioEnabled = useStore((s) => s.audioEnabled);
   const setAudioEnabled = useStore((s) => s.setAudioEnabled);
-  // calming mechanic the host pushes onto the client screen (broadcast)
   const clientCue = useStore((s) => s.clientCue);
   const setClientCue = useStore((s) => s.setClientCue);
 
-  // per-set local state for the desensitization loop
   const [setObsNote, setSetObsNote] = useState('');
   const [setObsSuds, setSetObsSuds] = useState<number | null>(null);
   const [awaitingNotice, setAwaitingNotice] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  // SSR-safe haptic capability resolution (navigator is unavailable on the server).
+  // navigator unavailable on server
   const [hapticOk, setHapticOk] = useState(false);
   useEffect(() => { setHapticOk(isHapticSupported()); }, []);
 
@@ -344,7 +330,7 @@ export function TherapistPanel() {
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch {
-      // Local journal write failed (no IndexedDB or storage blocked). Stay silent, no PII leaves device.
+      // silent - local journal only, no PII leaves device
     }
   };
 
@@ -357,7 +343,6 @@ export function TherapistPanel() {
     <AnimatePresence>
       {isClinicalOpen && (
         !isHost ? (
-          /* SOLO LOCK: reprocessing is gated. Centered card on the dark workspace. */
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -402,7 +387,6 @@ export function TherapistPanel() {
             </motion.div>
           </motion.div>
         ) : (
-          /* FULL-SCREEN CONDUCT WORKSPACE (host) */
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -410,16 +394,13 @@ export function TherapistPanel() {
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="fixed inset-0 z-50 bg-[#0a0a0c] flex flex-col"
           >
-            {/* ============================ HEADER ============================ */}
             <div className="shrink-0 border-b border-white/5">
-              {/* row 1: title + phase stepper + actions */}
               <div className="px-4 md:px-6 pt-3 pb-2.5 flex items-center gap-3 md:gap-4">
                 <div className="flex items-center gap-2.5 min-w-0 shrink-0">
                   <ClipboardList size={18} className="text-indigo-300 shrink-0" />
                   <h2 className="text-[15px] md:text-lg font-semibold tracking-tight text-white truncate">{t.tpTitle}</h2>
                 </div>
 
-                {/* compact horizontal 8-phase stepper */}
                 <div className="flex-1 min-w-0 overflow-x-auto no-scrollbar">
                   <div className="flex items-center gap-1.5">
                     {PHASE_ORDER.map((ph, idx) => {
@@ -465,7 +446,6 @@ export function TherapistPanel() {
                 </div>
               </div>
 
-              {/* row 2: current phase number + name + short guidance for "what to do now" */}
               <div className="px-4 md:px-6 pb-3 flex items-start gap-3">
                 <span className="shrink-0 flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-indigo-500/12">
                   <span className="text-indigo-300 text-[13px] font-semibold tabular-nums">{t.tpPhaseLabel} {currentMeta?.n}</span>
@@ -475,15 +455,12 @@ export function TherapistPanel() {
               </div>
             </div>
 
-            {/* ===================== BODY: two columns ===================== */}
             <div className="flex-1 min-h-0 flex flex-col lg:flex-row">
 
-              {/* LEFT: clinical record / notes. Order-2 on stacking so the live
-                  preview + controls are reachable first on narrow screens. */}
+              {/* order-2 so live controls are reachable first on narrow screens */}
               <div className="order-2 lg:order-1 flex-1 min-h-0 overflow-y-auto no-scrollbar border-t lg:border-t-0 lg:border-r border-white/5">
                 <div className="px-5 md:px-7 py-6 max-w-2xl mx-auto flex flex-col divide-y divide-white/[0.06]">
 
-                  {/* Assessment (phase 3) */}
                   <div className="flex flex-col gap-4 pb-6">
                     <SectionLabel color="text-indigo-300/80" icon={ClipboardList}>{t.phases[3]?.name}</SectionLabel>
                     <Field label={t.tpTarget} value={targetDesc} onChange={setTargetDesc} rows={2} />
@@ -501,7 +478,6 @@ export function TherapistPanel() {
                     </div>
                   </div>
 
-                  {/* Installation (phase 5) */}
                   <div className="flex flex-col gap-4 py-6">
                     <SectionLabel color="text-emerald-300/80" icon={Check}>{t.phases[5]?.name}</SectionLabel>
                     <Field label={t.tpPos} value={posCognition} onChange={setPosCognition} rows={2} />
@@ -511,7 +487,6 @@ export function TherapistPanel() {
                     </div>
                   </div>
 
-                  {/* Observation log */}
                   <div className="flex flex-col gap-3 py-6">
                     <SectionLabel icon={ClipboardList}>{t.tpLogObs}</SectionLabel>
                     {observations.length > 0 ? (
@@ -529,7 +504,6 @@ export function TherapistPanel() {
                     )}
                   </div>
 
-                  {/* SUDS trend mini-bars */}
                   <div className="flex flex-col gap-3 py-6">
                     <SectionLabel color="text-cyan-300/80" icon={Activity}>{t.tpSudsTrend}</SectionLabel>
                     {sudsLog.length > 0 ? (
@@ -550,24 +524,20 @@ export function TherapistPanel() {
                     )}
                   </div>
 
-                  {/* Therapist notes (main writing area) */}
                   <div className="pt-6">
                     <Field label={t.tpNotes} value={therapistNotes} onChange={setTherapistNotes} placeholder={t.tpNotesPh} rows={6} />
                   </div>
                 </div>
               </div>
 
-              {/* RIGHT: live preview + start/stop + FULL settings */}
               <div className="order-1 lg:order-2 w-full lg:w-[400px] lg:shrink-0 overflow-y-auto no-scrollbar">
                 <div className="px-5 py-6 flex flex-col divide-y divide-white/[0.06]">
 
-                  {/* a) Live preview of the client screen */}
                   <div className="flex flex-col gap-2.5 pb-6">
                     <Label color="text-white/45">{previewLabel}</Label>
                     <MiniStimPreview />
                   </div>
 
-                  {/* b) Start / Stop-and-ask + notice flow (Desensitization, phase 4) */}
                   <div className="flex flex-col gap-3 py-6">
                     <SectionLabel color="text-rose-300/80" icon={Activity}>{t.phases[4]?.name}</SectionLabel>
                     {!awaitingNotice && (
@@ -631,7 +601,6 @@ export function TherapistPanel() {
                     </AnimatePresence>
                   </div>
 
-                  {/* c) Show a resource technique to the client (cues) */}
                   <div className="flex flex-col gap-3 py-6">
                     <SectionLabel color="text-violet-300/80" icon={Sparkles}>{t.cueTitle}</SectionLabel>
                     <p className="text-white/30 text-[12px] leading-relaxed">{t.cueHint}</p>
@@ -671,9 +640,6 @@ export function TherapistPanel() {
                     </div>
                   </div>
 
-                  {/* d) FULL stimulation settings (replicates SettingsPanel direct controls) */}
-
-                  {/* Pattern */}
                   <div className="flex flex-col gap-3 py-6">
                     <SectionLabel color="text-cyan-300/80" icon={SlidersHorizontal}>{t.patternLabel}</SectionLabel>
                     <div className="grid grid-cols-3 gap-1.5">
@@ -691,7 +657,6 @@ export function TherapistPanel() {
                     </div>
                   </div>
 
-                  {/* Shape */}
                   <div className="flex flex-col gap-3 py-6">
                     <SectionLabel color="text-indigo-300/80" icon={Circle}>{t.shapeLabel}</SectionLabel>
                     <div className="grid grid-cols-4 gap-1.5">
@@ -709,7 +674,6 @@ export function TherapistPanel() {
                     </div>
                   </div>
 
-                  {/* Color */}
                   <div className="flex flex-col gap-3 py-6">
                     <SectionLabel color="text-white/40">{t.colorLabel}</SectionLabel>
                     <div className="flex gap-3 flex-wrap">
@@ -728,7 +692,6 @@ export function TherapistPanel() {
                     </div>
                   </div>
 
-                  {/* Timing: speed, amplitude, series, size */}
                   <div className="flex flex-col gap-5 py-6">
                     <SectionLabel color="text-cyan-300/80" icon={Gauge}>{lang === 'ru' ? 'Тайминг' : 'Timing'}</SectionLabel>
                     <SliderRow label={t.speedLabel} value={`${speed.toFixed(1)} ${t.hzUnit}`} min={0.5} max={3} step={0.1} val={speed} onChange={setSpeed} />
@@ -737,7 +700,6 @@ export function TherapistPanel() {
                     <SliderRow label={t.sizeLabel} value={`${size} ${t.pxUnit}`} min={20} max={150} step={1} val={size} onChange={(v) => setSize(Math.round(v))} />
                   </div>
 
-                  {/* Sound: stim format, ambient, volumes, background, host-local mute */}
                   <div className="flex flex-col gap-5 py-6">
                     <SectionLabel color="text-sky-300/80" icon={Volume2}>{lang === 'ru' ? 'Звук' : 'Sound'}</SectionLabel>
 
@@ -801,7 +763,6 @@ export function TherapistPanel() {
                       </div>
                     </div>
 
-                    {/* host-local mute (NOT broadcast) */}
                     <div className="flex items-center justify-between gap-3 rounded-xl bg-white/[0.03] px-3.5 py-3">
                       <div className="flex items-start gap-2.5 min-w-0">
                         <VolumeX size={15} className={`shrink-0 mt-0.5 ${!audioEnabled ? 'text-sky-300/80' : 'text-white/30'}`} />
@@ -814,7 +775,6 @@ export function TherapistPanel() {
                     </div>
                   </div>
 
-                  {/* Channels: haptic / visual / vestibular */}
                   <div className="flex flex-col gap-4 py-6">
                     <SectionLabel color="text-indigo-300/80" icon={Radio}>{t.channelsSection}</SectionLabel>
                     <div className="flex items-center justify-between gap-3">
@@ -840,7 +800,6 @@ export function TherapistPanel() {
                     </div>
                   </div>
 
-                  {/* e) Save / new session */}
                   <div className="flex flex-col gap-3 py-6">
                     <button
                       onClick={handleSave}

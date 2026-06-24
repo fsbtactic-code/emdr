@@ -9,7 +9,6 @@ export type VisualBackground = 'black' | 'aurora' | 'stars';
 export type SymbolLanguage = 'ru' | 'en' | 'numbers';
 export type ClientSignal = 'ok' | 'pause' | 'stop';
 export type AppMode = 'specialist' | 'selfhelp';
-// calming mechanic the practitioner can push onto the client screen during a session
 export type ClientCue = 'none' | 'butterfly' | 'breathing' | 'grounding';
 
 export interface SudsEntry { t: number; phase: string; value: number }
@@ -54,7 +53,6 @@ export interface EmdrState {
 
   lang: Locale;
 
-  // which tool surface is active: practitioner-led or self-help. null = not chosen yet.
   appMode: AppMode | null;
 
   isClient: boolean;
@@ -66,37 +64,28 @@ export interface EmdrState {
   safeMode: boolean;
   isGroundingOpen: boolean;
 
-  // audio: separate ambient volume bus (BLS volume is audioVolume)
   ambientVolume: number;
+  hapticEnabled: boolean;
+  visualEnabled: boolean;
+  vestibularSafe: boolean;
 
-  // stimulation channels / clinical accessibility
-  hapticEnabled: boolean;     // tactile BLS via Vibration API
-  visualEnabled: boolean;     // when false: audio/haptic-only path (low vision, motion sickness)
-  vestibularSafe: boolean;    // motion-sickness limiter (caps speed/amplitude)
-
-  // panels
   isResourcesOpen: boolean;
   isJournalOpen: boolean;
   isGateOpen: boolean;
   isClinicalOpen: boolean;
 
-  // guided onboarding (per mode, persisted, re-launchable)
   isOnboardingOpen: boolean;
   onboardingMode: AppMode | null;
   onboardingSeenSpecialist: boolean;
   onboardingSeenSelfhelp: boolean;
 
-  // pre-session safety gate
   consentGiven: boolean;
   dissociationScreenPassed: boolean;
 
-  // remote two-way signal channel (ephemeral, no PII, separate from room.state)
-  clientSignal: ClientSignal | null;   // what the client is sending (client side)
-  incomingSignal: ClientSignal | null; // what the host sees (host side)
+  clientSignal: ClientSignal | null;
+  incomingSignal: ClientSignal | null;
   signalAt: number | null;
-  connectionLost: boolean;             // client stopped receiving host updates
-
-  // calming mechanic pushed by the host onto the client screen (broadcast, host -> client)
+  connectionLost: boolean;
   clientCue: ClientCue;
 
   sessionStartedAt: number | null;

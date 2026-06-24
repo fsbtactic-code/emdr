@@ -172,11 +172,9 @@ export interface Dict {
   sessClientHint: string;
   sessEnd: string;
 
-  // nav
   navResources: string;
   navJournal: string;
 
-  // audio volumes + channels + accessibility
   channelsSection: string;
   blsVolume: string;
   ambientVolumeLabel: string;
@@ -188,13 +186,11 @@ export interface Dict {
   vestibular: string;
   vestibularDesc: string;
 
-  // forced safe closure + connection loss
   groundBeforeExit: string;
   groundBeforeExitSub: string;
   closeAnyway: string;
   connLost: string;
 
-  // client -> host signals
   sigOk: string;
   sigPause: string;
   sigStop: string;
@@ -206,7 +202,6 @@ export interface Dict {
   sigStopH: string;
   sigClear: string;
 
-  // therapist clinical panel
   tpTitle: string;
   tpSub: string;
   tpPhaseLabel: string;
@@ -233,7 +228,6 @@ export interface Dict {
   tpSoloLock: string;
   tpHostOnly: string;
 
-  // mode chooser + per-mode intro + nav
   modeChooseTitle: string;
   modeChooseSub: string;
   modeSpecialist: string;
@@ -253,13 +247,11 @@ export interface Dict {
   selfIntro3: string;
   selfStartBtn: string;
 
-  // quick controls during conduct + host-local mute + onboarding nav
   navOnboarding: string;
   tpQuick: string;
   tpLocalMute: string;
   tpLocalMuteHint: string;
 
-  // push calming mechanics to the client + crisis block
   cueTitle: string;
   cueHint: string;
   cueButterfly: string;
