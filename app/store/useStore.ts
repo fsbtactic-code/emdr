@@ -87,6 +87,7 @@ export interface EmdrState {
   signalAt: number | null;
   connectionLost: boolean;
   clientCue: ClientCue;
+  cueStep: number;
 
   sessionStartedAt: number | null;
 
@@ -144,6 +145,7 @@ export interface EmdrState {
   setIncomingSignal: (v: ClientSignal | null) => void;
   setConnectionLost: (v: boolean) => void;
   setClientCue: (v: ClientCue) => void;
+  setCueStep: (v: number) => void;
   setSessionStartedAt: (v: number | null) => void;
 }
 
@@ -231,6 +233,7 @@ export const useStore = create<RootState>((set) => ({
   signalAt: null,
   connectionLost: false,
   clientCue: 'none',
+  cueStep: 0,
   sessionStartedAt: null,
 
   setSpeed: (speed) => set({ speed, activePreset: null }),
@@ -321,7 +324,8 @@ export const useStore = create<RootState>((set) => ({
   setClientSignal: (clientSignal) => set({ clientSignal, signalAt: clientSignal ? Date.now() : null }),
   setIncomingSignal: (incomingSignal) => set({ incomingSignal }),
   setConnectionLost: (connectionLost) => set({ connectionLost }),
-  setClientCue: (clientCue) => set({ clientCue }),
+  setClientCue: (clientCue) => set({ clientCue, cueStep: 0 }),
+  setCueStep: (cueStep) => set({ cueStep }),
   setSessionStartedAt: (sessionStartedAt) => set({ sessionStartedAt }),
 
   currentPhase: SessionPhase.Idle,

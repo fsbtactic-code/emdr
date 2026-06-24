@@ -2,8 +2,9 @@
 
 import { useStore } from '../store/useStore';
 import { motion } from 'framer-motion';
-import { Wind, Anchor, Leaf } from 'lucide-react';
+import { Wind, Anchor, Leaf, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { CUE_CONTENT, cueStepCount, clampCueStep, type CueTechnique } from '../content/cues';
 
 const shapeClass = (shape: string) => {
   switch (shape) {
@@ -15,12 +16,12 @@ const shapeClass = (shape: string) => {
 };
 
 const CUE_META: Record<
-  'butterfly' | 'breathing' | 'grounding',
-  { ru: string; en: string; Icon: typeof Wind; tint: string; ring: string }
+  CueTechnique,
+  { Icon: typeof Wind; tint: string; ring: string }
 > = {
-  butterfly: { ru: 'Бабочка', en: 'Butterfly', Icon: Wind, tint: 'text-violet-200', ring: 'bg-violet-500/15' },
-  breathing: { ru: 'Дыхание', en: 'Breathing', Icon: Anchor, tint: 'text-cyan-200', ring: 'bg-cyan-500/15' },
-  grounding: { ru: 'Заземление', en: 'Grounding', Icon: Leaf, tint: 'text-emerald-200', ring: 'bg-emerald-500/15' },
+  butterfly: { Icon: Wind, tint: 'text-violet-200', ring: 'bg-violet-500/15' },
+  breathing: { Icon: Anchor, tint: 'text-cyan-200', ring: 'bg-cyan-500/15' },
+  grounding: { Icon: Leaf, tint: 'text-emerald-200', ring: 'bg-emerald-500/15' },
 };
 
 // framer-motion % on x/y resolves against the element (14px), not the container - animate in px instead
@@ -32,11 +33,13 @@ export function MiniStimPreview() {
   const isPlaying = useStore((s) => s.isPlaying);
   const targetShape = useStore((s) => s.targetShape);
   const isSaccadic = useStore((s) => s.isSaccadic);
+  const visualEnabled = useStore((s) => s.visualEnabled);
   const clientCue = useStore((s) => s.clientCue);
+  const cueStep = useStore((s) => s.cueStep);
   const lang = useStore((s) => s.lang);
 
   const boxRef = useRef<HTMLDivElement>(null);
-  const [box, setBox] = useState({ w: 360, h: 160 });
+  const [box, setBox] = useState({ w: 360, h: 200 });
   useEffect(() => {
     const el = boxRef.current;
     if (!el) return;
@@ -149,8 +152,8 @@ export function MiniStimPreview() {
     }
   };
 
-  const renderCue = () => {
-    if (clientCue === 'butterfly') {
+  const renderCueAnimation = (tech: CueTechnique) => {
+    if (tech === 'butterfly') {
       return (
         <div className="absolute inset-0 flex items-center justify-center gap-1.5">
           {[-1, 1].map((dir) => (
@@ -165,7 +168,7 @@ export function MiniStimPreview() {
         </div>
       );
     }
-    if (clientCue === 'breathing') {
+    if (tech === 'breathing') {
       return (
         <div className="absolute inset-0 flex items-center justify-center">
           <motion.div
@@ -190,38 +193,53 @@ export function MiniStimPreview() {
   };
 
   const cueActive = clientCue !== 'none';
-  const cueMeta = cueActive ? CUE_META[clientCue] : null;
-  const cuePrefix = lang === 'ru' ? 'Клиенту' : 'Client';
+  const tech = cueActive ? (clientCue as CueTechnique) : null;
+  const cueMeta = tech ? CUE_META[tech] : null;
+  const stepIdx = tech ? clampCueStep(tech, cueStep) : 0;
+  const stepTotal = tech ? cueStepCount(tech) : 0;
+  const cueName = tech ? (lang === 'ru' ? CUE_CONTENT[tech].titleRu : CUE_CONTENT[tech].titleEn) : '';
   const pausedLabel = lang === 'ru' ? 'пауза' : 'paused';
+  const noVisualLabel = lang === 'ru' ? 'визуал выключен' : 'visual off';
 
+  // EXACTLY ONE mode: cue technique, else moving stimulation, else static/paused target.
   return (
-    <div ref={boxRef} className="relative w-full h-[160px] rounded-2xl overflow-hidden bg-zinc-950 border border-transparent">
+    <div ref={boxRef} className="relative w-full aspect-video rounded-2xl overflow-hidden bg-zinc-950">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-8 -left-6 w-32 h-32 bg-blue-600/10 blur-[40px] rounded-full" />
         <div className="absolute -bottom-8 -right-6 w-32 h-32 bg-emerald-600/10 blur-[40px] rounded-full" />
       </div>
 
-      {cueActive ? (
-        <div className="absolute inset-0">{renderCue()}</div>
-      ) : (
-        <div className="absolute inset-0">
-          {isPlaying ? renderMoving() : <div className={dotClass} style={dotStyle} />}
-        </div>
-      )}
-
-      {cueActive && cueMeta && (
-        <div className="absolute top-2.5 left-1/2 -translate-x-1/2">
-          <div className={`flex items-center gap-1.5 ${cueMeta.ring} ${cueMeta.tint} pl-2 pr-2.5 py-1 rounded-full text-[11px] font-medium`}>
-            <cueMeta.Icon size={12} className="shrink-0" />
-            <span className="whitespace-nowrap">{cuePrefix}: {lang === 'ru' ? cueMeta.ru : cueMeta.en}</span>
+      {cueActive && tech && cueMeta ? (
+        <>
+          <div className="absolute inset-0">{renderCueAnimation(tech)}</div>
+          <div className="absolute top-2.5 left-1/2 -translate-x-1/2">
+            <div className={`flex items-center gap-1.5 ${cueMeta.ring} ${cueMeta.tint} pl-2 pr-2.5 py-1 rounded-full text-[11px] font-medium`}>
+              <cueMeta.Icon size={12} className="shrink-0" />
+              <span className="whitespace-nowrap">{cueName}</span>
+            </div>
           </div>
+          <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2">
+            <span className={`text-[10px] uppercase tracking-[0.18em] font-semibold tabular-nums ${cueMeta.tint}`}>
+              {(lang === 'ru' ? 'Шаг' : 'Step')} {stepIdx + 1}/{stepTotal}
+            </span>
+          </div>
+        </>
+      ) : !visualEnabled ? (
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5">
+          <EyeOff size={18} className="text-white/25" />
+          <span className="text-[10px] uppercase tracking-[0.18em] font-semibold text-white/25">{noVisualLabel}</span>
         </div>
-      )}
-
-      {!isPlaying && !cueActive && (
-        <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.18em] font-semibold text-white/25">
-          {pausedLabel}
-        </div>
+      ) : (
+        <>
+          <div className="absolute inset-0">
+            {isPlaying ? renderMoving() : <div className={dotClass} style={dotStyle} />}
+          </div>
+          {!isPlaying && (
+            <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.18em] font-semibold text-white/25">
+              {pausedLabel}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

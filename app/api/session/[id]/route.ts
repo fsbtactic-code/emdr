@@ -76,6 +76,7 @@ function sanitize(raw: any): Record<string, unknown> {
   put('isPlaying', b(c.isPlaying));
   put('isGroundingOpen', b(c.isGroundingOpen));
   put('clientCue', one(c.clientCue, CUES));
+  put('cueStep', num(c.cueStep, 0, 30));
   put('ambientVolume', num(c.ambientVolume, 0, 1));
   put('hapticEnabled', b(c.hapticEnabled));
   put('visualEnabled', b(c.visualEnabled));

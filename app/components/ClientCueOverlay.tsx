@@ -3,50 +3,14 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '../store/useStore';
+import { CUE_CONTENT, cueStepCount, clampCueStep, type CueTechnique } from '../content/cues';
 
 const BOX_SECONDS = [4, 4, 4, 4];
 const BOX_SCALE = [1.0, 1.0, 0.62, 0.62];
 
-type Strings = {
-  butterflyTitle: string;
-  butterflyHint: string;
-  breathingTitle: string;
-  breathPhases: [string, string, string, string];
-  groundingTitle: string;
-  groundingLead: string;
-  grounding: [string, string, string, string, string];
-};
-
-const RU: Strings = {
-  butterflyTitle: 'Объятие бабочки',
-  butterflyHint: 'Скрестите руки на груди и мягко постукивайте по плечам, по очереди слева и справа, в спокойном ритме.',
-  breathingTitle: 'Дыхание по квадрату',
-  breathPhases: ['Вдох', 'Задержка', 'Выдох', 'Задержка'],
-  groundingTitle: 'Заземление 5-4-3-2-1',
-  groundingLead: 'Назовите про себя, не торопясь, на спокойном дыхании.',
-  grounding: [
-    '5 вещей, которые вы видите',
-    '4 вещи, которые вы можете потрогать',
-    '3 звука, которые вы слышите',
-    '2 запаха, которые вы чувствуете',
-    '1 вкус, который вы ощущаете',
-  ],
-};
-
-const EN: Strings = {
-  butterflyTitle: 'Butterfly hug',
-  butterflyHint: 'Cross your arms over your chest and gently tap your shoulders, alternating left and right, at a calm pace.',
-  breathingTitle: 'Box breathing',
-  breathPhases: ['Inhale', 'Hold', 'Exhale', 'Hold'],
-  groundingTitle: 'Grounding 5-4-3-2-1',
-  groundingLead: 'Name them quietly to yourself, slowly, with calm breathing.',
-  grounding: [
-    '5 things you can see',
-    '4 things you can touch',
-    '3 sounds you can hear',
-    '2 smells you can notice',
-    '1 taste you can sense',
-  ],
+const BREATH_PHASES: Record<'ru' | 'en', [string, string, string, string]> = {
+  ru: ['Вдох', 'Задержка', 'Выдох', 'Задержка'],
+  en: ['Inhale', 'Hold', 'Exhale', 'Hold'],
 };
 
 function BreathingCircle({ phases }: { phases: [string, string, string, string] }) {
@@ -77,7 +41,7 @@ function BreathingCircle({ phases }: { phases: [string, string, string, string] 
   );
 }
 
-function ButterflyGuide({ s }: { s: Strings }) {
+function ButterflyGuide() {
   const [side, setSide] = useState<0 | 1>(0);
 
   useEffect(() => {
@@ -85,88 +49,88 @@ function ButterflyGuide({ s }: { s: Strings }) {
     return () => clearInterval(id);
   }, []);
 
-  const zone = (active: boolean) => ({
-    opacity: active ? 1 : 0.35,
-    scale: active ? 1.06 : 0.94,
-  });
-
   return (
-    <div className="flex flex-col items-center gap-8">
-      <div className="flex items-center justify-center gap-6 sm:gap-10">
-        {[0, 1].map((i) => {
-          const active = side === i;
-          return (
-            <motion.div
-              key={i}
-              animate={zone(active)}
-              transition={{ duration: 0.9, ease: 'easeInOut' }}
-              className="relative flex items-center justify-center"
-            >
-              <div className="absolute w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-violet-500/20 blur-2xl" />
-              <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-indigo-500/[0.16] flex items-center justify-center">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-violet-400/30" />
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
-      <p className="max-w-sm text-center text-white/55 text-[14px] leading-relaxed px-2">{s.butterflyHint}</p>
+    <div className="flex items-center justify-center gap-6 sm:gap-10">
+      {[0, 1].map((i) => {
+        const active = side === i;
+        return (
+          <motion.div
+            key={i}
+            animate={{ opacity: active ? 1 : 0.35, scale: active ? 1.06 : 0.94 }}
+            transition={{ duration: 0.9, ease: 'easeInOut' }}
+            className="relative flex items-center justify-center"
+          >
+            <div className="absolute w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-violet-500/20 blur-2xl" />
+            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-indigo-500/[0.16] flex items-center justify-center">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-violet-400/30" />
+            </div>
+          </motion.div>
+        );
+      })}
     </div>
   );
 }
 
+// Animation paired with each technique; identical regardless of step so the
+// calming motion stays continuous while the specialist advances the prompt.
+function CueAnimation({ tech }: { tech: CueTechnique }) {
+  const lang = useStore((s) => s.lang) === 'ru' ? 'ru' : 'en';
+  if (tech === 'butterfly') return <ButterflyGuide />;
+  return <BreathingCircle phases={BREATH_PHASES[lang]} />;
+}
+
 export function ClientCueOverlay() {
   const clientCue = useStore((state) => state.clientCue);
+  const cueStep = useStore((state) => state.cueStep);
   const lang = useStore((state) => state.lang);
-  const s = lang === 'en' ? EN : RU;
+  const isRu = lang === 'ru';
 
-  const title =
-    clientCue === 'butterfly' ? s.butterflyTitle
-    : clientCue === 'breathing' ? s.breathingTitle
-    : clientCue === 'grounding' ? s.groundingTitle
-    : '';
+  const tech = clientCue !== 'none' ? (clientCue as CueTechnique) : null;
+  const content = tech ? CUE_CONTENT[tech] : null;
+  const stepIdx = tech ? clampCueStep(tech, cueStep) : 0;
+  const stepTotal = tech ? cueStepCount(tech) : 0;
+  const title = content ? (isRu ? content.titleRu : content.titleEn) : '';
+  const stepText = content ? (isRu ? content.steps[stepIdx].ru : content.steps[stepIdx].en) : '';
 
   return (
     <AnimatePresence>
-      {clientCue !== 'none' && (
+      {tech && content && (
         <motion.div
-          key={clientCue}
+          key={tech}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className="fixed inset-0 z-[115] flex items-center justify-center px-6 py-10 bg-zinc-950/92 backdrop-blur-2xl overflow-y-auto no-scrollbar"
+          className="fixed inset-0 z-[115] flex items-center justify-center px-6 py-10 bg-zinc-950/92 backdrop-blur-2xl"
         >
           <div
             className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-72 h-72 blur-[90px] rounded-full pointer-events-none ${
-              clientCue === 'butterfly' ? 'bg-violet-500/10' : 'bg-emerald-500/10'
+              tech === 'butterfly' ? 'bg-violet-500/10' : 'bg-emerald-500/10'
             }`}
           />
 
           <div className="relative z-10 flex flex-col items-center text-center gap-8 max-w-md w-full">
-            <h2 className="text-white text-[22px] sm:text-[26px] font-medium tracking-tight">{title}</h2>
+            <div className="flex flex-col items-center gap-2">
+              <span className="text-[11px] uppercase tracking-[0.18em] font-semibold tabular-nums text-white/35">
+                {(isRu ? 'Шаг' : 'Step')} {stepIdx + 1} / {stepTotal}
+              </span>
+              <h2 className="text-white text-[22px] sm:text-[26px] font-medium tracking-tight">{title}</h2>
+            </div>
 
-            {clientCue === 'butterfly' && <ButterflyGuide s={s} />}
+            <CueAnimation tech={tech} />
 
-            {clientCue === 'breathing' && <BreathingCircle phases={s.breathPhases} />}
-
-            {clientCue === 'grounding' && (
-              <div className="flex flex-col items-center gap-7 w-full">
-                <BreathingCircle phases={s.breathPhases} />
-                <p className="text-white/55 text-[14px] leading-relaxed max-w-sm">{s.groundingLead}</p>
-                <div className="w-full flex flex-col gap-2 text-left">
-                  {s.grounding.map((g) => (
-                    <div
-                      key={g}
-                      className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-emerald-500/[0.06]"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/70 shrink-0" />
-                      <span className="text-[14px] text-white/75 leading-snug">{g}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={stepIdx}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.35 }}
+                className="text-white/80 text-[16px] sm:text-[18px] leading-relaxed max-w-sm"
+              >
+                {stepText}
+              </motion.p>
+            </AnimatePresence>
           </div>
         </motion.div>
       )}
