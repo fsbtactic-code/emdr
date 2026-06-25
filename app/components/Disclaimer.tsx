@@ -14,17 +14,23 @@ const STORAGE_KEY = 'emdr_disclaimer_accepted_v2';
 export const Disclaimer = () => {
   const t = useT();
   const isClient = useStore((s) => s.isClient);
+  const appMode = useStore((s) => s.appMode);
   const setConsentGiven = useStore((s) => s.setConsentGiven);
   const setDissociationScreenPassed = useStore((s) => s.setDissociationScreenPassed);
   const [show, setShow] = useState(false);
   const [step, setStep] = useState<1 | 2>(1);
   const [confirmed, setConfirmed] = useState(false);
 
+  // Specialists run sessions for clients and do not need the self-help consent
+  // screen; showing it would also sit on top of the rail and break the guided tour.
   useEffect(() => {
-    if (isClient) return;
+    if (isClient || appMode === 'specialist') {
+      setShow(false);
+      return;
+    }
     const hasAccepted = localStorage.getItem(STORAGE_KEY);
     if (!hasAccepted) setShow(true);
-  }, [isClient]);
+  }, [isClient, appMode]);
 
   const handleAccept = () => {
     localStorage.setItem(STORAGE_KEY, 'true');
