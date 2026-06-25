@@ -49,7 +49,8 @@ export function Divider({
     <hr
       role="separator"
       aria-orientation="horizontal"
-      className={cn('border-0 border-t border-white/[0.06] w-full', className)}
+      // block hr fills the container minus margins; w-full would ignore mx-* and overflow
+      className={cn('border-0 border-t border-white/[0.06]', className)}
     />
   );
 }

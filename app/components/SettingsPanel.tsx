@@ -158,7 +158,7 @@ export const SettingsPanel = () => {
               </div>
             </div>
 
-            <div className="flex-1 no-scrollbar overflow-y-auto">
+            <div className="flex-1 no-scrollbar overflow-y-auto overflow-x-hidden">
 
               <div className="px-5 pt-5 pb-1">
                 <SectionLabel>{t.languageSection}</SectionLabel>
